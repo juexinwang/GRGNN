@@ -57,6 +57,10 @@ def read_edge_file_csc(filename, sample_size):
             words = line.split()
             end1 = int(words[0][1:])-1
             end2 = int(words[1][1:])-1
+            if end1 > end2:
+                tmpp = end1
+                end1 = end2
+                end2 = tmpp
             row.append(end1)
             col.append(end2)
             data.append(1.0)
