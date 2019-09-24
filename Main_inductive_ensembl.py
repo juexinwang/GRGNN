@@ -324,7 +324,7 @@ for i in np.arange(len(test_prob_agent0)):
 print("Both agents right: "+str(count))
 print("Both agents wrong: "+str(bothwrong))
 print("Corrected by Ensembl: "+str(corrected))
-print("Not corrected by Ensembl: "+uncorrected)
+print("Not corrected by Ensembl: "+str(uncorrected))
 
 allstr = str(float((tp+tn)/len(test_graphs_agent0)))+"\t"+str(tp)+"\t"+str(len(test_pos[0])-tp)+"\t"+str(tn)+"\t"+str(len(test_neg[0])-tn)
 agent0_str = str(float((tp0+tn0)/len(test_graphs_agent0)))+"\t"+str(tp0)+"\t"+str(len(test_pos[0])-tp0)+"\t"+str(tn0)+"\t"+str(len(test_neg[0])-tn0)

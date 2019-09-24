@@ -21,7 +21,32 @@ sys.path.append('%s/software/node2vec/src' % cur_dir)
 from util import GNNGraph
 import node2vec
 
-# Generate explicit features 
+# return dictionary of transcription factors
+def generateTFattribute(dream_name):
+    tfDict={}
+    number = 0
+    if dream_name == 'dream1':
+        number = 195
+    elif dream_name == 'dream3':
+        number = 334
+    elif dream_name == 'dream4':
+        number = 333
+    for i in np.arange(number):
+        tfDict[i]=1
+    return tfDict    
+
+# Use all the gene expression features
+def geneexpression_attribute(allx, tfDict):
+    tfAttr = np.zeros((len(allx),1))
+    for i in np.arange(len(allx)) :
+        if i in tfDict:
+            tfAttr[i]=1.0
+        else:
+            tfAttr[i]=0.0
+    trainAttributes = np.concatenate([allx, tfAttr], axis=1)
+    return trainAttributes
+
+# Generate explicit features for inductive learning, get trends features
 def genenet_attribute(allx,tfNum):
     #1: average to one dimension
     allx_ = StandardScaler().fit_transform(allx)
@@ -130,11 +155,13 @@ def sample_neg(net, test_ratio=0.1, train_pos=None, test_pos=None, max_train_num
     neg = ([], [])
     n = net.shape[0]
     print('sampling negative links for train and test')
+    recordDict={}
     while len(neg[0]) < train_num + test_num:
         i, j = random.randint(0, n-1), random.randint(0, n-1)
-        if i < j and net[i, j] == 0:
+        if i < j and net[i, j] == 0 and str(i)+"_"+str(j) not in recordDict:
             neg[0].append(i)
             neg[1].append(j)
+            recordDict[str(i)+"_"+str(j)]=''
         else:
             continue
     train_neg  = (neg[0][:train_num], neg[1][:train_num])
@@ -165,11 +192,49 @@ def sample_neg_TF(net, test_ratio=0.1, TF_num=333, train_pos=None, test_pos=None
     neg = ([], [])
     n = net.shape[0]
     print('sampling negative links for train and test')
+    recordDict={}
     while len(neg[0]) < train_num + test_num:
         i, j = random.randint(0, TF_num), random.randint(0, n-1)
-        if i < j and net[i, j] == 0:
+        if i < j and net[i, j] == 0 and str(i)+"_"+str(j) not in recordDict:
             neg[0].append(i)
             neg[1].append(j)
+            recordDict[str(i)+"_"+str(j)]=''
+        else:
+            continue
+    train_neg  = (neg[0][:train_num], neg[1][:train_num])
+    test_neg = (neg[0][train_num:], neg[1][train_num:])
+    return train_pos, train_neg, test_pos, test_neg
+
+# Should only use this: only TF
+def sample_neg_TF_motif(net, test_ratio=1.0, TF_num=333, train_pos=None, test_pos=None, max_train_num=None):
+    # get upper triangular matrix
+    net_triu = ssp.triu(net, k=1)
+    # sample positive links for train/test
+    row, col, _ = ssp.find(net_triu)
+    # sample positive links if not specified
+    if train_pos is None or test_pos is None:
+        perm = random.sample(range(len(row)), len(row))
+        row, col = row[perm], col[perm]
+        split = int(math.ceil(len(row) * (1 - test_ratio)))
+        train_pos = (row[:split], col[:split])
+        test_pos = (row[split:], col[split:])
+    #TODO
+    # if max_train_num is set, randomly sample train links
+    if max_train_num is not None:
+        perm = np.random.permutation(len(train_pos[0]))[:max_train_num]
+        train_pos = (train_pos[0][perm], train_pos[1][perm])
+    # sample negative links for train/test
+    train_num, test_num = len(train_pos[0]), len(test_pos[0])
+    neg = ([], [])
+    n = net.shape[0]
+    print('sampling negative links for train and test')
+    recordDict={}
+    while len(neg[0]) < train_num + test_num:
+        i, j = random.randint(0, TF_num), random.randint(0, n-1)
+        if i < j and net[i, j] == 0 and str(i)+"_"+str(j) not in recordDict:
+            neg[0].append(i)
+            neg[1].append(j)
+            recordDict[str(i)+"_"+str(j)]=''
         else:
             continue
     train_neg  = (neg[0][:train_num], neg[1][:train_num])
@@ -199,11 +264,13 @@ def sample_neg_semi_TF(net, test_ratio=0.1, TF_num=333, train_pos=None, test_pos
     neg = ([], [])
     n = net.shape[0]
     print('sampling negative links for train and test')
+    recordDict={}
     while len(neg[0]) < train_num * semi_pool_fold:
         i, j = random.randint(0, TF_num), random.randint(0, n-1)
-        if i < j and net[i, j] == 0:
+        if i < j and net[i, j] == 0 and str(i)+"_"+str(j) not in recordDict:
             neg[0].append(i)
             neg[1].append(j)
+            recordDict[str(i)+"_"+str(j)]=''
         else:
             continue
     train_neg  = (neg[0], neg[1])
@@ -263,11 +330,13 @@ def sample_neg_all_large(net,maximum_test=100000):
     neg = ([], [])
     n = net.shape[0]
     print('sampling negative links for dataset')
+    recordDict={}
     while len(neg[0]) < maximum_test:
         i, j = random.randint(0, n-1), random.randint(0, n-1)
-        if i < j and net[i, j] == 0:
+        if i < j and net[i, j] == 0 and str(i)+"_"+str(j) not in recordDict:
             neg[0].append(i)
             neg[1].append(j)
+            recordDict[str(i)+"_"+str(j)]=''
         else:
             continue
     test_neg = (neg[0], neg[1])
@@ -295,17 +364,54 @@ def sample_neg_semi(net, test_ratio=0.1, train_pos=None, test_pos=None, max_trai
     neg = ([], [])
     n = net.shape[0]
     print('sampling negative links for train and test')
+    recordDict={}
     while len(neg[0]) < train_num * semi_pool_fold:
         i, j = random.randint(0, n-1), random.randint(0, n-1)
-        if i < j and net[i, j] == 0:
+        if i < j and net[i, j] == 0 and str(i)+"_"+str(j) not in recordDict:
             neg[0].append(i)
             neg[1].append(j)
+            recordDict[str(i)+"_"+str(j)]=''
         else:
             continue
     #TODO: can be better later
     train_neg  = (neg[0], neg[1])
     test_neg  = (neg[0], neg[1])
     return train_pos, train_neg, test_pos, test_neg
+
+# Extract subgraph from links for network motifs 
+def extractLinks2subgraphs_motif(A, train_pos, train_neg, test_pos, test_neg, h=1, max_nodes_per_hop=None, node_information=None):
+    # automatically select h from {1, 2}
+    if h == 'auto': # TODO
+        # split train into val_train and val_test
+        _, _, val_test_pos, val_test_neg = sample_neg(A, 0.1)
+        val_A = A.copy()
+        val_A[val_test_pos[0], val_test_pos[1]] = 0
+        val_A[val_test_pos[1], val_test_pos[0]] = 0
+        val_auc_CN = CN(val_A, val_test_pos, val_test_neg)
+        val_auc_AA = AA(val_A, val_test_pos, val_test_neg)
+        print('\033[91mValidation AUC of AA is {}, CN is {}\033[0m'.format(val_auc_AA, val_auc_CN))
+        if val_auc_AA >= val_auc_CN:
+            h = 2
+            print('\033[91mChoose h=2\033[0m')
+        else:
+            h = 1
+            print('\033[91mChoose h=1\033[0m')
+
+    # extract enclosing subgraphs
+    max_n_label = {'value': 0}
+    def helper(A, links, g_label, node_information):
+        g_list = []
+        for i, j in tqdm(zip(links[0], links[1])):
+            g, n_labels, n_features = subgraph_extraction_labeling((i, j), A, h, max_nodes_per_hop, node_information)
+            max_n_label['value'] = max(max(n_labels), max_n_label['value'])
+            g_list.append(GNNGraph(g, g_label, n_labels, n_features))
+        return g_list
+    print('Extract enclosed subgraph...')
+    train_graphs = helper(A, train_pos, 1, node_information) + helper(A, train_neg, 0, node_information)
+    test_graphs = helper(A, test_pos, 1, node_information) + helper(A, test_neg, 0, node_information)
+    print(max_n_label)
+    return train_graphs, test_graphs, max_n_label['value']
+
 
 # Extract subgraph from links 
 def extractLinks2subgraphs(Atrain, Atest, train_pos, train_neg, test_pos, test_neg, h=1, max_nodes_per_hop=None, train_node_information=None, test_node_information=None):
