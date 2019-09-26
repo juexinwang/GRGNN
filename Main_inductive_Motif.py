@@ -7,12 +7,6 @@ import os.path
 import random
 import math
 import argparse
-from sklearn.preprocessing import StandardScaler
-from sklearn.decomposition import PCA
-from sklearn.metrics import precision_recall_curve
-import matplotlib.pyplot as plt
-from inspect import signature
-from util_functions import *
 
 # Test network motifs
 # Only one agent is used
@@ -89,8 +83,10 @@ if args.use_attribute and attributes is not None:
     else:
         node_information = attributes
 
-pos_graphs, neg_graphs, max_n_label = extractLinks2subgraphs_motif(A, train_pos, train_neg, args.hop, args.max_nodes_per_hop, node_information, dreamTFdict[args.traindata_name])
-print('# pos: %d, # neg: %d' % (len(pos_graphs), len(neg_graphs)))
+pos_graphs_labels,pos_graphs_features,neg_graphs_labels,neg_graphs_features, max_n_label = extractLinks2subgraphs_motif(A, train_pos, train_neg, args.hop, args.max_nodes_per_hop, node_information, dreamTFdict[args.traindata_name])
+print('# pos: %d, # neg: %d' % (len(pos_graphs_labels), len(neg_graphs_labels)))
 
-pickle.dump( pos_graphs, open( "pos_graphs.pickle", "wb" ) )
+np.save('pos_graphs_labels.npy',pos_graphs_labels)
+np.save('pos_graphs_features.npy',pos_graphs_features)
+# pickle.dump( pos_graphs, open( "pos_graphs.pickle", "wb" ) )
 # pickle.dump( neg_graphs, open( "neg_graphs.pickle", "wb" ) )

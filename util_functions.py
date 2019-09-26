@@ -391,38 +391,31 @@ def extractLinks2subgraphs_motif(A, train_pos, train_neg, h=1, max_nodes_per_hop
             max_n_label['value'] = max(max(n_labels), max_n_label['value'])
             g_list.append(GNNGraph(g, g_label, n_labels, n_features))
         return g_list
-
-    def helpermotif(A, links, g_label, node_information, tfNum, motifDictTFTarget, motifDictTFTF):
-        g_list = []
+    
+    def helperMotif(A, links, g_label, node_information):
+        label_list = []
+        feature_list = []
         for i, j in tqdm(zip(links[0], links[1])):
             g, n_labels, n_features = subgraph_extraction_labeling((i, j), A, h, max_nodes_per_hop, node_information)
             max_n_label['value'] = max(max(n_labels), max_n_label['value'])
-            g_list.append(GNNGraph(g, g_label, n_labels, n_features))
-            if i<tfNum and j<tfNum:
-                if n_features.shape[0] in motifDictTFTF:
-                    motifDictTFTF[n_features.shape[0]]=motifDictTFTF[n_features.shape[0]]+1
-                else:
-                    motifDictTFTF[n_features.shape[0]]=1
-            else:
-                if n_features.shape[0] in motifDictTFTarget:
-                    motifDictTFTarget[n_features.shape[0]]=motifDictTFTarget[n_features.shape[0]]+1
-                else:
-                    motifDictTFTarget[n_features.shape[0]]=1
+            label_list.append(n_labels)
+            feature_list.append(n_features)
+        return label_list, feature_list
 
-        return g_list
     print('Extract enclosed subgraph...')
     # motifDictTFTarget={}
     # motifDictTFTF={}
     # train_graphs = helpermotif(A, train_pos, 1, node_information, tfNum, motifDictTFTarget, motifDictTFTF) + helper(A, train_neg, 0, node_information)
-    pos_graphs = helper(A, train_pos, 1, node_information)
-    neg_graphs = []
-    # neg_graphs= helper(A, train_neg, 0, node_information)    
+    pos_graphs_labels,pos_graphs_features = helperMotif(A, train_pos, 1, node_information)
+    neg_graphs_labels = []
+    neg_graphs_features = []
+    # neg_graphs_labels,neg_graphs_features= helperMotif(A, train_neg, 0, node_information)    
     print(max_n_label)
     # for key in sorted(motifDictTFTF):
     #     print(str(key)+"\t"+str(motifDictTFTF[key]))
     # for key in sorted(motifDictTFTarget):
     #     print(str(key)+"\t"+str(motifDictTFTarget[key]))
-    return pos_graphs, neg_graphs, max_n_label['value']
+    return pos_graphs_labels,pos_graphs_features,neg_graphs_labels,neg_graphs_features, max_n_label['value']
 
 
 # Extract subgraph from links 
