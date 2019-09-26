@@ -206,40 +206,25 @@ def sample_neg_TF(net, test_ratio=0.1, TF_num=333, train_pos=None, test_pos=None
     return train_pos, train_neg, test_pos, test_neg
 
 # Should only use this: only TF
-def sample_neg_TF_motif(net, test_ratio=1.0, TF_num=333, train_pos=None, test_pos=None, max_train_num=None):
+def sample_neg_TF_motif(net, TF_num=334):
     # get upper triangular matrix
     net_triu = ssp.triu(net, k=1)
     # sample positive links for train/test
     row, col, _ = ssp.find(net_triu)
-    # sample positive links if not specified
-    if train_pos is None or test_pos is None:
-        perm = random.sample(range(len(row)), len(row))
-        row, col = row[perm], col[perm]
-        split = int(math.ceil(len(row) * (1 - test_ratio)))
-        train_pos = (row[:split], col[:split])
-        test_pos = (row[split:], col[split:])
-    #TODO
-    # if max_train_num is set, randomly sample train links
-    if max_train_num is not None:
-        perm = np.random.permutation(len(train_pos[0]))[:max_train_num]
-        train_pos = (train_pos[0][perm], train_pos[1][perm])
+    test_pos = (row, col)   
     # sample negative links for train/test
-    train_num, test_num = len(train_pos[0]), len(test_pos[0])
     neg = ([], [])
     n = net.shape[0]
-    print('sampling negative links for train and test')
-    recordDict={}
-    while len(neg[0]) < train_num + test_num:
-        i, j = random.randint(0, TF_num), random.randint(0, n-1)
-        if i < j and net[i, j] == 0 and str(i)+"_"+str(j) not in recordDict:
-            neg[0].append(i)
-            neg[1].append(j)
-            recordDict[str(i)+"_"+str(j)]=''
-        else:
-            continue
-    train_neg  = (neg[0][:train_num], neg[1][:train_num])
-    test_neg = (neg[0][train_num:], neg[1][train_num:])
-    return train_pos, train_neg, test_pos, test_neg
+    print('sampling negative links for dataset')
+    for i in np.arange(TF_num):
+        for j in np.arange(i+1,n):
+            if net[i, j] == 0:
+                neg[0].append(i)
+                neg[1].append(j)
+            else:
+                continue
+    test_neg = (neg[0], neg[1])
+    return test_pos, test_neg
 
 # Should only use this: only TF in semi-supervise learning
 def sample_neg_semi_TF(net, test_ratio=0.1, TF_num=333, train_pos=None, test_pos=None, max_train_num=None, semi_pool_fold=5):
@@ -379,7 +364,7 @@ def sample_neg_semi(net, test_ratio=0.1, train_pos=None, test_pos=None, max_trai
     return train_pos, train_neg, test_pos, test_neg
 
 # Extract subgraph from links for network motifs 
-def extractLinks2subgraphs_motif(A, train_pos, train_neg, test_pos, test_neg, h=1, max_nodes_per_hop=None, node_information=None):
+def extractLinks2subgraphs_motif(A, train_pos, train_neg, h=1, max_nodes_per_hop=None, node_information=None, tfNum=334):
     # automatically select h from {1, 2}
     if h == 'auto': # TODO
         # split train into val_train and val_test
@@ -406,11 +391,38 @@ def extractLinks2subgraphs_motif(A, train_pos, train_neg, test_pos, test_neg, h=
             max_n_label['value'] = max(max(n_labels), max_n_label['value'])
             g_list.append(GNNGraph(g, g_label, n_labels, n_features))
         return g_list
+
+    def helpermotif(A, links, g_label, node_information, tfNum, motifDictTFTarget, motifDictTFTF):
+        g_list = []
+        for i, j in tqdm(zip(links[0], links[1])):
+            g, n_labels, n_features = subgraph_extraction_labeling((i, j), A, h, max_nodes_per_hop, node_information)
+            max_n_label['value'] = max(max(n_labels), max_n_label['value'])
+            g_list.append(GNNGraph(g, g_label, n_labels, n_features))
+            if i<tfNum and j<tfNum:
+                if n_features.shape[0] in motifDictTFTF:
+                    motifDictTFTF[n_features.shape[0]]=motifDictTFTF[n_features.shape[0]]+1
+                else:
+                    motifDictTFTF[n_features.shape[0]]=1
+            else:
+                if n_features.shape[0] in motifDictTFTarget:
+                    motifDictTFTarget[n_features.shape[0]]=motifDictTFTarget[n_features.shape[0]]+1
+                else:
+                    motifDictTFTarget[n_features.shape[0]]=1
+
+        return g_list
     print('Extract enclosed subgraph...')
-    train_graphs = helper(A, train_pos, 1, node_information) + helper(A, train_neg, 0, node_information)
-    test_graphs = helper(A, test_pos, 1, node_information) + helper(A, test_neg, 0, node_information)
+    # motifDictTFTarget={}
+    # motifDictTFTF={}
+    # train_graphs = helpermotif(A, train_pos, 1, node_information, tfNum, motifDictTFTarget, motifDictTFTF) + helper(A, train_neg, 0, node_information)
+    pos_graphs = helper(A, train_pos, 1, node_information)
+    neg_graphs = []
+    # neg_graphs= helper(A, train_neg, 0, node_information)    
     print(max_n_label)
-    return train_graphs, test_graphs, max_n_label['value']
+    # for key in sorted(motifDictTFTF):
+    #     print(str(key)+"\t"+str(motifDictTFTF[key]))
+    # for key in sorted(motifDictTFTarget):
+    #     print(str(key)+"\t"+str(motifDictTFTarget[key]))
+    return pos_graphs, neg_graphs, max_n_label['value']
 
 
 # Extract subgraph from links 

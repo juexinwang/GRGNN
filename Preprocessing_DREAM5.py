@@ -64,6 +64,9 @@ def read_edge_file_csc(filename, sample_size):
             row.append(end1)
             col.append(end2)
             data.append(1.0)
+            row.append(end2)
+            col.append(end1)
+            data.append(1.0)
             count += 1
     f.close()
     row = np.asarray(row)
