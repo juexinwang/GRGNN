@@ -407,9 +407,9 @@ def extractLinks2subgraphs_motif(A, train_pos, train_neg, h=1, max_nodes_per_hop
     # motifDictTFTF={}
     # train_graphs = helpermotif(A, train_pos, 1, node_information, tfNum, motifDictTFTarget, motifDictTFTF) + helper(A, train_neg, 0, node_information)
     pos_graphs_labels,pos_graphs_features = helperMotif(A, train_pos, 1, node_information)
-    neg_graphs_labels = []
-    neg_graphs_features = []
-    # neg_graphs_labels,neg_graphs_features= helperMotif(A, train_neg, 0, node_information)    
+    # neg_graphs_labels = []
+    # neg_graphs_features = []
+    neg_graphs_labels,neg_graphs_features = helperMotif(A, train_neg, 0, node_information)    
     print(max_n_label)
     # for key in sorted(motifDictTFTF):
     #     print(str(key)+"\t"+str(motifDictTFTF[key]))
