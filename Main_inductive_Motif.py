@@ -65,7 +65,9 @@ net = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.tr
 group = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name)))
 allx =group.toarray().astype('float32')
 #deal with the features:
-attributes = geneexpression_attribute(allx,tfDict)
+# attributes = geneexpression_attribute(allx,tfDict)
+#deal with the features, zscore and features:
+attributes = geneexpression_attribute_zscore(allx,tfDict)
 train_pos, train_neg = sample_neg_TF_motif(net, TF_num=dreamTFdict[args.traindata_name])
 
 '''Train and apply classifier'''
@@ -87,9 +89,9 @@ if args.use_attribute and attributes is not None:
 pos_graphs_labels,pos_graphs_features,neg_graphs_labels,neg_graphs_features, max_n_label = extractLinks2subgraphs_motif(A, train_pos, train_neg, args.hop, args.max_nodes_per_hop, node_information, dreamTFdict[args.traindata_name])
 print('# pos: %d, # neg: %d' % (len(pos_graphs_labels), len(neg_graphs_labels)))
 
-np.save('pos_graphs_labels.npy',pos_graphs_labels)
-np.save('pos_graphs_features.npy',pos_graphs_features)
-np.save('neg_graphs_labels.npy',pos_graphs_labels)
-np.save('neg_graphs_features.npy',pos_graphs_features)
+# np.save('pos_graphs_labels.npy',pos_graphs_labels)
+# np.save('pos_graphs_features.npy',pos_graphs_features)
+np.save('neg_graphs_labels.npy',neg_graphs_labels)
+np.save('neg_graphs_features_zscore.npy',neg_graphs_features)
 # pickle.dump( pos_graphs, open( "pos_graphs.pickle", "wb" ) )
 # pickle.dump( neg_graphs, open( "neg_graphs.pickle", "wb" ) )

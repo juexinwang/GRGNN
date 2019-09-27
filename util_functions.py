@@ -46,6 +46,19 @@ def geneexpression_attribute(allx, tfDict):
     trainAttributes = np.concatenate([allx, tfAttr], axis=1)
     return trainAttributes
 
+# Use all the gene expression features
+def geneexpression_attribute_zscore(allx, tfDict):
+    tfAttr = np.zeros((len(allx),1))
+    for i in np.arange(len(allx)) :
+        if i in tfDict:
+            tfAttr[i]=1.0
+        else:
+            tfAttr[i]=0.0
+    allx_ = StandardScaler().fit_transform(allx)
+    trainAttributes = np.average(allx_, axis=1).reshape((len(allx),1))
+    trainAttributes = np.concatenate([trainAttributes, tfAttr], axis=1)
+    return trainAttributes
+
 # Generate explicit features for inductive learning, get trends features
 def genenet_attribute(allx,tfNum):
     #1: average to one dimension
