@@ -90,8 +90,11 @@ pos_graphs_labels,pos_graphs_features,neg_graphs_labels,neg_graphs_features, max
 print('# pos: %d, # neg: %d' % (len(pos_graphs_labels), len(neg_graphs_labels)))
 
 # np.save('pos_graphs_labels.npy',pos_graphs_labels)
-# np.save('pos_graphs_features.npy',pos_graphs_features)
+# np.save('pos_graphs_features_zscore.npy',pos_graphs_features)
 np.save('neg_graphs_labels.npy',neg_graphs_labels)
 np.save('neg_graphs_features_zscore.npy',neg_graphs_features)
+
+
+
 # pickle.dump( pos_graphs, open( "pos_graphs.pickle", "wb" ) )
 # pickle.dump( neg_graphs, open( "neg_graphs.pickle", "wb" ) )
