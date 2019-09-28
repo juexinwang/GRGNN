@@ -318,8 +318,15 @@ def neighborCase(gi,func1=condition3,func2=condition4,var1=num_TG_n12,var2=num_T
 posGiList = generate_information(graphs_labels=pos_graphs_labels, graphs_features=pos_graphs_features)
 # negGiList = generate_information(graphs_labels=neg_graphs_labels, graphs_features=neg_graphs_features)
 
+#TT: TF-TF, TG: TF-Target
+#n12: neighbor, end1, end2
+#t12: neighborTF, end1, end2
+#g12: neighborTarget, end1, end2
+#tB12: neighborTF Bypass, end1, end2
+#tN12: neighborTF Bypassno, end1, end2
+#gB12: neighborTarget Bypass, end1, end2
+#gN12: neighborTarget Bypassno, end1, end2
 num_TT=0
-num_TG=0
 num_TT_n12=0
 num_TT_1n2=0
 num_TT_12n=0
@@ -341,6 +348,8 @@ num_TT_12gB=0
 num_TT_gN12=0
 num_TT_1gN2=0
 num_TT_12gN=0
+
+num_TG=0
 num_TG_12=0
 num_TG_21=0
 num_TG_n12=0
@@ -385,6 +394,7 @@ num_TG_12gN=0
 num_TG_gN21=0
 num_TG_2gN1=0
 num_TG_21gN=0
+
 for gi in posGiList:
     if condition1(gi):
         num_TT = num_TT + 1
