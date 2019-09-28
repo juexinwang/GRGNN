@@ -298,6 +298,23 @@ def generate_information(graphs_labels=pos_graphs_labels, graphs_features=pos_gr
 
     return giList
 
+# if condition3(gi):
+#     num_TG_n12 = num_TG_n12 +1
+# else:
+#     if condition4(gi):
+#         num_TG_1n2 = num_TG_1n2 +1
+#     else:
+#         num_TG_12n = num_TG_12n +1
+def neighborCase(gi,func1=condition3,func2=condition4,var1=num_TG_n12,var2=num_TG_1n2,var3=num_TG_12n):
+    if func1(gi):
+        var1 = var1 +1
+    else:
+        if func2(gi):
+            var2 = var2 +1
+        else:
+            var3 = var3 +1
+
+
 posGiList = generate_information(graphs_labels=pos_graphs_labels, graphs_features=pos_graphs_features)
 # negGiList = generate_information(graphs_labels=neg_graphs_labels, graphs_features=neg_graphs_features)
 
@@ -306,6 +323,12 @@ num_TG=0
 num_TT_n12=0
 num_TT_1n2=0
 num_TT_12n=0
+num_TT_t12=0
+num_TT_1t2=0
+num_TT_12t=0
+num_TT_g12=0
+num_TT_1g2=0
+num_TT_12g=0
 num_TG_12=0
 num_TG_21=0
 num_TG_n12=0
@@ -314,45 +337,71 @@ num_TG_12n=0
 num_TG_n21=0
 num_TG_2n1=0
 num_TG_21n=0
+num_TG_t12=0
+num_TG_1t2=0
+num_TG_12t=0
+num_TG_t21=0
+num_TG_2t1=0
+num_TG_21t=0
+num_TG_g12=0
+num_TG_1g2=0
+num_TG_12g=0
+num_TG_g21=0
+num_TG_2g1=0
+num_TG_21g=0
 for gi in posGiList:
     if condition1(gi):
         num_TT = num_TT + 1
         if condition2(gi):
-            if condition3(gi):
-                num_TT_n12 = num_TT_n12 +1
-            else:
-                if condition4(gi):
-                    num_TT_1n2 = num_TT_1n2 +1
-                else:
-                    num_TT_12n = num_TT_12n +1
+            if self.numNeighbor>0:
+                neighborCase(gi,func1=condition3,func2=condition4,var1=num_TT_n12,var2=num_TT_1n2,var3=num_TT_12n)
+                if not len(neighborTF)==0:
+                    neighborCase(gi,func1=condition5,func2=condition6,var1=num_TT_t12,var2=num_TT_1t2,var3=num_TT_12t)
+                if not len(neighborTarget)==0:
+                    neighborCase(gi,func1=condition7,func2=condition8,var1=num_TT_g12,var2=num_TT_1g2,var3=num_TT_12g)
         else:
-            if condition4(gi):
-                num_TT_n12 = num_TT_n12 +1
-            else:
-                if condition3(gi):
-                    num_TT_1n2 = num_TT_1n2 +1
-                else:
-                    num_TT_12n = num_TT_12n +1
+            if self.numNeighbor>0:
+                neighborCase(gi,func1=condition4,func2=condition3,var1=num_TT_n12,var2=num_TT_1n2,var3=num_TT_12n)
+                if not len(neighborTF)==0:
+                    neighborCase(gi,func1=condition6,func2=condition5,var1=num_TT_t12,var2=num_TT_1t2,var3=num_TT_12t)
+                if not len(neighborTarget)==0:
+                    neighborCase(gi,func1=condition8,func2=condition7,var1=num_TT_g12,var2=num_TT_1g2,var3=num_TT_12g)
+                
     else:
         num_TG = num_TG + 1
         if condition2(gi):
             num_TG_12 = num_TG_12 +1
-            if condition3(gi):
-                num_TG_n12 = num_TG_n12 +1
-            else:
-                if condition4(gi):
-                    num_TG_1n2 = num_TG_1n2 +1
-                else:
-                    num_TG_12n = num_TG_12n +1
+            if self.numNeighbor>0:
+                neighborCase(gi,func1=condition3,func2=condition4,var1=num_TG_n12,var2=num_TG_1n2,var3=num_TG_12n)
+                if not len(neighborTF)==0:
+                    neighborCase(gi,func1=condition5,func2=condition6,var1=num_TG_t12,var2=num_TG_1t2,var3=num_TG_12t)
+                if not len(neighborTarget)==0:
+                    neighborCase(gi,func1=condition7,func2=condition8,var1=num_TG_g12,var2=num_TG_1g2,var3=num_TG_12g)
         else:
             num_TG_21 = num_TG_21 +1
-            if condition4(gi):
-                num_TG_n21 = num_TG_n21 +1
-            else:
-                if condition3(gi):
-                    num_TG_2n1 = num_TG_2n1 +1
-                else:
-                    num_TG_21n = num_TG_21n +1 
+            if self.numNeighbor>0:
+                neighborCase(gi,func1=condition4,func2=condition3,var1=num_TG_n21,var2=num_TG_2n1,var3=num_TG_21n)
+                if not len(neighborTF)==0:
+                    neighborCase(gi,func1=condition6,func2=condition5,var1=num_TG_t21,var2=num_TG_2t1,var3=num_TG_21t)
+                if not len(neighborTarget)==0:
+                    neighborCase(gi,func1=condition8,func2=condition7,var1=num_TG_g21,var2=num_TG_2g1,var3=num_TG_21g)
+                
+
+
+                
+print(num_TT)
+print(num_TG)
+print(num_TT_n12)
+print(num_TT_1n2)
+print(num_TT_12n)
+print(num_TG_12)
+print(num_TG_21)
+print(num_TG_n12)
+print(num_TG_1n2)
+print(num_TG_12n)
+print(num_TG_n21)
+print(num_TG_2n1)
+print(num_TG_21n)
 
 
 
