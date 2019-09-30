@@ -5,11 +5,14 @@ from tqdm import tqdm
 import os, sys, pdb, math
 import networkx as nx
 
+#3: ecoli
 #2055 vs 1448674
+#4: yeast
+#3935 vs 1921804
 pos_graphs_labels = np.load("pos_graphs_labels.npy")
-pos_graphs_features = np.load("pos_graphs_features_zscore.npy")
+pos_graphs_features = np.load("pos_graphs_features_mean.npy")
 neg_graphs_labels = np.load("neg_graphs_labels.npy")
-neg_graphs_features = np.load("neg_graphs_features_zscore.npy")
+neg_graphs_features = np.load("neg_graphs_features_mean.npy")
 
 ph1=0
 ph2=0
@@ -303,7 +306,16 @@ def condition16(gi):
         result = False
     return result
 
-
+#Not Good enough
+#condition17: expression neighborTF > neighborTarget
+def condition17(gi):
+    #exMeanNeighborTF>exMeanNeighborTarget
+    if gi.exMeanNeighborTF > gi.exMeanNeighborTarget :
+        result = True   
+    #exMeanNeighborTF<exMeanNeighborTarget
+    else:
+        result = False
+    return result
 
 
 #posFlag: True for positive, False for negative
@@ -348,6 +360,8 @@ posGiList = generate_information(graphs_labels=pos_graphs_labels, graphs_feature
 #gB12: neighborTarget Bypass, end1, end2
 #gN12: neighborTarget Bypassno, end1, end2
 num_TT=0
+num_TT_tg=0
+num_TT_gt=0
 num_TT_n12=0
 num_TT_1n2=0
 num_TT_12n=0
@@ -371,6 +385,8 @@ num_TT_1gN2=0
 num_TT_12gN=0
 
 num_TG=0
+num_TG_tg=0
+num_TG_gt=0
 num_TG_12=0
 num_TG_21=0
 num_TG_n12=0
@@ -420,6 +436,11 @@ for gi in posGiList:
 # for gi in negGiList:
     if condition1(gi):
         num_TT = num_TT + 1
+        if gi.numNeighbor>0 and len(gi.neighborTF)>0 and len(gi.neighborTarget)>0:
+            if condition17(gi):
+                num_TT_tg = num_TT_tg +1
+            else:
+                num_TT_gt = num_TT_gt +1
         if condition2(gi):
             if gi.numNeighbor>0:
                 num_TT_n12,num_TT_1n2,num_TT_12n = neighborCase(gi,func1=condition3,func2=condition4,var1=num_TT_n12,var2=num_TT_1n2,var3=num_TT_12n)
@@ -453,6 +474,11 @@ for gi in posGiList:
                 
     else:
         num_TG = num_TG + 1
+        if gi.numNeighbor>0 and len(gi.neighborTF)>0 and len(gi.neighborTarget)>0:
+            if condition17(gi):
+                num_TG_tg = num_TG_tg +1
+            else:
+                num_TG_gt = num_TG_gt +1
         if condition2(gi):
             num_TG_12 = num_TG_12 +1
             if gi.numNeighbor>0:
@@ -496,6 +522,8 @@ for gi in posGiList:
 #gB12: neighborTarget Bypass, end1, end2
 #gN12: neighborTarget Bypassno, end1, end2
 print(num_TT)
+print(num_TT_tg)
+print(num_TT_gt)
 print(num_TT_n12)
 print(num_TT_1n2)
 print(num_TT_12n)
@@ -520,6 +548,8 @@ print(num_TT_12gN)
 
 print("****")
 print(num_TG)
+print(num_TG_tg)
+print(num_TG_gt)
 print(num_TG_12)
 print(num_TG_21)
 print(num_TG_n12)

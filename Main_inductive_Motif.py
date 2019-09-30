@@ -13,7 +13,7 @@ from util_functions import *
 # Only one agent is used
 parser = argparse.ArgumentParser(description='Gene Regulatory Graph Neural Network in network motifs')
 # general settings
-parser.add_argument('--traindata-name', default='dream3', help='train network name')
+parser.add_argument('--traindata-name', default='dream4', help='train network name')
 parser.add_argument('--testdata-name', default=None, help='test network name, usually transductive here')
 parser.add_argument('--max-train-num', type=int, default=100000, 
                     help='set maximum number of train links (to fit into memory)')
@@ -67,7 +67,8 @@ allx =group.toarray().astype('float32')
 #deal with the features:
 # attributes = geneexpression_attribute(allx,tfDict)
 #deal with the features, zscore and features:
-attributes = geneexpression_attribute_zscore(allx,tfDict)
+# attributes = geneexpression_attribute_zscore(allx,tfDict)
+attributes = geneexpression_attribute_mean(allx,tfDict)
 train_pos, train_neg = sample_neg_TF_motif(net, TF_num=dreamTFdict[args.traindata_name])
 
 '''Train and apply classifier'''
@@ -90,9 +91,9 @@ pos_graphs_labels,pos_graphs_features,neg_graphs_labels,neg_graphs_features, max
 print('# pos: %d, # neg: %d' % (len(pos_graphs_labels), len(neg_graphs_labels)))
 
 # np.save('pos_graphs_labels.npy',pos_graphs_labels)
-# np.save('pos_graphs_features_zscore.npy',pos_graphs_features)
-np.save('neg_graphs_labels.npy',neg_graphs_labels)
-np.save('neg_graphs_features_zscore.npy',neg_graphs_features)
+np.save('4_pos_graphs_features_mean.npy',pos_graphs_features)
+# np.save('neg_graphs_labels.npy',neg_graphs_labels)
+np.save('4_neg_graphs_features_mean.npy',neg_graphs_features)
 
 
 
