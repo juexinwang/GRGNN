@@ -95,7 +95,7 @@ class GraphInfo(object):
 
         for j in np.arange(len(neighborTF)):
             #bypass
-            if neighborTF[j,1]>0:
+            if neighborLabelTF[j]>0:
                 neighborTFBypass.append(neighborTF[j,:])
                 neighborLabelTFBypass.append(neighborLabelTF[j])
                 if neighborLabelTF[j] == 2.0:
@@ -114,7 +114,7 @@ class GraphInfo(object):
         
         for j in np.arange(len(neighborTarget)):
             #bypass
-            if neighborTarget[j,1]>0:
+            if neighborLabelTarget[j]>0:
                 neighborTargetBypass.append(neighborTarget[j,:])
                 neighborLabelTargetBypass.append(neighborLabelTarget[j])
                 if neighborLabelTarget[j] == 2.0:
@@ -572,6 +572,29 @@ def condition19_2(gi):
 
 def condition19_3(gi):
     if gi.exMeanNeighborTargetBypass_3 > gi.exMeanNeighborTargetBypass_H :
+        result = True
+    else:
+        result = False
+    return result
+
+#condition20
+#exMeanNeighborTFBypass vs exMeanNeighborTargetBypass 2,3,H
+def condition20_1(gi):
+    if gi.exMeanNeighborTFBypass_2 > gi.exMeanNeighborTargetBypass_2 :
+        result = True
+    else:
+        result = False
+    return result
+
+def condition20_2(gi):
+    if gi.exMeanNeighborTFBypass_3 > gi.exMeanNeighborTargetBypass_3 :
+        result = True
+    else:
+        result = False
+    return result
+
+def condition20_3(gi):
+    if gi.exMeanNeighborTFBypass_H > gi.exMeanNeighborTargetBypass_H :
         result = True
     else:
         result = False
