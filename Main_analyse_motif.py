@@ -776,272 +776,303 @@ num_TG_gN21=0
 num_TG_2gN1=0
 num_TG_21gN=0
 
-# for gi in posGiList:
-for gi in negGiList:
-    if condition1(gi):
-        num_TT = num_TT + 1
-        if gi.numNeighbor>0 and len(gi.neighborTF)>0 and len(gi.neighborTarget)>0:
-            if condition17(gi):
-                num_TT_tg = num_TT_tg +1
-            else:
-                num_TT_gt = num_TT_gt +1
-        if condition2(gi):
-            if gi.numNeighbor>0:
-                num_TT_n12,num_TT_1n2,num_TT_12n = neighborCase(gi,func1=condition3,func2=condition4,var1=num_TT_n12,var2=num_TT_1n2,var3=num_TT_12n)
-                if not len(gi.neighborTF)==0:
-                    num_TT_t12,num_TT_1t2,num_TT_12t = neighborCase(gi,func1=condition5,func2=condition6,var1=num_TT_t12,var2=num_TT_1t2,var3=num_TT_12t)
-                    if not len(gi.neighborTFBypass)==0:
-                        num_TT_tB12,num_TT_1tB2,num_TT_12tB = neighborCase(gi,func1=condition9,func2=condition10,var1=num_TT_tB12,var2=num_TT_1tB2,var3=num_TT_12tB)
-                        if not gi.numNeighborTFBypass_2==0:
-                            num_TT_tB2_12,num_TT_1tB2_2,num_TT_12tB2_ = neighborCase(gi,func1=condition9_2,func2=condition10_2,var1=num_TT_tB2_12,var2=num_TT_1tB2_2,var3=num_TT_12tB2_)
-                        if not gi.numNeighborTFBypass_3==0:
-                            num_TT_tB3_12,num_TT_1tB3_2,num_TT_12tB3_ = neighborCase(gi,func1=condition9_3,func2=condition10_3,var1=num_TT_tB3_12,var2=num_TT_1tB3_2,var3=num_TT_12tB3_)
-                        if not gi.numNeighborTFBypass_H==0:
-                            num_TT_tBH_12,num_TT_1tBH_2,num_TT_12tBH_ = neighborCase(gi,func1=condition9_H,func2=condition10_H,var1=num_TT_tBH_12,var2=num_TT_1tBH_2,var3=num_TT_12tBH_)
-                    if not len(gi.neighborTFBypassNo)==0:
-                        num_TT_tN12,num_TT_1tN2,num_TT_12tN = neighborCase(gi,func1=condition13,func2=condition14,var1=num_TT_tN12,var2=num_TT_1tN2,var3=num_TT_12tN)
-                if not len(gi.neighborTarget)==0:
-                    num_TT_g12,num_TT_1g2,num_TT_12g = neighborCase(gi,func1=condition7,func2=condition8,var1=num_TT_g12,var2=num_TT_1g2,var3=num_TT_12g)
-                    if not len(gi.neighborTargetBypass)==0:
-                        num_TT_gB12,num_TT_1gB2,num_TT_12gB = neighborCase(gi,func1=condition11,func2=condition12,var1=num_TT_gB12,var2=num_TT_1gB2,var3=num_TT_12gB)
-                        if not gi.numNeighborTargetBypass_2==0:
-                            num_TT_gB2_12,num_TT_1gB2_2,num_TT_12gB2_ = neighborCase(gi,func1=condition11_2,func2=condition12_2,var1=num_TT_gB2_12,var2=num_TT_1gB2_2,var3=num_TT_12gB2_)
-                        if not gi.numNeighborTargetBypass_3==0:
-                            num_TT_gB3_12,num_TT_1gB3_2,num_TT_12gB3_ = neighborCase(gi,func1=condition11_3,func2=condition12_3,var1=num_TT_gB3_12,var2=num_TT_1gB3_2,var3=num_TT_12gB3_)
-                        if not gi.numNeighborTargetBypass_H==0:
-                            num_TT_gBH_12,num_TT_1gBH_2,num_TT_12gBH_ = neighborCase(gi,func1=condition11_H,func2=condition12_H,var1=num_TT_gBH_12,var2=num_TT_1gBH_2,var3=num_TT_12gBH_)
-                    if not len(gi.neighborTargetBypassNo)==0:
-                        num_TT_gN12,num_TT_1gN2,num_TT_12gN = neighborCase(gi,func1=condition15,func2=condition16,var1=num_TT_gN12,var2=num_TT_1gN2,var3=num_TT_12gN)
-        else:
-            if gi.numNeighbor>0:
-                num_TT_n12,num_TT_1n2,num_TT_12n = neighborCase(gi,func1=condition4,func2=condition3,var1=num_TT_n12,var2=num_TT_1n2,var3=num_TT_12n)
-                if not len(gi.neighborTF)==0:
-                    num_TT_t12,num_TT_1t2,num_TT_12t = neighborCase(gi,func1=condition6,func2=condition5,var1=num_TT_t12,var2=num_TT_1t2,var3=num_TT_12t)
-                    if not len(gi.neighborTFBypass)==0:
-                        num_TT_tB12,num_TT_1tB2,num_TT_12tB = neighborCase(gi,func1=condition10,func2=condition9,var1=num_TT_tB12,var2=num_TT_1tB2,var3=num_TT_12tB)
-                        if not gi.numNeighborTFBypass_2==0:
-                            num_TT_tB2_12,num_TT_1tB2_2,num_TT_12tB2_ = neighborCase(gi,func1=condition10_2,func2=condition9_2,var1=num_TT_tB2_12,var2=num_TT_1tB2_2,var3=num_TT_12tB2_)
-                        if not gi.numNeighborTFBypass_3==0:
-                            num_TT_tB3_12,num_TT_1tB3_2,num_TT_12tB3_ = neighborCase(gi,func1=condition10_3,func2=condition9_3,var1=num_TT_tB3_12,var2=num_TT_1tB3_2,var3=num_TT_12tB3_)
-                        if not gi.numNeighborTFBypass_H==0:
-                            num_TT_tBH_12,num_TT_1tBH_2,num_TT_12tBH_ = neighborCase(gi,func1=condition10_H,func2=condition9_H,var1=num_TT_tBH_12,var2=num_TT_1tBH_2,var3=num_TT_12tBH_)
-                    if not len(gi.neighborTFBypassNo)==0:
-                        num_TT_tN12,num_TT_1tN2,num_TT_12tN = neighborCase(gi,func1=condition14,func2=condition13,var1=num_TT_tN12,var2=num_TT_1tN2,var3=num_TT_12tN)
-                if not len(gi.neighborTarget)==0:
-                    num_TT_g12,num_TT_1g2,num_TT_12g = neighborCase(gi,func1=condition8,func2=condition7,var1=num_TT_g12,var2=num_TT_1g2,var3=num_TT_12g)
-                    if not len(gi.neighborTargetBypass)==0:
-                        num_TT_gB12,num_TT_1gB2,num_TT_12gB = neighborCase(gi,func1=condition12,func2=condition11,var1=num_TT_gB12,var2=num_TT_1gB2,var3=num_TT_12gB)
-                        if not gi.numNeighborTargetBypass_2==0:
-                            num_TT_gB2_12,num_TT_1gB2_2,num_TT_12gB2_ = neighborCase(gi,func1=condition12_2,func2=condition11_2,var1=num_TT_gB2_12,var2=num_TT_1gB2_2,var3=num_TT_12gB2_)
-                        if not gi.numNeighborTargetBypass_3==0:
-                            num_TT_gB3_12,num_TT_1gB3_2,num_TT_12gB3_ = neighborCase(gi,func1=condition12_3,func2=condition11_3,var1=num_TT_gB3_12,var2=num_TT_1gB3_2,var3=num_TT_12gB3_)
-                        if not gi.numNeighborTargetBypass_H==0:
-                            num_TT_gBH_12,num_TT_1gBH_2,num_TT_12gBH_ = neighborCase(gi,func1=condition12_H,func2=condition11_H,var1=num_TT_gBH_12,var2=num_TT_1gBH_2,var3=num_TT_12gBH_)
-                    if not len(gi.neighborTargetBypassNo)==0:
-                        num_TT_gN12,num_TT_1gN2,num_TT_12gN = neighborCase(gi,func1=condition16,func2=condition15,var1=num_TT_gN12,var2=num_TT_1gN2,var3=num_TT_12gN)
+# # for gi in posGiList:
+# for gi in negGiList:
+#     if condition1(gi):
+#         num_TT = num_TT + 1
+#         if gi.numNeighbor>0 and len(gi.neighborTF)>0 and len(gi.neighborTarget)>0:
+#             if condition17(gi):
+#                 num_TT_tg = num_TT_tg +1
+#             else:
+#                 num_TT_gt = num_TT_gt +1
+#         if condition2(gi):
+#             if gi.numNeighbor>0:
+#                 num_TT_n12,num_TT_1n2,num_TT_12n = neighborCase(gi,func1=condition3,func2=condition4,var1=num_TT_n12,var2=num_TT_1n2,var3=num_TT_12n)
+#                 if not len(gi.neighborTF)==0:
+#                     num_TT_t12,num_TT_1t2,num_TT_12t = neighborCase(gi,func1=condition5,func2=condition6,var1=num_TT_t12,var2=num_TT_1t2,var3=num_TT_12t)
+#                     if not len(gi.neighborTFBypass)==0:
+#                         num_TT_tB12,num_TT_1tB2,num_TT_12tB = neighborCase(gi,func1=condition9,func2=condition10,var1=num_TT_tB12,var2=num_TT_1tB2,var3=num_TT_12tB)
+#                         if not gi.numNeighborTFBypass_2==0:
+#                             num_TT_tB2_12,num_TT_1tB2_2,num_TT_12tB2_ = neighborCase(gi,func1=condition9_2,func2=condition10_2,var1=num_TT_tB2_12,var2=num_TT_1tB2_2,var3=num_TT_12tB2_)
+#                         if not gi.numNeighborTFBypass_3==0:
+#                             num_TT_tB3_12,num_TT_1tB3_2,num_TT_12tB3_ = neighborCase(gi,func1=condition9_3,func2=condition10_3,var1=num_TT_tB3_12,var2=num_TT_1tB3_2,var3=num_TT_12tB3_)
+#                         if not gi.numNeighborTFBypass_H==0:
+#                             num_TT_tBH_12,num_TT_1tBH_2,num_TT_12tBH_ = neighborCase(gi,func1=condition9_H,func2=condition10_H,var1=num_TT_tBH_12,var2=num_TT_1tBH_2,var3=num_TT_12tBH_)
+#                     if not len(gi.neighborTFBypassNo)==0:
+#                         num_TT_tN12,num_TT_1tN2,num_TT_12tN = neighborCase(gi,func1=condition13,func2=condition14,var1=num_TT_tN12,var2=num_TT_1tN2,var3=num_TT_12tN)
+#                 if not len(gi.neighborTarget)==0:
+#                     num_TT_g12,num_TT_1g2,num_TT_12g = neighborCase(gi,func1=condition7,func2=condition8,var1=num_TT_g12,var2=num_TT_1g2,var3=num_TT_12g)
+#                     if not len(gi.neighborTargetBypass)==0:
+#                         num_TT_gB12,num_TT_1gB2,num_TT_12gB = neighborCase(gi,func1=condition11,func2=condition12,var1=num_TT_gB12,var2=num_TT_1gB2,var3=num_TT_12gB)
+#                         if not gi.numNeighborTargetBypass_2==0:
+#                             num_TT_gB2_12,num_TT_1gB2_2,num_TT_12gB2_ = neighborCase(gi,func1=condition11_2,func2=condition12_2,var1=num_TT_gB2_12,var2=num_TT_1gB2_2,var3=num_TT_12gB2_)
+#                         if not gi.numNeighborTargetBypass_3==0:
+#                             num_TT_gB3_12,num_TT_1gB3_2,num_TT_12gB3_ = neighborCase(gi,func1=condition11_3,func2=condition12_3,var1=num_TT_gB3_12,var2=num_TT_1gB3_2,var3=num_TT_12gB3_)
+#                         if not gi.numNeighborTargetBypass_H==0:
+#                             num_TT_gBH_12,num_TT_1gBH_2,num_TT_12gBH_ = neighborCase(gi,func1=condition11_H,func2=condition12_H,var1=num_TT_gBH_12,var2=num_TT_1gBH_2,var3=num_TT_12gBH_)
+#                     if not len(gi.neighborTargetBypassNo)==0:
+#                         num_TT_gN12,num_TT_1gN2,num_TT_12gN = neighborCase(gi,func1=condition15,func2=condition16,var1=num_TT_gN12,var2=num_TT_1gN2,var3=num_TT_12gN)
+#         else:
+#             if gi.numNeighbor>0:
+#                 num_TT_n12,num_TT_1n2,num_TT_12n = neighborCase(gi,func1=condition4,func2=condition3,var1=num_TT_n12,var2=num_TT_1n2,var3=num_TT_12n)
+#                 if not len(gi.neighborTF)==0:
+#                     num_TT_t12,num_TT_1t2,num_TT_12t = neighborCase(gi,func1=condition6,func2=condition5,var1=num_TT_t12,var2=num_TT_1t2,var3=num_TT_12t)
+#                     if not len(gi.neighborTFBypass)==0:
+#                         num_TT_tB12,num_TT_1tB2,num_TT_12tB = neighborCase(gi,func1=condition10,func2=condition9,var1=num_TT_tB12,var2=num_TT_1tB2,var3=num_TT_12tB)
+#                         if not gi.numNeighborTFBypass_2==0:
+#                             num_TT_tB2_12,num_TT_1tB2_2,num_TT_12tB2_ = neighborCase(gi,func1=condition10_2,func2=condition9_2,var1=num_TT_tB2_12,var2=num_TT_1tB2_2,var3=num_TT_12tB2_)
+#                         if not gi.numNeighborTFBypass_3==0:
+#                             num_TT_tB3_12,num_TT_1tB3_2,num_TT_12tB3_ = neighborCase(gi,func1=condition10_3,func2=condition9_3,var1=num_TT_tB3_12,var2=num_TT_1tB3_2,var3=num_TT_12tB3_)
+#                         if not gi.numNeighborTFBypass_H==0:
+#                             num_TT_tBH_12,num_TT_1tBH_2,num_TT_12tBH_ = neighborCase(gi,func1=condition10_H,func2=condition9_H,var1=num_TT_tBH_12,var2=num_TT_1tBH_2,var3=num_TT_12tBH_)
+#                     if not len(gi.neighborTFBypassNo)==0:
+#                         num_TT_tN12,num_TT_1tN2,num_TT_12tN = neighborCase(gi,func1=condition14,func2=condition13,var1=num_TT_tN12,var2=num_TT_1tN2,var3=num_TT_12tN)
+#                 if not len(gi.neighborTarget)==0:
+#                     num_TT_g12,num_TT_1g2,num_TT_12g = neighborCase(gi,func1=condition8,func2=condition7,var1=num_TT_g12,var2=num_TT_1g2,var3=num_TT_12g)
+#                     if not len(gi.neighborTargetBypass)==0:
+#                         num_TT_gB12,num_TT_1gB2,num_TT_12gB = neighborCase(gi,func1=condition12,func2=condition11,var1=num_TT_gB12,var2=num_TT_1gB2,var3=num_TT_12gB)
+#                         if not gi.numNeighborTargetBypass_2==0:
+#                             num_TT_gB2_12,num_TT_1gB2_2,num_TT_12gB2_ = neighborCase(gi,func1=condition12_2,func2=condition11_2,var1=num_TT_gB2_12,var2=num_TT_1gB2_2,var3=num_TT_12gB2_)
+#                         if not gi.numNeighborTargetBypass_3==0:
+#                             num_TT_gB3_12,num_TT_1gB3_2,num_TT_12gB3_ = neighborCase(gi,func1=condition12_3,func2=condition11_3,var1=num_TT_gB3_12,var2=num_TT_1gB3_2,var3=num_TT_12gB3_)
+#                         if not gi.numNeighborTargetBypass_H==0:
+#                             num_TT_gBH_12,num_TT_1gBH_2,num_TT_12gBH_ = neighborCase(gi,func1=condition12_H,func2=condition11_H,var1=num_TT_gBH_12,var2=num_TT_1gBH_2,var3=num_TT_12gBH_)
+#                     if not len(gi.neighborTargetBypassNo)==0:
+#                         num_TT_gN12,num_TT_1gN2,num_TT_12gN = neighborCase(gi,func1=condition16,func2=condition15,var1=num_TT_gN12,var2=num_TT_1gN2,var3=num_TT_12gN)
                 
+#     else:
+#         num_TG = num_TG + 1
+#         if gi.numNeighbor>0 and len(gi.neighborTF)>0 and len(gi.neighborTarget)>0:
+#             if condition17(gi):
+#                 num_TG_tg = num_TG_tg +1
+#             else:
+#                 num_TG_gt = num_TG_gt +1
+#         if condition2(gi):
+#             num_TG_12 = num_TG_12 +1
+#             if gi.numNeighbor>0:
+#                 num_TG_n12,num_TG_1n2,num_TG_12n = neighborCase(gi,func1=condition3,func2=condition4,var1=num_TG_n12,var2=num_TG_1n2,var3=num_TG_12n)
+#                 if not len(gi.neighborTF)==0:
+#                     num_TG_t12,num_TG_1t2,num_TG_12t = neighborCase(gi,func1=condition5,func2=condition6,var1=num_TG_t12,var2=num_TG_1t2,var3=num_TG_12t)
+#                     if not len(gi.neighborTFBypass)==0:
+#                         num_TG_tB12,num_TG_1tB2,num_TG_12tB = neighborCase(gi,func1=condition9,func2=condition10,var1=num_TG_tB12,var2=num_TG_1tB2,var3=num_TG_12tB)
+#                         if not gi.numNeighborTFBypass_2==0:
+#                             num_TG_tB2_12,num_TG_1tB2_2,num_TG_12tB2_ = neighborCase(gi,func1=condition9_2,func2=condition10_2,var1=num_TG_tB2_12,var2=num_TG_1tB2_2,var3=num_TG_12tB2_)
+#                         if not gi.numNeighborTFBypass_3==0:
+#                             num_TG_tB3_12,num_TG_1tB3_2,num_TG_12tB3_ = neighborCase(gi,func1=condition9_3,func2=condition10_3,var1=num_TG_tB3_12,var2=num_TG_1tB3_2,var3=num_TG_12tB3_)
+#                         if not gi.numNeighborTFBypass_H==0:
+#                             num_TG_tBH_12,num_TG_1tBH_2,num_TG_12tBH_ = neighborCase(gi,func1=condition9_H,func2=condition10_H,var1=num_TG_tBH_12,var2=num_TG_1tBH_2,var3=num_TG_12tBH_)
+#                     if not len(gi.neighborTFBypassNo)==0:
+#                         num_TG_tN12,num_TG_1tN2,num_TG_12tN = neighborCase(gi,func1=condition13,func2=condition14,var1=num_TG_tN12,var2=num_TG_1tN2,var3=num_TG_12tN)                    
+#                 if not len(gi.neighborTarget)==0:
+#                     num_TG_g12,num_TG_1g2,num_TG_12g = neighborCase(gi,func1=condition7,func2=condition8,var1=num_TG_g12,var2=num_TG_1g2,var3=num_TG_12g)
+#                     if not len(gi.neighborTargetBypass)==0:
+#                         num_TG_gB12,num_TG_1gB2,num_TG_12gB = neighborCase(gi,func1=condition11,func2=condition12,var1=num_TG_gB12,var2=num_TG_1gB2,var3=num_TG_12gB)
+#                         if not gi.numNeighborTargetBypass_2==0:
+#                             num_TG_gB2_12,num_TG_1gB2_2,num_TG_12gB2_ = neighborCase(gi,func1=condition11_2,func2=condition12_2,var1=num_TG_gB2_12,var2=num_TG_1gB2_2,var3=num_TG_12gB2_)
+#                         if not gi.numNeighborTargetBypass_3==0:
+#                             num_TG_gB3_12,num_TG_1gB3_2,num_TG_12gB3_ = neighborCase(gi,func1=condition11_3,func2=condition12_3,var1=num_TG_gB3_12,var2=num_TG_1gB3_2,var3=num_TG_12gB3_)
+#                         if not gi.numNeighborTargetBypass_H==0:
+#                             num_TG_gBH_12,num_TG_1gBH_2,num_TG_12gBH_ = neighborCase(gi,func1=condition11_H,func2=condition12_H,var1=num_TG_gBH_12,var2=num_TG_1gBH_2,var3=num_TG_12gBH_)
+#                     if not len(gi.neighborTargetBypassNo)==0:
+#                         num_TG_gN12,num_TG_1gN2,num_TG_12gN = neighborCase(gi,func1=condition15,func2=condition16,var1=num_TG_gN12,var2=num_TG_1gN2,var3=num_TG_12gN) 
+#         else:
+#             num_TG_21 = num_TG_21 +1
+#             if gi.numNeighbor>0:
+#                 num_TG_n21,num_TG_2n1,num_TG_21n = neighborCase(gi,func1=condition4,func2=condition3,var1=num_TG_n21,var2=num_TG_2n1,var3=num_TG_21n)
+#                 if not len(gi.neighborTF)==0:
+#                     num_TG_t21,num_TG_2t1,num_TG_21t = neighborCase(gi,func1=condition6,func2=condition5,var1=num_TG_t21,var2=num_TG_2t1,var3=num_TG_21t)
+#                     if not len(gi.neighborTFBypass)==0:
+#                         num_TG_tB21,num_TG_2tB1,num_TG_21tB = neighborCase(gi,func1=condition10,func2=condition9,var1=num_TG_tB21,var2=num_TG_2tB1,var3=num_TG_21tB)
+#                         if not gi.numNeighborTFBypass_2==0:
+#                             num_TG_tB2_21,num_TG_2tB2_1,num_TG_21tB2_ = neighborCase(gi,func1=condition10_2,func2=condition9_2,var1=num_TG_tB2_21,var2=num_TG_2tB2_1,var3=num_TG_21tB2_)
+#                         if not gi.numNeighborTFBypass_3==0:
+#                             num_TG_tB3_21,num_TG_2tB3_1,num_TG_21tB3_ = neighborCase(gi,func1=condition10_3,func2=condition9_3,var1=num_TG_tB3_21,var2=num_TG_2tB3_1,var3=num_TG_21tB3_)
+#                         if not gi.numNeighborTFBypass_H==0:
+#                             num_TG_tBH_21,num_TG_2tBH_1,num_TG_21tBH_ = neighborCase(gi,func1=condition10_H,func2=condition9_H,var1=num_TG_tBH_21,var2=num_TG_2tBH_1,var3=num_TG_21tBH_)
+#                     if not len(gi.neighborTFBypassNo)==0:
+#                         num_TG_tN21,num_TG_2tN1,num_TG_21tN = neighborCase(gi,func1=condition14,func2=condition13,var1=num_TG_tN21,var2=num_TG_2tN1,var3=num_TG_21tN)
+#                 if not len(gi.neighborTarget)==0:
+#                     num_TG_g21,num_TG_2g1,num_TG_21g = neighborCase(gi,func1=condition8,func2=condition7,var1=num_TG_g21,var2=num_TG_2g1,var3=num_TG_21g)
+#                     if not len(gi.neighborTargetBypass)==0:
+#                         num_TG_gB21,num_TG_2gB1,num_TG_21gB = neighborCase(gi,func1=condition12,func2=condition11,var1=num_TG_gB21,var2=num_TG_2gB1,var3=num_TG_21gB)
+#                         if not gi.numNeighborTargetBypass_2==0:
+#                             num_TG_gB2_21,num_TG_2gB2_1,num_TG_21gB2_ = neighborCase(gi,func1=condition12_2,func2=condition11_2,var1=num_TG_gB2_21,var2=num_TG_2gB2_1,var3=num_TG_21gB2_)
+#                         if not gi.numNeighborTargetBypass_3==0:
+#                             num_TG_gB3_21,num_TG_2gB3_1,num_TG_21gB3_ = neighborCase(gi,func1=condition12_3,func2=condition11_3,var1=num_TG_gB3_21,var2=num_TG_2gB3_1,var3=num_TG_21gB3_)
+#                         if not gi.numNeighborTargetBypass_H==0:
+#                             num_TG_gBH_21,num_TG_2gBH_1,num_TG_21gBH_ = neighborCase(gi,func1=condition12_H,func2=condition11_H,var1=num_TG_gBH_21,var2=num_TG_2gBH_1,var3=num_TG_21gBH_)
+#                     if not len(gi.neighborTargetBypassNo)==0:
+#                         num_TG_gN21,num_TG_2gN1,num_TG_21gN = neighborCase(gi,func1=condition16,func2=condition15,var1=num_TG_gN21,var2=num_TG_2gN1,var3=num_TG_21gN)
+                
+
+# #TT: TF-TF, TG: TF-Target
+# #n12: neighbor, end1, end2
+# #t12: neighborTF, end1, end2
+# #g12: neighborTarget, end1, end2
+# #tB12: neighborTF Bypass, end1, end2
+# #tN12: neighborTF Bypassno, end1, end2
+# #gB12: neighborTarget Bypass, end1, end2
+# #gN12: neighborTarget Bypassno, end1, end2
+# print(num_TT)
+# print(num_TT_tg)
+# print(num_TT_gt)
+# print(num_TT_n12)
+# print(num_TT_1n2)
+# print(num_TT_12n)
+# print(num_TT_t12)
+# print(num_TT_1t2)
+# print(num_TT_12t)
+# print(num_TT_tB12)
+# print(num_TT_1tB2)
+# print(num_TT_12tB)
+# print(num_TT_tB2_12)
+# print(num_TT_1tB2_2)
+# print(num_TT_12tB2_)
+# print(num_TT_tB3_12)
+# print(num_TT_1tB3_2)
+# print(num_TT_12tB3_)
+# print(num_TT_tBH_12)
+# print(num_TT_1tBH_2)
+# print(num_TT_12tBH_)
+# print(num_TT_tN12)
+# print(num_TT_1tN2)
+# print(num_TT_12tN)
+# print(num_TT_g12)
+# print(num_TT_1g2)
+# print(num_TT_12g)
+# print(num_TT_gB12)
+# print(num_TT_1gB2)
+# print(num_TT_12gB)
+# print(num_TT_gB2_12)
+# print(num_TT_1gB2_2)
+# print(num_TT_12gB2_)
+# print(num_TT_gB3_12)
+# print(num_TT_1gB3_2)
+# print(num_TT_12gB3_)
+# print(num_TT_gBH_12)
+# print(num_TT_1gBH_2)
+# print(num_TT_12gBH_)
+# print(num_TT_gN12)
+# print(num_TT_1gN2)
+# print(num_TT_12gN)
+
+# print("****")
+# print(num_TG)
+# print(num_TG_tg)
+# print(num_TG_gt)
+# print(num_TG_12)
+# print(num_TG_21)
+# print(num_TG_n12)
+# print(num_TG_1n2)
+# print(num_TG_12n)
+# print(num_TG_n21)
+# print(num_TG_2n1)
+# print(num_TG_21n)
+# print(num_TG_t12)
+# print(num_TG_1t2)
+# print(num_TG_12t)
+# print(num_TG_t21)
+# print(num_TG_2t1)
+# print(num_TG_21t)
+# print(num_TG_tB12)
+# print(num_TG_1tB2)
+# print(num_TG_12tB)
+# print(num_TG_tB2_12)
+# print(num_TG_1tB2_2)
+# print(num_TG_12tB2_)
+# print(num_TG_tB3_12)
+# print(num_TG_1tB3_2)
+# print(num_TG_12tB3_)
+# print(num_TG_tBH_12)
+# print(num_TG_1tBH_2)
+# print(num_TG_12tBH_)
+# print(num_TG_tB21)
+# print(num_TG_2tB1)
+# print(num_TG_21tB)
+# print(num_TG_tB2_21)
+# print(num_TG_2tB2_1)
+# print(num_TG_21tB2_)
+# print(num_TG_tB3_21)
+# print(num_TG_2tB3_1)
+# print(num_TG_21tB3_)
+# print(num_TG_tBH_21)
+# print(num_TG_2tBH_1)
+# print(num_TG_21tBH_)
+# print(num_TG_tN12)
+# print(num_TG_1tN2)
+# print(num_TG_12tN)
+# print(num_TG_tN21)
+# print(num_TG_2tN1)
+# print(num_TG_21tN)
+# print(num_TG_g12)
+# print(num_TG_1g2)
+# print(num_TG_12g)
+# print(num_TG_g21)
+# print(num_TG_2g1)
+# print(num_TG_21g)
+# print(num_TG_gB12)
+# print(num_TG_1gB2)
+# print(num_TG_12gB)
+# print(num_TG_gB2_12)
+# print(num_TG_1gB2_2)
+# print(num_TG_12gB2_)
+# print(num_TG_gB3_12)
+# print(num_TG_1gB3_2)
+# print(num_TG_12gB3_)
+# print(num_TG_gBH_12)
+# print(num_TG_1gBH_2)
+# print(num_TG_12gBH_)
+# print(num_TG_gB21)
+# print(num_TG_2gB1)
+# print(num_TG_21gB)
+# print(num_TG_gB2_21)
+# print(num_TG_2gB2_1)
+# print(num_TG_21gB2_)
+# print(num_TG_gB3_21)
+# print(num_TG_2gB3_1)
+# print(num_TG_21gB3_)
+# print(num_TG_gBH_21)
+# print(num_TG_2gBH_1)
+# print(num_TG_21gBH_)
+# print(num_TG_gN12)
+# print(num_TG_1gN2)
+# print(num_TG_12gN)
+# print(num_TG_gN21)
+# print(num_TG_2gN1)
+# print(num_TG_21gN)
+
+num_B2=0
+num_B3=0
+num_BH=0
+num_BN=0
+num_END=0
+#without expression
+for gi in negGiList:   
+    if gi.numNeighbor>0:
+        if len(gi.neighborTF) > 0 or len(gi.neighborTarget) > 0:
+            if len(gi.neighborTFBypass)>0 or len(gi.neighborTargetBypass)>0:
+                if gi.numNeighborTFBypass_2>0 or gi.numNeighborTargetBypass_2>0:
+                    num_B2=num_B2+1
+                if gi.numNeighborTFBypass_3>0 or gi.numNeighborTargetBypass_3>0:
+                    num_B3=num_B3+1
+                if gi.numNeighborTFBypass_H>0 or gi.numNeighborTargetBypass_H>0:
+                    num_BH=num_BH+1
+            else:
+                num_BN=num_BN+1
+        else:
+            print("^^^^")
     else:
-        num_TG = num_TG + 1
-        if gi.numNeighbor>0 and len(gi.neighborTF)>0 and len(gi.neighborTarget)>0:
-            if condition17(gi):
-                num_TG_tg = num_TG_tg +1
-            else:
-                num_TG_gt = num_TG_gt +1
-        if condition2(gi):
-            num_TG_12 = num_TG_12 +1
-            if gi.numNeighbor>0:
-                num_TG_n12,num_TG_1n2,num_TG_12n = neighborCase(gi,func1=condition3,func2=condition4,var1=num_TG_n12,var2=num_TG_1n2,var3=num_TG_12n)
-                if not len(gi.neighborTF)==0:
-                    num_TG_t12,num_TG_1t2,num_TG_12t = neighborCase(gi,func1=condition5,func2=condition6,var1=num_TG_t12,var2=num_TG_1t2,var3=num_TG_12t)
-                    if not len(gi.neighborTFBypass)==0:
-                        num_TG_tB12,num_TG_1tB2,num_TG_12tB = neighborCase(gi,func1=condition9,func2=condition10,var1=num_TG_tB12,var2=num_TG_1tB2,var3=num_TG_12tB)
-                        if not gi.numNeighborTFBypass_2==0:
-                            num_TG_tB2_12,num_TG_1tB2_2,num_TG_12tB2_ = neighborCase(gi,func1=condition9_2,func2=condition10_2,var1=num_TG_tB2_12,var2=num_TG_1tB2_2,var3=num_TG_12tB2_)
-                        if not gi.numNeighborTFBypass_3==0:
-                            num_TG_tB3_12,num_TG_1tB3_2,num_TG_12tB3_ = neighborCase(gi,func1=condition9_3,func2=condition10_3,var1=num_TG_tB3_12,var2=num_TG_1tB3_2,var3=num_TG_12tB3_)
-                        if not gi.numNeighborTFBypass_H==0:
-                            num_TG_tBH_12,num_TG_1tBH_2,num_TG_12tBH_ = neighborCase(gi,func1=condition9_H,func2=condition10_H,var1=num_TG_tBH_12,var2=num_TG_1tBH_2,var3=num_TG_12tBH_)
-                    if not len(gi.neighborTFBypassNo)==0:
-                        num_TG_tN12,num_TG_1tN2,num_TG_12tN = neighborCase(gi,func1=condition13,func2=condition14,var1=num_TG_tN12,var2=num_TG_1tN2,var3=num_TG_12tN)                    
-                if not len(gi.neighborTarget)==0:
-                    num_TG_g12,num_TG_1g2,num_TG_12g = neighborCase(gi,func1=condition7,func2=condition8,var1=num_TG_g12,var2=num_TG_1g2,var3=num_TG_12g)
-                    if not len(gi.neighborTargetBypass)==0:
-                        num_TG_gB12,num_TG_1gB2,num_TG_12gB = neighborCase(gi,func1=condition11,func2=condition12,var1=num_TG_gB12,var2=num_TG_1gB2,var3=num_TG_12gB)
-                        if not gi.numNeighborTargetBypass_2==0:
-                            num_TG_gB2_12,num_TG_1gB2_2,num_TG_12gB2_ = neighborCase(gi,func1=condition11_2,func2=condition12_2,var1=num_TG_gB2_12,var2=num_TG_1gB2_2,var3=num_TG_12gB2_)
-                        if not gi.numNeighborTargetBypass_3==0:
-                            num_TG_gB3_12,num_TG_1gB3_2,num_TG_12gB3_ = neighborCase(gi,func1=condition11_3,func2=condition12_3,var1=num_TG_gB3_12,var2=num_TG_1gB3_2,var3=num_TG_12gB3_)
-                        if not gi.numNeighborTargetBypass_H==0:
-                            num_TG_gBH_12,num_TG_1gBH_2,num_TG_12gBH_ = neighborCase(gi,func1=condition11_H,func2=condition12_H,var1=num_TG_gBH_12,var2=num_TG_1gBH_2,var3=num_TG_12gBH_)
-                    if not len(gi.neighborTargetBypassNo)==0:
-                        num_TG_gN12,num_TG_1gN2,num_TG_12gN = neighborCase(gi,func1=condition15,func2=condition16,var1=num_TG_gN12,var2=num_TG_1gN2,var3=num_TG_12gN) 
-        else:
-            num_TG_21 = num_TG_21 +1
-            if gi.numNeighbor>0:
-                num_TG_n21,num_TG_2n1,num_TG_21n = neighborCase(gi,func1=condition4,func2=condition3,var1=num_TG_n21,var2=num_TG_2n1,var3=num_TG_21n)
-                if not len(gi.neighborTF)==0:
-                    num_TG_t21,num_TG_2t1,num_TG_21t = neighborCase(gi,func1=condition6,func2=condition5,var1=num_TG_t21,var2=num_TG_2t1,var3=num_TG_21t)
-                    if not len(gi.neighborTFBypass)==0:
-                        num_TG_tB21,num_TG_2tB1,num_TG_21tB = neighborCase(gi,func1=condition10,func2=condition9,var1=num_TG_tB21,var2=num_TG_2tB1,var3=num_TG_21tB)
-                        if not gi.numNeighborTFBypass_2==0:
-                            num_TG_tB2_21,num_TG_2tB2_1,num_TG_21tB2_ = neighborCase(gi,func1=condition10_2,func2=condition9_2,var1=num_TG_tB2_21,var2=num_TG_2tB2_1,var3=num_TG_21tB2_)
-                        if not gi.numNeighborTFBypass_3==0:
-                            num_TG_tB3_21,num_TG_2tB3_1,num_TG_21tB3_ = neighborCase(gi,func1=condition10_3,func2=condition9_3,var1=num_TG_tB3_21,var2=num_TG_2tB3_1,var3=num_TG_21tB3_)
-                        if not gi.numNeighborTFBypass_H==0:
-                            num_TG_tBH_21,num_TG_2tBH_1,num_TG_21tBH_ = neighborCase(gi,func1=condition10_H,func2=condition9_H,var1=num_TG_tBH_21,var2=num_TG_2tBH_1,var3=num_TG_21tBH_)
-                    if not len(gi.neighborTFBypassNo)==0:
-                        num_TG_tN21,num_TG_2tN1,num_TG_21tN = neighborCase(gi,func1=condition14,func2=condition13,var1=num_TG_tN21,var2=num_TG_2tN1,var3=num_TG_21tN)
-                if not len(gi.neighborTarget)==0:
-                    num_TG_g21,num_TG_2g1,num_TG_21g = neighborCase(gi,func1=condition8,func2=condition7,var1=num_TG_g21,var2=num_TG_2g1,var3=num_TG_21g)
-                    if not len(gi.neighborTargetBypass)==0:
-                        num_TG_gB21,num_TG_2gB1,num_TG_21gB = neighborCase(gi,func1=condition12,func2=condition11,var1=num_TG_gB21,var2=num_TG_2gB1,var3=num_TG_21gB)
-                        if not gi.numNeighborTargetBypass_2==0:
-                            num_TG_gB2_21,num_TG_2gB2_1,num_TG_21gB2_ = neighborCase(gi,func1=condition12_2,func2=condition11_2,var1=num_TG_gB2_21,var2=num_TG_2gB2_1,var3=num_TG_21gB2_)
-                        if not gi.numNeighborTargetBypass_3==0:
-                            num_TG_gB3_21,num_TG_2gB3_1,num_TG_21gB3_ = neighborCase(gi,func1=condition12_3,func2=condition11_3,var1=num_TG_gB3_21,var2=num_TG_2gB3_1,var3=num_TG_21gB3_)
-                        if not gi.numNeighborTargetBypass_H==0:
-                            num_TG_gBH_21,num_TG_2gBH_1,num_TG_21gBH_ = neighborCase(gi,func1=condition12_H,func2=condition11_H,var1=num_TG_gBH_21,var2=num_TG_2gBH_1,var3=num_TG_21gBH_)
-                    if not len(gi.neighborTargetBypassNo)==0:
-                        num_TG_gN21,num_TG_2gN1,num_TG_21gN = neighborCase(gi,func1=condition16,func2=condition15,var1=num_TG_gN21,var2=num_TG_2gN1,var3=num_TG_21gN)
-                
+        num_END=num_END+1
 
-#TT: TF-TF, TG: TF-Target
-#n12: neighbor, end1, end2
-#t12: neighborTF, end1, end2
-#g12: neighborTarget, end1, end2
-#tB12: neighborTF Bypass, end1, end2
-#tN12: neighborTF Bypassno, end1, end2
-#gB12: neighborTarget Bypass, end1, end2
-#gN12: neighborTarget Bypassno, end1, end2
-print(num_TT)
-print(num_TT_tg)
-print(num_TT_gt)
-print(num_TT_n12)
-print(num_TT_1n2)
-print(num_TT_12n)
-print(num_TT_t12)
-print(num_TT_1t2)
-print(num_TT_12t)
-print(num_TT_tB12)
-print(num_TT_1tB2)
-print(num_TT_12tB)
-print(num_TT_tB2_12)
-print(num_TT_1tB2_2)
-print(num_TT_12tB2_)
-print(num_TT_tB3_12)
-print(num_TT_1tB3_2)
-print(num_TT_12tB3_)
-print(num_TT_tBH_12)
-print(num_TT_1tBH_2)
-print(num_TT_12tBH_)
-print(num_TT_tN12)
-print(num_TT_1tN2)
-print(num_TT_12tN)
-print(num_TT_g12)
-print(num_TT_1g2)
-print(num_TT_12g)
-print(num_TT_gB12)
-print(num_TT_1gB2)
-print(num_TT_12gB)
-print(num_TT_gB2_12)
-print(num_TT_1gB2_2)
-print(num_TT_12gB2_)
-print(num_TT_gB3_12)
-print(num_TT_1gB3_2)
-print(num_TT_12gB3_)
-print(num_TT_gBH_12)
-print(num_TT_1gBH_2)
-print(num_TT_12gBH_)
-print(num_TT_gN12)
-print(num_TT_1gN2)
-print(num_TT_12gN)
+print(num_B2)
+print(num_B3)
+print(num_BH)
+print(num_BN)
+print(num_END)
+        
 
-print("****")
-print(num_TG)
-print(num_TG_tg)
-print(num_TG_gt)
-print(num_TG_12)
-print(num_TG_21)
-print(num_TG_n12)
-print(num_TG_1n2)
-print(num_TG_12n)
-print(num_TG_n21)
-print(num_TG_2n1)
-print(num_TG_21n)
-print(num_TG_t12)
-print(num_TG_1t2)
-print(num_TG_12t)
-print(num_TG_t21)
-print(num_TG_2t1)
-print(num_TG_21t)
-print(num_TG_tB12)
-print(num_TG_1tB2)
-print(num_TG_12tB)
-print(num_TG_tB2_12)
-print(num_TG_1tB2_2)
-print(num_TG_12tB2_)
-print(num_TG_tB3_12)
-print(num_TG_1tB3_2)
-print(num_TG_12tB3_)
-print(num_TG_tBH_12)
-print(num_TG_1tBH_2)
-print(num_TG_12tBH_)
-print(num_TG_tB21)
-print(num_TG_2tB1)
-print(num_TG_21tB)
-print(num_TG_tB2_21)
-print(num_TG_2tB2_1)
-print(num_TG_21tB2_)
-print(num_TG_tB3_21)
-print(num_TG_2tB3_1)
-print(num_TG_21tB3_)
-print(num_TG_tBH_21)
-print(num_TG_2tBH_1)
-print(num_TG_21tBH_)
-print(num_TG_tN12)
-print(num_TG_1tN2)
-print(num_TG_12tN)
-print(num_TG_tN21)
-print(num_TG_2tN1)
-print(num_TG_21tN)
-print(num_TG_g12)
-print(num_TG_1g2)
-print(num_TG_12g)
-print(num_TG_g21)
-print(num_TG_2g1)
-print(num_TG_21g)
-print(num_TG_gB12)
-print(num_TG_1gB2)
-print(num_TG_12gB)
-print(num_TG_gB2_12)
-print(num_TG_1gB2_2)
-print(num_TG_12gB2_)
-print(num_TG_gB3_12)
-print(num_TG_1gB3_2)
-print(num_TG_12gB3_)
-print(num_TG_gBH_12)
-print(num_TG_1gBH_2)
-print(num_TG_12gBH_)
-print(num_TG_gB21)
-print(num_TG_2gB1)
-print(num_TG_21gB)
-print(num_TG_gB2_21)
-print(num_TG_2gB2_1)
-print(num_TG_21gB2_)
-print(num_TG_gB3_21)
-print(num_TG_2gB3_1)
-print(num_TG_21gB3_)
-print(num_TG_gBH_21)
-print(num_TG_2gBH_1)
-print(num_TG_21gBH_)
-print(num_TG_gN12)
-print(num_TG_1gN2)
-print(num_TG_12gN)
-print(num_TG_gN21)
-print(num_TG_2gN1)
-print(num_TG_21gN)
-
-
+            
+        
 
 
 
