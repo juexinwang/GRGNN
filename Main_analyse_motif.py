@@ -658,8 +658,8 @@ def neighborCase(gi,func1=condition3,func2=condition4,var1=ph1,var2=ph2,var3=ph3
     return var1, var2, var3
 
 
-posGiList = generate_information(graphs_labels=pos_graphs_labels, graphs_features=pos_graphs_features)
-# negGiList = generate_information(graphs_labels=neg_graphs_labels, graphs_features=neg_graphs_features)
+# posGiList = generate_information(graphs_labels=pos_graphs_labels, graphs_features=pos_graphs_features)
+negGiList = generate_information(graphs_labels=neg_graphs_labels, graphs_features=neg_graphs_features)
 
 #TT: TF-TF, TG: TF-Target
 #n12: neighbor, end1, end2
@@ -802,8 +802,8 @@ num_TG_gN21=0
 num_TG_2gN1=0
 num_TG_21gN=0
 
-for gi in posGiList:
-# for gi in negGiList:
+# for gi in posGiList:
+for gi in negGiList:
     if condition1(gi):
         num_TT = num_TT + 1
         if gi.numNeighbor>0 and len(gi.neighborTF)>0 and len(gi.neighborTarget)>0:
@@ -1078,15 +1078,17 @@ num_B2_3H=0
 num_B2_3H_=0
 num_B2_3_H=0
 num_B23_H_=0
+num_B=0
 num_BN=0
 num_END=0
 
 #without expression
-for gi in posGiList: 
-# for gi in negGiList:   
+# for gi in posGiList: 
+for gi in negGiList:   
     if gi.numNeighbor>0:
         if len(gi.neighborTF) > 0 or len(gi.neighborTarget) > 0:
-            if len(gi.neighborTFBypass)>0 or len(gi.neighborTargetBypass)>0:
+            # if len(gi.neighborTFBypass)>0 or len(gi.neighborTargetBypass)>0:
+            if len(gi.neighborBypass_2)>0 or len(gi.neighborBypass_3)>0 or len(gi.neighborBypass_H)>0:
                 if len(gi.neighborBypass_2)>0:
                     num_B2=num_B2+1
                 if len(gi.neighborBypass_3)>0:
@@ -1109,7 +1111,7 @@ for gi in posGiList:
                     num_B2_3_H=num_B2_3_H+1
                 elif len(gi.neighborBypass_2)==0 and len(gi.neighborBypass_3)==0 and len(gi.neighborBypass_H)==0:
                     num_B2_3_H_=num_B2_3_H_+1
-                
+                num_B=num_B+1
             else:
                 num_BN=num_BN+1
         else:
@@ -1128,6 +1130,7 @@ print(num_B2_3H)
 print(num_B2_3H_)
 print(num_B2_3_H)
 print(num_B23_H_)
+print(num_B)
 print(num_BN)
 print(num_END)
         
