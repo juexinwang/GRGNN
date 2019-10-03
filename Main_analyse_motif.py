@@ -1047,15 +1047,16 @@ num_BH=0
 num_BN=0
 num_END=0
 #without expression
+# for gi in posGiList: 
 for gi in negGiList:   
     if gi.numNeighbor>0:
         if len(gi.neighborTF) > 0 or len(gi.neighborTarget) > 0:
             if len(gi.neighborTFBypass)>0 or len(gi.neighborTargetBypass)>0:
-                if gi.numNeighborTFBypass_2>0 or gi.numNeighborTargetBypass_2>0:
+                if (len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)>0:
                     num_B2=num_B2+1
-                if gi.numNeighborTFBypass_3>0 or gi.numNeighborTargetBypass_3>0:
+                if (len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)>0:
                     num_B3=num_B3+1
-                if gi.numNeighborTFBypass_H>0 or gi.numNeighborTargetBypass_H>0:
+                if (len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)>0:
                     num_BH=num_BH+1
             else:
                 num_BN=num_BN+1
