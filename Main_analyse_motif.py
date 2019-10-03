@@ -1044,6 +1044,14 @@ num_TG_21gN=0
 num_B2=0
 num_B3=0
 num_BH=0
+num_B23H=0
+num_B23H_=0
+num_B23_H=0
+num_B23_H_=0
+num_B2_3H=0
+num_B2_3H_=0
+num_B2_3_H=0
+num_B23_H_=0
 num_BN=0
 num_END=0
 #without expression
@@ -1058,6 +1066,38 @@ for gi in negGiList:
                     num_B3=num_B3+1
                 if (len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)>0:
                     num_BH=num_BH+1
+                if ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)>0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)>0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)>0):
+                    num_B23H=0
+                if ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)>0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)>0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)==0):
+                    num_B23H_=0
+                if ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)>0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)==0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)>0):
+                    num_B23_H=0
+                if ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)>0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)==0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)==0):
+                    num_B23_H_=0
+                if ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)==0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)>0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)>0):
+                    num_B23H=0
+                if ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)==0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)>0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)==0):
+                    num_B23H_=0
+                if ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)==0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)==0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H>0) or (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)>0):
+                    num_B23_H=0
+                if ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_2==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_2)==0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_3==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_3)==0)
+                    and ((len(gi.neighborTFBypass)>0 and gi.numNeighborTFBypass_H==0) and (len(gi.neighborTargetBypass)>0 and gi.numNeighborTargetBypass_H)==0):
+                    num_B23_H_=0
             else:
                 num_BN=num_BN+1
         else:
@@ -1068,6 +1108,14 @@ for gi in negGiList:
 print(num_B2)
 print(num_B3)
 print(num_BH)
+print(num_B23H)
+print(num_B23H_)
+print(num_B23_H)
+print(num_B23_H_)
+print(num_B2_3H)
+print(num_B2_3H_)
+print(num_B2_3_H)
+print(num_B23_H_)
 print(num_BN)
 print(num_END)
         
