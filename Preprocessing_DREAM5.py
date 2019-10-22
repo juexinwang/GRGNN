@@ -12,12 +12,14 @@ import pickle
 # Preprocess DREAM5 data from Official DREAM websites.
 # https://www.synapse.org/#!Synapse:syn3130840
 parser = argparse.ArgumentParser()
-parser.add_argument('--dream-num', type=str, default='1',
+parser.add_argument('--dream-num', type=str, default='4',
                     help='1 for In silico, 3 for E.coli, 4 for S. cerevisae')
 parser.add_argument('--pearson_net', type=float, default=0.8, #1
                     help='pearson correlation as the network')
 parser.add_argument('--mutual_net', type=int, default=3, #3
                     help='mutual information as the network')
+parser.add_argument('--random_net', type=float, default=0.003, #3
+                    help='random as the network')
 
 args = parser.parse_args()
 
@@ -128,6 +130,25 @@ def calc_MI(x, y, bins):
     mi = mutual_info_score(None, None, contingency=c_xy)
     return mi
 
+# calculate random
+def randomMatrix(data, threshold=0.003):
+    row=[]
+    col=[]
+    edata=[]
+    for i in np.arange(data.shape[1]):
+        for j in np.arange(data.shape[1]):
+            if np.random.random_sample() <= threshold:
+                row.append(i)
+                col.append(j)
+                edata.append(1.0)
+    
+    row = np.asarray(row)
+    col = np.asarray(col)
+    edata = np.asarray(edata)
+    #check and get full matrix
+    mtx = scipy.sparse.csc_matrix((edata, (row, col)), shape=(data.shape[1], data.shape[1]))
+    return mtx
+
 # Setting of Dream dataset size
 rowDict={}
 colDict={}
@@ -141,14 +162,14 @@ colDict['4']=5950
 # Can be changed to dream3 and dream4
 datasetname=args.dream_num
 
-feature_filename = "~/biodata/DREAM5_network_inference_challenge/Network"+datasetname+"/input_data/expression_data.tsv"
-edge_filename    = "~/biodata/DREAM5_network_inference_challenge/Network"+datasetname+"/gold_standard/gold_standard_signed.tsv"
+feature_filename = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Network"+datasetname+"/input_data/expression_data.tsv"
+edge_filename    = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Network"+datasetname+"/gold_standard/gold_standard_signed.tsv"
 
-graphcsc = read_edge_file_csc(edge_filename, sample_size=args.sample_size)
-allx = read_feature_file_sparse(feature_filename, sample_size=args.sample_size, feature_size=args.feature_size)
+# graphcsc = read_edge_file_csc(edge_filename, sample_size=args.sample_size)
+# allx = read_feature_file_sparse(feature_filename, sample_size=args.sample_size, feature_size=args.feature_size)
 
-pickle.dump(allx, open( "ind.dream"+datasetname+".allx", "wb" ) )
-pickle.dump(graphcsc, open( "ind.dream"+datasetname+".csc", "wb" ) )
+# pickle.dump(allx, open( "ind.dream"+datasetname+".allx", "wb" ) )
+# pickle.dump(graphcsc, open( "ind.dream"+datasetname+".csc", "wb" ) )
 
 # data as the correlation
 rownum = rowDict[datasetname]    
@@ -170,9 +191,13 @@ with open(feature_filename) as f:
     f.close()
 
 # Calculate Pearson's Correlation coeficient
-pmatrix = pearsonMatrix(data, args.pearson_net)
-np.save('dream'+datasetname+'_pmatrix_'+args.pearson_net+'.npy', pmatrix)
+# pmatrix = pearsonMatrix(data, args.pearson_net)
+# np.save('dream'+datasetname+'_pmatrix_'+args.pearson_net+'.npy', pmatrix)
 
 # Calculate Mutual Information
-mmatrix = mutualMatrix(data, args.mutual_net)
-np.save('dream'+datasetname+'_mmatrix_'+args.mutual_net+'.npy', mmatrix)
+# mmatrix = mutualMatrix(data, args.mutual_net)
+# np.save('dream'+datasetname+'_mmatrix_'+args.mutual_net+'.npy', mmatrix)
+
+# Calculate a random network based on 
+rmatrix = randomMatrix(data, args.random_net)
+np.save('dream'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)

@@ -33,7 +33,7 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
 parser.add_argument('--training-ratio', type=float, default=1.0,
                     help='ratio of used training set')
 # Pearson correlation
-parser.add_argument('--embedding-dim', type=int, default=1,
+parser.add_argument('--embedding-dim', type=int, default=128,
                     help='embedding dimmension')
 parser.add_argument('--pearson_net', type=float, default=0.8, #1
                     help='pearson correlation as the network')
@@ -82,16 +82,22 @@ dreamTFdict['dream4']=333
 if args.traindata_name is not None:
     trainNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.traindata_name)))
     trainGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name)))
-    trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
-    trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    # trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
+    # trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy').tolist()
+    trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy').tolist()
+    
     allx =trainGroup.toarray().astype('float32')
     #deal with the features:
     trainAttributes = genenet_attribute(allx,dreamTFdict[args.traindata_name])   
 
     testNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.testdata_name)))
     testGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.testdata_name)))
-    testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
-    testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    # testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
+    # testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy').tolist()
+    testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy').tolist()
+    
     allxt =testGroup.toarray().astype('float32')
     #deal with the features:
     testAttributes = genenet_attribute(allxt,dreamTFdict[args.testdata_name])
