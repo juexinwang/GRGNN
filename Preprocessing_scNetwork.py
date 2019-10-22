@@ -19,59 +19,93 @@ parser.add_argument('--expression-name', type=str, default='TGFb', #1
 args = parser.parse_args()
 
 # Load gene expression into sparse matrix
-def read_feature_file_sparse(filename, sample_size, feature_size):
+def read_feature_file_sparse(filename, geneList):
     samplelist=[]
     featurelist=[]
     data =[]
+    selectDict=[]
+    selectList=[]
     count = -1
     with open(filename) as f:
         lines = f.readlines()
-        for line in lines:
-            if count >= 0:
-                line = line.strip()
-                words = line.split()
-                data_count = 0
+        for line in lines:            
+            line = line.strip()
+            words = line.split()
+            if count == -1:
+                tcount =0
                 for word in words:
+                    selectDict[word] = tcount
+                    tcount = tcount + 1
+                for gene in geneList:
+                    if gene in selectDict:
+                        selectList.append(selectDict[gene])
+                    else:
+                        print(str(gene)+' is not in the input')
+            if count >= 0:
+                tmplist =[]
+                for word in words:
+                    tmplist.append(word)
+                
+                data_count = 0
+                for item in selectList:
                     featurelist.append(count)
                     samplelist.append(data_count)
-                    data.append(float(word))
+                    data.append(float(tmplist[item]))
                     data_count += 1
             count += 1
     f.close()
-    feature = scipy.sparse.csr_matrix((data, (samplelist,featurelist)), shape=(sample_size,feature_size))   
+    feature = scipy.sparse.csr_matrix((data, (samplelist,featurelist)), shape=(len(samplelist),len(geneList)))   
     return feature
 
 # Load gold standard edges into sparse matrix
-def read_edge_file_csc(filename, sample_size):
+# No edge types
+# output mtx, geneList, geneDict, tfDict
+def read_edge_file_csc(filename):
     row=[]
     col=[]
     data=[]
+    # geneList, geneDict, tfDict
+    geneList=[]
+    geneDict={}
+    tfDict={}
+
     count = 0
+    genecount = 0
     with open(filename) as f:
         lines = f.readlines()
         for line in lines:
             line = line.strip()
             words = line.split()
-            end1 = int(words[0][1:])-1
-            end2 = int(words[1][1:])-1
-            if end1 > end2:
-                tmpp = end1
-                end1 = end2
-                end2 = tmpp
+            end1 = words[0]
+            end2 = words[1]
+
+            #Add to sparse matrix
             row.append(end1)
             col.append(end2)
             data.append(1.0)
             row.append(end2)
             col.append(end1)
             data.append(1.0)
+
+            # geneList, geneDict, tfDict
+            if end1 not in geneDict:
+                geneDict[end1] = genecount
+                geneList.append(end1)
+                genecount = genecount + 1
+            if end2 not in geneDict:
+                geneDict[end2] = genecount
+                geneList.append(end2)
+                genecount = genecount + 1
+            if end1 not in tfDict:
+                tfDict[end1] = ''
             count += 1
     f.close()
     row = np.asarray(row)
     col = np.asarray(col)
     data = np.asarray(data)
     #check and get full matrix
-    mtx = scipy.sparse.csc_matrix((data, (row, col)), shape=(sample_size, sample_size))
-    return mtx
+    mtx = scipy.sparse.csc_matrix((data, (row, col)), shape=(len(geneList), len(geneList)))
+    return mtx, geneList, geneDict, tfDict
 
 # calculate Pearson's Correlation coefficient of gene expression
 def pearsonMatrix(data, threshold=0.8):
@@ -169,9 +203,9 @@ elif args.expression_name=='test':
 edge_filename    = "data/"+networkname
 feature_filename = "data/"+expressionname
 
-graphcsc = read_edge_file_csc(edge_filename, sample_size=args.sample_size)
-allx = read_feature_file_sparse(feature_filename, sample_size=args.sample_size, feature_size=args.feature_size)
+graphcsc, geneList, geneDict, tfDict = read_edge_file_csc(edge_filename)
+allx = read_feature_file_sparse(feature_filename, geneList)
 
-pickle.dump(allx, open( "ind.dream"+datasetname+".allx", "wb" ) )
-pickle.dump(graphcsc, open( "ind.dream"+datasetname+".csc", "wb" ) )
+pickle.dump(allx, open( "ind.dream"+expressionname+".allx", "wb" ) )
+pickle.dump(graphcsc, open( "ind.dream"+expressionname+".csc", "wb" ) )
 
