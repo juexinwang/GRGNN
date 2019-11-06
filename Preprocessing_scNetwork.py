@@ -8,6 +8,7 @@ from scipy.stats import pearsonr
 import scipy.sparse
 import sys
 import pickle
+import csv
 
 # Preprocess network for sc
 parser = argparse.ArgumentParser()
@@ -79,6 +80,7 @@ def preprocess_network(edge_filename, feature_filename):
 # Load gold standard edges into sparse matrix
 # No edge types
 # output mtx, tfDict
+# Additional outfile for matlab
 def read_edge_file_csc(filename, geneDict):
     row=[]
     col=[]
@@ -111,7 +113,12 @@ def read_edge_file_csc(filename, geneDict):
     data = np.asarray(data)
     #check and get full matrix
     mtx = scipy.sparse.csc_matrix((data, (row, col)), shape=(len(geneDict), len(geneDict)))
-    return mtx, tfDict
+    
+    #python output
+    # return mtx, tfDict
+
+    #Output for matlab
+    return mtx, tfDict, row, col, data
 
 # Load gene expression into sparse matrix
 def read_feature_file_sparse(filename, geneList, geneDict):
@@ -121,6 +128,7 @@ def read_feature_file_sparse(filename, geneList, geneDict):
     selectDict={}
     selectList=[]
     count = -1
+
     with open(filename) as f:
         lines = f.readlines()
         for line in lines:            
@@ -161,8 +169,30 @@ def read_feature_file_sparse(filename, geneList, geneDict):
             count += 1
     f.close()
     # As dream: rows as genes, columns as samples: This is transpose of the original scRNA data
-    feature = scipy.sparse.csr_matrix((data, (featurelist, samplelist)), shape=(len(selectList),count))   
-    return feature
+    feature = scipy.sparse.csr_matrix((data, (featurelist, samplelist)), shape=(len(selectList),count))  
+
+    # For Matlab
+    dim2out = [[0.0] * len(selectList) for i in range(count)]
+    count = -1
+    with open(filename) as f:
+        lines = f.readlines()
+        for line in lines:            
+            line = line.strip()
+            words = line.split(',')
+            if count >= 0:
+                tmplist =[]
+                for word in words:
+                    tmplist.append(float(word))
+                avgtmp = np.sum(tmplist)/float(len(tmplist))
+                
+                data_count = 0
+                for item in selectList:
+                    dim2out[count][data_count]=float(tmplist[item])
+                    data_count += 1
+            count += 1
+    f.close()
+
+    return feature, dim2out
 
 
 
@@ -201,8 +231,8 @@ if args.network_name=='ttrust':
     networkname = 'trrust_rawdata.human.tsv'
 
 if args.expression_name=='TGFb':
-    # expressionname = 'HMLE_TGFb_day_8_10.csv'
-    expressionname = 'HMLE_TGFb_day_8_10_part.csv'
+    expressionname = 'HMLE_TGFb_day_8_10.csv'
+    # expressionname = 'HMLE_TGFb_day_8_10_part.csv'
 elif args.expression_name=='test':
     expressionname = 'test_data.csv'
 
@@ -211,8 +241,14 @@ feature_filename = "/home/wangjue/biodata/scData/"+expressionname
 
 geneList, geneDict = preprocess_network(edge_filename, feature_filename)
 
-graphcsc, tfDict = read_edge_file_csc(edge_filename, geneDict)
-feature = read_feature_file_sparse(feature_filename, geneList, geneDict)
+#only python
+# graphcsc, tfDict = read_edge_file_csc(edge_filename, geneDict)
+# feature = read_feature_file_sparse(feature_filename, geneList, geneDict)
+
+#python and matlab
+graphcsc, tfDict, rowO, colO, dataO  = read_edge_file_csc(edge_filename, geneDict)
+feature, dim2out = read_feature_file_sparse(feature_filename, geneList, geneDict)
+
 graphdict = read_edge_file_dict(edge_filename, geneDict)
 
 x = feature[0:100]
@@ -245,4 +281,26 @@ pickle.dump(graphdict, open( "data/sc/ind."+args.expression_name+".graph", "wb" 
 with open ("data/sc/ind."+args.expression_name+".test.index", 'w') as fw:
     fw.writelines(testindex)
     fw.close()
+
+
+# For matlab
+with open('data/sc/'+args.expression_name+'.features.csv','w') as fw:
+    writer = csv.writer(fw)
+    writer.writerows(dim2out)
+fw.close()
+
+with open('data/sc/'+args.expression_name+'.row.csv','w') as fw:
+    for item in rowO:
+        fw.write(str(item)+"\n")
+fw.close()
+
+with open('data/sc/'+args.expression_name+'.col.csv','w') as fw:
+    for item in colO:
+        fw.write(str(item)+"\n")
+fw.close()
+
+with open('data/sc/'+args.expression_name+'.data.csv','w') as fw:
+    for item in dataO:
+        fw.write(str(item)+"\n")
+fw.close()
 
