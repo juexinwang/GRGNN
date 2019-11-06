@@ -12,6 +12,8 @@ import csv
 
 # Preprocess network for sc
 parser = argparse.ArgumentParser()
+parser.add_argument('--graph-type', type=str, default='cell',
+                    help='cell/gene, cell:cell as nodes in the graph, gene:gene as nodes in the graph')
 parser.add_argument('--network-name', type=str, default='ttrust',
                     help='ttrust')
 parser.add_argument('--expression-name', type=str, default='TGFb', #1
@@ -227,14 +229,24 @@ def read_edge_file_dict(filename, geneDict):
 networkname=args.network_name
 expressionname=args.expression_name
 
-if args.network_name=='ttrust':
-    networkname = 'trrust_rawdata.human.tsv'
+if args.graph_type=='gene':
+    if args.network_name=='ttrust':
+        networkname = 'trrust_rawdata.human.tsv'
 
-if args.expression_name=='TGFb':
-    expressionname = 'HMLE_TGFb_day_8_10.csv'
-    # expressionname = 'HMLE_TGFb_day_8_10_part.csv'
-elif args.expression_name=='test':
-    expressionname = 'test_data.csv'
+    if args.expression_name=='TGFb':
+        expressionname = 'HMLE_TGFb_day_8_10.csv'
+        # expressionname = 'HMLE_TGFb_day_8_10_part.csv'
+    elif args.expression_name=='test':
+        expressionname = 'test_data.csv'
+elif args.graph_type=='cell':
+    if args.network_name=='ttrust':
+        networkname = 'trrust_rawdata.human.cell.tsv'
+
+    if args.expression_name=='TGFb':
+        expressionname = 'HMLE_TGFb_day_8_10.cell.csv'
+        # expressionname = 'HMLE_TGFb_day_8_10_part.cell.csv'
+    elif args.expression_name=='test':
+        expressionname = 'test_data.cell.csv'
 
 edge_filename    = "/home/wangjue/biodata/scData/network/"+networkname
 feature_filename = "/home/wangjue/biodata/scData/"+expressionname
