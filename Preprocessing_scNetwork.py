@@ -381,28 +381,20 @@ def read_edge_file_dict_cell(edgeList, nodesize):
 
 networkname=args.network_name
 expressionname=args.expression_name
+if args.network_name=='ttrust':
+    networkname = 'trrust_rawdata.human.tsv'
 
-if args.graph_type=='gene':
-    if args.network_name=='ttrust':
-        networkname = 'trrust_rawdata.human.tsv'
+if args.expression_name=='TGFb':
+    expressionname = 'HMLE_TGFb_day_8_10.csv'
+    # expressionname = 'HMLE_TGFb_day_8_10_part.csv'
+elif args.expression_name=='test':
+    expressionname = 'test_data.csv'
 
-    if args.expression_name=='TGFb':
-        expressionname = 'HMLE_TGFb_day_8_10.csv'
-        # expressionname = 'HMLE_TGFb_day_8_10_part.csv'
-    elif args.expression_name=='test':
-        expressionname = 'test_data.csv'
-elif args.graph_type=='cell':
-    if args.network_name=='ttrust':
-        networkname = 'trrust_rawdata.human.cell.tsv'
-
-    if args.expression_name=='TGFb':
-        expressionname = 'HMLE_TGFb_day_8_10.cell.csv'
-        # expressionname = 'HMLE_TGFb_day_8_10_part.cell.csv'
-    elif args.expression_name=='test':
-        expressionname = 'test_data.cell.csv'
 
 edge_filename    = "/home/wangjue/biodata/scData/network/"+networkname
 feature_filename = "/home/wangjue/biodata/scData/"+expressionname
+# edge_filename    = "data/"+networkname
+# feature_filename = "data/"+expressionname
 
 geneList, geneDict = preprocess_network(edge_filename, feature_filename)
 
