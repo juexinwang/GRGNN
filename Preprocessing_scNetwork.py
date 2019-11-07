@@ -407,12 +407,14 @@ if args.graph_type=='gene':
     graphcsc, tfDict, rowO, colO, dataO  = read_edge_file_csc(edge_filename, geneDict)
     feature, dim2out = read_feature_file_sparse(feature_filename, geneList, geneDict)
     graphdict = read_edge_file_dict(edge_filename, geneDict)
+    outname = args.expression_name
 elif args.graph_type=='cell':
     #First generate feature
     feature, dim2out = read_feature_file_sparse_cell(feature_filename, geneList, geneDict)
     edgeList = cal_distanceMatrix(feature, k=5)
     graphcsc, rowO, colO, dataO  = read_edge_file_csc_cell(edgeList, feature.shape[0], k=5)
     graphdict = read_edge_file_dict_cell(edgeList, feature.shape[0] )
+    outname = args.expression_name + '.cell'
 
 x = feature[0:100]
 tx = feature[0:100]
@@ -435,34 +437,34 @@ if args.graph_type=='gene':
             fw.write(key+"\t"+str(tfDict[key])+"\n")
             count += 1
 
-pickle.dump(allx, open( "data/sc/ind."+args.expression_name+".allx", "wb" ) )
-pickle.dump(graphcsc, open( "data/sc/ind."+args.expression_name+".csc", "wb" ) )
+pickle.dump(allx, open( "data/sc/ind."+outname+".allx", "wb" ) )
+pickle.dump(graphcsc, open( "data/sc/ind."+outname+".csc", "wb" ) )
 
-pickle.dump(x, open( "data/sc/ind."+args.expression_name+".x", "wb" ) )
-pickle.dump(tx, open( "data/sc/ind."+args.expression_name+".tx", "wb" ) )
-pickle.dump(graphdict, open( "data/sc/ind."+args.expression_name+".graph", "wb" ) )
-with open ("data/sc/ind."+args.expression_name+".test.index", 'w') as fw:
+pickle.dump(x, open( "data/sc/ind."+outname+".x", "wb" ) )
+pickle.dump(tx, open( "data/sc/ind."+outname+".tx", "wb" ) )
+pickle.dump(graphdict, open( "data/sc/ind."+outname+".graph", "wb" ) )
+with open ("data/sc/ind."+outname+".test.index", 'w') as fw:
     fw.writelines(testindex)
     fw.close()
 
 
 # For matlab
-with open('data/sc/'+args.expression_name+'.features.csv','w') as fw:
+with open('data/sc/'+outname+'.features.csv','w') as fw:
     writer = csv.writer(fw)
     writer.writerows(dim2out)
 fw.close()
 
-with open('data/sc/'+args.expression_name+'.row.csv','w') as fw:
+with open('data/sc/'+outname+'.row.csv','w') as fw:
     for item in rowO:
         fw.write(str(item)+"\n")
 fw.close()
 
-with open('data/sc/'+args.expression_name+'.col.csv','w') as fw:
+with open('data/sc/'+outname+'.col.csv','w') as fw:
     for item in colO:
         fw.write(str(item)+"\n")
 fw.close()
 
-with open('data/sc/'+args.expression_name+'.data.csv','w') as fw:
+with open('data/sc/'+outname+'.data.csv','w') as fw:
     for item in dataO:
         fw.write(str(item)+"\n")
 fw.close()
