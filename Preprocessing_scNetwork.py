@@ -13,7 +13,7 @@ import csv
 
 # Preprocess network for sc
 parser = argparse.ArgumentParser()
-parser.add_argument('--graph-type', type=str, default='cell',
+parser.add_argument('--graph-type', type=str, default='gene',
                     help='cell/gene, cell:cell as nodes in the graph, gene:gene as nodes in the graph')
 parser.add_argument('--network-name', type=str, default='ttrust',
                     help='ttrust')
@@ -131,7 +131,7 @@ class KNNEdge:
 # Not use it now
 # Calculate KNN graph, return row and col
 def cal_distanceMatrix(featureMatrix, k=5):
-    distMat = distance_matrix(featureMatrix,featureMatrix)
+    distMat = distance_matrix(featureMatrix.todense(),featureMatrix.todense())
     edgeList=[]
 
     for i in np.arange(distMat.shape[0]):
@@ -291,8 +291,8 @@ def read_feature_file_sparse_cell(filename, geneList, geneDict):
                 
                 data_count = 0
                 for item in selectList:
-                    samplelist.append(data_count)
-                    featurelist.append(count)
+                    samplelist.append(count)
+                    featurelist.append(data_count)
                     # data.append(float(tmplist[item]))
                     if tmplist[item]>=avgtmp:
                         data.append(1)
@@ -385,8 +385,8 @@ if args.network_name=='ttrust':
     networkname = 'trrust_rawdata.human.tsv'
 
 if args.expression_name=='TGFb':
-    expressionname = 'HMLE_TGFb_day_8_10.csv'
-    # expressionname = 'HMLE_TGFb_day_8_10_part.csv'
+    # expressionname = 'HMLE_TGFb_day_8_10.csv'
+    expressionname = 'HMLE_TGFb_day_8_10_part.csv'
 elif args.expression_name=='test':
     expressionname = 'test_data.csv'
 
