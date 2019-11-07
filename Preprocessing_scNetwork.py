@@ -13,7 +13,7 @@ import csv
 
 # Preprocess network for sc
 parser = argparse.ArgumentParser()
-parser.add_argument('--graph-type', type=str, default='gene',
+parser.add_argument('--graph-type', type=str, default='cell',
                     help='cell/gene, cell:cell as nodes in the graph, gene:gene as nodes in the graph')
 parser.add_argument('--network-name', type=str, default='ttrust',
                     help='ttrust')
