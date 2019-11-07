@@ -385,8 +385,8 @@ if args.network_name=='ttrust':
     networkname = 'trrust_rawdata.human.tsv'
 
 if args.expression_name=='TGFb':
-    # expressionname = 'HMLE_TGFb_day_8_10.csv'
-    expressionname = 'HMLE_TGFb_day_8_10_part.csv'
+    expressionname = 'HMLE_TGFb_day_8_10.csv'
+    # expressionname = 'HMLE_TGFb_day_8_10_part.csv'
 elif args.expression_name=='test':
     expressionname = 'test_data.csv'
 
