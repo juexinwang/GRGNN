@@ -229,6 +229,8 @@ def read_feature_file_sparse(filename, geneList, geneDict):
 
     # For Matlab
     dim2out = [[0.0] * len(selectList) for i in range(count)]
+    dim2outD = [[0.0] * len(selectList) for i in range(count)]
+
     count = -1
     with open(filename) as f:
         lines = f.readlines()
@@ -244,11 +246,15 @@ def read_feature_file_sparse(filename, geneList, geneDict):
                 data_count = 0
                 for item in selectList:
                     dim2out[count][data_count]=float(tmplist[item])
+                    if tmplist[item]>=avgtmp:
+                        dim2outD[count][data_count]=1
+                    else:
+                        dim2outD[count][data_count]=0
                     data_count += 1
             count += 1
     f.close()
 
-    return feature, dim2out
+    return feature, dim2out, dim2outD
 
 
 # For node as cell
@@ -301,11 +307,13 @@ def read_feature_file_sparse_cell(filename, geneList, geneDict):
                     data_count += 1
             count += 1
     f.close()
-    # As dream: rows as genes, columns as samples: This is transpose of the original scRNA data
+    # As dream: rows as cells, columns as genes: This is transpose of the original scRNA data
     feature = scipy.sparse.csr_matrix((data, (samplelist, featurelist)), shape=(count,len(selectList)))  
 
     # For Matlab
-    dim2out = [[0.0] * count for i in range(len(selectList))]
+    dim2out = [[0.0] * len(selectList)  for i in range(count)]
+    dim2outD = [[0.0] * len(selectList) for i in range(count)]
+    
     count = -1
     with open(filename) as f:
         lines = f.readlines()
@@ -320,12 +328,16 @@ def read_feature_file_sparse_cell(filename, geneList, geneDict):
                 
                 data_count = 0
                 for item in selectList:
-                    dim2out[data_count][count]=float(tmplist[item])
+                    dim2out[count][data_count]=float(tmplist[item])
+                    if tmplist[item]>=avgtmp:
+                        dim2outD[count][data_count]=1
+                    else:
+                        dim2outD[count][data_count]=0
                     data_count += 1
             count += 1
     f.close()
 
-    return feature, dim2out
+    return feature, dim2out, dim2outD
 
 
 def read_edge_file_dict(filename, geneDict):
@@ -390,7 +402,7 @@ if args.expression_name=='TGFb':
 elif args.expression_name=='test':
     expressionname = 'test_data.csv'
 
-
+out_folder = "data/sc/"+args.expression_name+"/"
 edge_filename    = "/home/wangjue/biodata/scData/network/"+networkname
 feature_filename = "/home/wangjue/biodata/scData/"+expressionname
 # edge_filename    = "data/"+networkname
@@ -405,12 +417,12 @@ geneList, geneDict = preprocess_network(edge_filename, feature_filename)
 #python and matlab
 if args.graph_type=='gene':
     graphcsc, tfDict, rowO, colO, dataO  = read_edge_file_csc(edge_filename, geneDict)
-    feature, dim2out = read_feature_file_sparse(feature_filename, geneList, geneDict)
+    feature, dim2out, dim2outD = read_feature_file_sparse(feature_filename, geneList, geneDict)
     graphdict = read_edge_file_dict(edge_filename, geneDict)
     outname = args.expression_name
 elif args.graph_type=='cell':
     #First generate feature
-    feature, dim2out = read_feature_file_sparse_cell(feature_filename, geneList, geneDict)
+    feature, dim2out, dim2outD = read_feature_file_sparse_cell(feature_filename, geneList, geneDict)
     edgeList = cal_distanceMatrix(feature, k=5)
     graphcsc, rowO, colO, dataO  = read_edge_file_csc_cell(edgeList, feature.shape[0], k=5)
     graphdict = read_edge_file_dict_cell(edgeList, feature.shape[0] )
@@ -425,46 +437,51 @@ for i in range(100):
     testindex = testindex + str(i) + "\n"
 
 if args.graph_type=='gene':
-    with open("data/sc/gene.txt",'w') as fw:
+    with open(out_folder+args.expression_name+"gene.txt",'w') as fw:
         count = 0
         for item in geneList:
             fw.write(str(count)+"\t"+item+"\n")
             count += 1
 
-    with open("data/sc/TF.txt",'w') as fw:
+    with open(out_folder+args.expression_name+"TF.txt",'w') as fw:
         count = 0
         for key in tfDict:
             fw.write(key+"\t"+str(tfDict[key])+"\n")
             count += 1
 
-pickle.dump(allx, open( "data/sc/ind."+outname+".allx", "wb" ) )
-pickle.dump(graphcsc, open( "data/sc/ind."+outname+".csc", "wb" ) )
+pickle.dump(allx, open( out_folder+"ind."+outname+".allx", "wb" ) )
+pickle.dump(graphcsc, open( out_folder+"ind."+outname+".csc", "wb" ) )
 
-pickle.dump(x, open( "data/sc/ind."+outname+".x", "wb" ) )
-pickle.dump(tx, open( "data/sc/ind."+outname+".tx", "wb" ) )
-pickle.dump(graphdict, open( "data/sc/ind."+outname+".graph", "wb" ) )
-with open ("data/sc/ind."+outname+".test.index", 'w') as fw:
+pickle.dump(x, open( out_folder+"ind."+outname+".x", "wb" ) )
+pickle.dump(tx, open( out_folder+"ind."+outname+".tx", "wb" ) )
+pickle.dump(graphdict, open( out_folder+"ind."+outname+".graph", "wb" ) )
+with open ( out_folder+"ind."+outname+".test.index", 'w') as fw:
     fw.writelines(testindex)
     fw.close()
 
 
 # For matlab
-with open('data/sc/'+outname+'.features.csv','w') as fw:
+with open(out_folder+outname+'.features.csv','w') as fw:
     writer = csv.writer(fw)
     writer.writerows(dim2out)
 fw.close()
 
-with open('data/sc/'+outname+'.row.csv','w') as fw:
+with open(out_folder+outname+'.features.D.csv','w') as fw:
+    writer = csv.writer(fw)
+    writer.writerows(dim2outD)
+fw.close()
+
+with open(out_folder+outname+'.row.csv','w') as fw:
     for item in rowO:
         fw.write(str(item)+"\n")
 fw.close()
 
-with open('data/sc/'+outname+'.col.csv','w') as fw:
+with open(out_folder+outname+'.col.csv','w') as fw:
     for item in colO:
         fw.write(str(item)+"\n")
 fw.close()
 
-with open('data/sc/'+outname+'.data.csv','w') as fw:
+with open(out_folder+outname+'.data.csv','w') as fw:
     for item in dataO:
         fw.write(str(item)+"\n")
 fw.close()
