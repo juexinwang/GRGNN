@@ -17,8 +17,10 @@ parser.add_argument('--graph-type', type=str, default='cell',
                     help='cell/gene, cell:cell as nodes in the graph, gene:gene as nodes in the graph')
 parser.add_argument('--network-name', type=str, default='ttrust',
                     help='ttrust')
-parser.add_argument('--expression-name', type=str, default='TGFb', #1
-                    help='TGFb from MAGIC or test')
+parser.add_argument('--expression-name', type=str, default='sci-CAR',
+                    help='TGFb from MAGIC/ test also from MAGIC/ sci-CAR/ sci-CAR_D')
+parser.add_argument('--discrete-flag', type=str, default='False',
+                    help='True for average discrete')
 
 args = parser.parse_args()
 
@@ -176,7 +178,7 @@ def read_edge_file_csc_cell(edgeList, nodesize, k=5):
 
 
 # Load gene expression into sparse matrix
-def read_feature_file_sparse(filename, geneList, geneDict):
+def read_feature_file_sparse(filename, geneList, geneDict, discreteFlag=False):
     samplelist=[]
     featurelist=[]
     data =[]
@@ -188,6 +190,8 @@ def read_feature_file_sparse(filename, geneList, geneDict):
         lines = f.readlines()
         for line in lines:            
             line = line.strip()
+            if line.endswith(','):
+                line = line[:-1]
             words = line.split(',')
             if count == -1:
                 tcount =0
@@ -216,11 +220,13 @@ def read_feature_file_sparse(filename, geneList, geneDict):
                 for item in selectList:
                     samplelist.append(count)
                     featurelist.append(data_count)
-                    # data.append(float(tmplist[item]))
-                    if tmplist[item]>=avgtmp:
-                        data.append(1)
+                    if discreteFlag:
+                        if tmplist[item]>=avgtmp:
+                            data.append(1)
+                        else:
+                            data.append(0)
                     else:
-                        data.append(0)
+                        data.append(float(tmplist[item]))
                     data_count += 1
             count += 1
     f.close()
@@ -236,6 +242,8 @@ def read_feature_file_sparse(filename, geneList, geneDict):
         lines = f.readlines()
         for line in lines:            
             line = line.strip()
+            if line.endswith(','):
+                line = line[:-1]
             words = line.split(',')
             if count >= 0:
                 tmplist =[]
@@ -259,7 +267,7 @@ def read_feature_file_sparse(filename, geneList, geneDict):
 
 # For node as cell
 # Load gene expression into sparse matrix
-def read_feature_file_sparse_cell(filename, geneList, geneDict):
+def read_feature_file_sparse_cell(filename, geneList, geneDict, discreteFlag=False):
     samplelist=[]
     featurelist=[]
     data =[]
@@ -271,6 +279,8 @@ def read_feature_file_sparse_cell(filename, geneList, geneDict):
         lines = f.readlines()
         for line in lines:            
             line = line.strip()
+            if line.endswith(','):
+                line = line[:-1]
             words = line.split(',')
             if count == -1:
                 tcount =0
@@ -299,11 +309,13 @@ def read_feature_file_sparse_cell(filename, geneList, geneDict):
                 for item in selectList:
                     samplelist.append(count)
                     featurelist.append(data_count)
-                    # data.append(float(tmplist[item]))
-                    if tmplist[item]>=avgtmp:
-                        data.append(1)
+                    if discreteFlag:
+                        if tmplist[item]>=avgtmp:
+                            data.append(1)
+                        else:
+                            data.append(0)
                     else:
-                        data.append(0)
+                        data.append(float(tmplist[item]))
                     data_count += 1
             count += 1
     f.close()
@@ -319,6 +331,8 @@ def read_feature_file_sparse_cell(filename, geneList, geneDict):
         lines = f.readlines()
         for line in lines:            
             line = line.strip()
+            if line.endswith(','):
+                line = line[:-1]
             words = line.split(',')
             if count >= 0:
                 tmplist =[]
@@ -399,6 +413,10 @@ if args.network_name=='ttrust':
 if args.expression_name=='TGFb':
     expressionname = 'HMLE_TGFb_day_8_10.csv'
     # expressionname = 'HMLE_TGFb_day_8_10_part.csv'
+elif args.expression_name=='sci-CAR':
+    expressionname = 'sci-CAR.csv'
+elif args.expression_name=='sci-CAR_D':
+    expressionname = 'sci-CAR_D.csv'
 elif args.expression_name=='test':
     expressionname = 'test_data.csv'
 
@@ -417,12 +435,12 @@ geneList, geneDict = preprocess_network(edge_filename, feature_filename)
 #python and matlab
 if args.graph_type=='gene':
     graphcsc, tfDict, rowO, colO, dataO  = read_edge_file_csc(edge_filename, geneDict)
-    feature, dim2out, dim2outD = read_feature_file_sparse(feature_filename, geneList, geneDict)
+    feature, dim2out, dim2outD = read_feature_file_sparse(feature_filename, geneList, geneDict, discreteFlag=args.discrete_flag)
     graphdict = read_edge_file_dict(edge_filename, geneDict)
     outname = args.expression_name
 elif args.graph_type=='cell':
     #First generate feature
-    feature, dim2out, dim2outD = read_feature_file_sparse_cell(feature_filename, geneList, geneDict)
+    feature, dim2out, dim2outD = read_feature_file_sparse_cell(feature_filename, geneList, geneDict, discreteFlag=args.discrete_flag)
     edgeList = cal_distanceMatrix(feature, k=5)
     graphcsc, rowO, colO, dataO  = read_edge_file_csc_cell(edgeList, feature.shape[0], k=5)
     graphdict = read_edge_file_dict_cell(edgeList, feature.shape[0] )
