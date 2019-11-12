@@ -12,6 +12,7 @@ import scipy.sparse as ssp
 from sklearn import metrics
 from gensim.models import Word2Vec
 import warnings
+import math
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 warnings.simplefilter('ignore', ssp.SparseEfficiencyWarning)
@@ -151,7 +152,7 @@ def genenet_attribute(allx,tfNum):
     # Best now:
     #trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
 
-    trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
+    trainAttributes = np.concatenate([trainAttributes, tfAttr], axis=1)
     # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, quantilValAtt, tfAttr], axis=1)
     
     #trainAttributes = np.concatenate([tfAttr], axis=1)
@@ -442,7 +443,7 @@ def extractLinks2subgraphs_motif(A, train_pos, train_neg, h=1, max_nodes_per_hop
     #     print(str(key)+"\t"+str(motifDictTFTarget[key]))
     return pos_graphs_labels,pos_graphs_features,neg_graphs_labels,neg_graphs_features, max_n_label['value']
 
-
+# Original
 # Extract subgraph from links 
 def extractLinks2subgraphs(Atrain, Atest, train_pos, train_neg, test_pos, test_neg, h=1, max_nodes_per_hop=None, train_node_information=None, test_node_information=None):
     # automatically select h from {1, 2}
@@ -477,6 +478,41 @@ def extractLinks2subgraphs(Atrain, Atest, train_pos, train_neg, test_pos, test_n
     print(max_n_label)
     return train_graphs, test_graphs, max_n_label['value']
 
+# Extract subgraph from links 
+def extractLinks2subgraphsRatio(Atrain, Atest, train_pos, train_neg, test_pos, test_neg, ratio, labelflag, h=1, max_nodes_per_hop=None, train_node_information=None, test_node_information=None):
+    # automatically select h from {1, 2}
+    if h == 'auto': # TODO
+        # split train into val_train and val_test
+        _, _, val_test_pos, val_test_neg = sample_neg(A, 0.1)
+        val_A = A.copy()
+        val_A[val_test_pos[0], val_test_pos[1]] = 0
+        val_A[val_test_pos[1], val_test_pos[0]] = 0
+        val_auc_CN = CN(val_A, val_test_pos, val_test_neg)
+        val_auc_AA = AA(val_A, val_test_pos, val_test_neg)
+        print('\033[91mValidation AUC of AA is {}, CN is {}\033[0m'.format(val_auc_AA, val_auc_CN))
+        if val_auc_AA >= val_auc_CN:
+            h = 2
+            print('\033[91mChoose h=2\033[0m')
+        else:
+            h = 1
+            print('\033[91mChoose h=1\033[0m')
+
+    # extract enclosing subgraphs
+    max_n_label = {'value': 0}
+    def helper(A, links, g_label, node_information):
+        g_list = []
+        for i, j in tqdm(zip(links[0], links[1])):
+            # g, n_labels, n_features = subgraph_extraction_labeling((i, j), A, h, max_nodes_per_hop, node_information)
+            g, n_labels, n_features = subgraph_extraction_labeling_ratio((i, j), A, ratio, labelflag, h, max_nodes_per_hop, node_information)
+            max_n_label['value'] = max(max(n_labels), max_n_label['value'])
+            g_list.append(GNNGraph(g, g_label, n_labels, n_features))
+        return g_list
+    print('Extract enclosed subgraph...')
+    train_graphs = helper(Atrain, train_pos, 1, train_node_information) + helper(Atrain, train_neg, 0, train_node_information)
+    test_graphs = helper(Atest, test_pos, 1, test_node_information) + helper(Atest, test_neg, 0, test_node_information)
+    print(max_n_label)
+    return train_graphs, test_graphs, max_n_label['value']
+
 # Extract subgraph from links for SVM
 def extractLinks2subgraphsSVM(Atrain, Atest, train_pos, train_neg, test_pos, test_neg, h=1, max_nodes_per_hop=None, train_node_information=None, test_node_information=None):
     # extract enclosing subgraphs
@@ -499,7 +535,8 @@ def extractLinks2subgraphsSVM(Atrain, Atest, train_pos, train_neg, test_pos, tes
     test_labels = test_labels + test_labels1
     return train_graphs, test_graphs, train_labels, test_labels
 
-# Add labels
+# Add labels for the graph
+# Original version, use all the neighbors
 def subgraph_extraction_labeling(ind, A, h=1, max_nodes_per_hop=None, node_information=None):
     # extract the h-hop enclosing subgraph around link 'ind'
     dist = 0
@@ -536,12 +573,70 @@ def subgraph_extraction_labeling(ind, A, h=1, max_nodes_per_hop=None, node_infor
         g.remove_edge(0, 1)
     return g, labels.tolist(), features
 
+# extract graph and get labels
+def subgraph_extraction_labeling_ratio(ind, A, ratio, labelflag, h=1, max_nodes_per_hop=None, node_information=None):
+    # extract the h-hop enclosing subgraph around link 'ind'
+    dist = 0
+    nodes = set([ind[0], ind[1]])
+    visited = set([ind[0], ind[1]])
+    fringe = set([ind[0], ind[1]])
+    nodes_dist = [0, 0]
+    for dist in range(1, h+1):
+        fringe = neighbors_ratio(fringe, A, ratio)
+        fringe = fringe - visited
+        visited = visited.union(fringe)
+        if max_nodes_per_hop is not None:
+            if max_nodes_per_hop < len(fringe):
+                fringe = random.sample(fringe, max_nodes_per_hop)
+        if len(fringe) == 0:
+            break
+        nodes = nodes.union(fringe)
+        nodes_dist += [dist] * len(fringe)
+    # move target nodes to top
+    nodes.remove(ind[0])
+    nodes.remove(ind[1])
+    nodes = [ind[0], ind[1]] + list(nodes) 
+    subgraph = A[nodes, :][:, nodes]
+    # apply node-labeling
+    labels = node_label(subgraph)
+    # if noly use nonezero
+    if labelflag:
+        labelindex = np.nonzero(labels)
+        labels = labels[labelindex]
+        nodesO = np.array(nodes)
+        nodes = nodesO[labelindex]
+        subgraph = A[nodes, :][:, nodes]
+    # get node features
+    features = None
+    if node_information is not None:
+        features = node_information[nodes]
+    # construct nx graph
+    g = nx.from_scipy_sparse_matrix(subgraph)
+    # remove link between target nodes
+    if g.has_edge(0, 1):
+        g.remove_edge(0, 1)
+    return g, labels.tolist(), features
 
+# original version
 def neighbors(fringe, A):
     # find all 1-hop neighbors of nodes in fringe from A
     res = set()
     for node in fringe:
         nei, _, _ = ssp.find(A[:, node])
+        nei = set(nei)
+        res = res.union(nei)
+    return res
+
+# neighours in ratio
+def neighbors_ratio(fringe, A, ratio=0.5):
+    # find all 1-hop neighbors of nodes in fringe from A
+    res = set()
+    for node in fringe:
+        nei, _, _ = ssp.find(A[:, node])
+        neighborSize = math.floor(len(nei)*ratio)
+        perm = np.random.permutation(len(nei))[:neighborSize]
+        nei = np.array(nei)
+        nei = nei[perm]
         nei = set(nei)
         res = res.union(nei)
     return res

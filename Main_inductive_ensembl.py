@@ -32,6 +32,10 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--training-ratio', type=float, default=1.0,
                     help='ratio of used training set')
+parser.add_argument('--neighbors-ratio', type=float, default=0.0,
+                    help='ratio of neighbors used')
+parser.add_argument('--nonezerolabel-flag', default=False,
+                    help='whether only use nonezerolabel flag')
 # Pearson correlation
 parser.add_argument('--embedding-dim', type=int, default=128,
                     help='embedding dimmension')
@@ -148,8 +152,13 @@ if args.use_attribute and trainAttributes is not None:
         train_node_information_agent1 = trainAttributes
         test_node_information_agent1 = testAttributes
 
-train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphs(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
-train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphs(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
+# Original
+# train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphs(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
+# train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphs(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
+
+# ratio
+train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphsRatio(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
+train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphsRatio(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
 
 
 # For 2 vs 1
