@@ -32,9 +32,9 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--training-ratio', type=float, default=1.0,
                     help='ratio of used training set')
-parser.add_argument('--neighbors-ratio', type=float, default=0.0,
+parser.add_argument('--neighbors-ratio', type=float, default=1.0,
                     help='ratio of neighbors used')
-parser.add_argument('--nonezerolabel-flag', default=False,
+parser.add_argument('--nonezerolabel-flag', default=True,
                     help='whether only use nonezerolabel flag')
 # Pearson correlation
 parser.add_argument('--embedding-dim', type=int, default=128,
