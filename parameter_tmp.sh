@@ -3,7 +3,7 @@ do
    python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute
 done
 
-for i in 1, 2, 4, 8, 16
+for i in 1 2 4 8 16
 for k in {1..3}
 do
    python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute --use-embedding
