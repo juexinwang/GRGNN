@@ -55,7 +55,7 @@ parser.add_argument('--max-nodes-per-hop', default=None,
                     help='if > 0, upper bound the # nodes per hop by subsampling')
 parser.add_argument('--use-embedding', action='store_true', default=False,
                     help='whether to use node2vec node embeddings')
-parser.add_argument('--use-attribute', action='store_true', default=False,
+parser.add_argument('--use-attribute', action='store_true', default=True,
                     help='whether to use node attributes')
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
@@ -155,6 +155,7 @@ if args.use_attribute and trainAttributes is not None:
 
         train_node_information_agent1 = trainAttributes
         test_node_information_agent1 = testAttributes
+
 
 # Original
 # train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphs(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
