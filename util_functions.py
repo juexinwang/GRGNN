@@ -152,7 +152,7 @@ def genenet_attribute(allx,tfNum):
     # Best now:
     # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
 
-    trainAttributes = np.concatenate([trainAttributes, tfAttr], axis=1)
+    trainAttributes = np.concatenate([trainAttributes, quantilPerAtt, tfAttr], axis=1)
     # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, quantilValAtt, tfAttr], axis=1)
     
     #trainAttributes = np.concatenate([tfAttr], axis=1)
