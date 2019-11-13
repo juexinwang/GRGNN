@@ -28,7 +28,7 @@ parser.add_argument('--max-train-num', type=int, default=100000,
                     help='set maximum number of train links (to fit into memory)')
 parser.add_argument('--no-cuda', action='store_true', default=False,
                     help='disables CUDA training')
-parser.add_argument('--seed', type=int, default=1, metavar='S',
+parser.add_argument('--seed', type=int, default=43, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--training-ratio', type=float, default=1.0,
                     help='ratio of used training set')
@@ -36,6 +36,10 @@ parser.add_argument('--neighbors-ratio', type=float, default=1.0,
                     help='ratio of neighbors used')
 parser.add_argument('--nonezerolabel-flag', default=False,
                     help='whether only use nonezerolabel flag')
+parser.add_argument('--nonzerolabel-ratio', type=float, default=1.0,
+                    help='ratio for nonzero label for training')
+parser.add_argument('--zerolabel-ratio', type=float, default=1.0,
+                    help='ratio for zero label for training')
 # Pearson correlation
 parser.add_argument('--embedding-dim', type=int, default=1,
                     help='embedding dimmension')
@@ -86,10 +90,10 @@ dreamTFdict['dream4']=333
 if args.traindata_name is not None:
     trainNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.traindata_name)))
     trainGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name)))
-    # trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
-    # trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
-    trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy').tolist()
-    trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy').tolist()
+    trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
+    trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    # trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy').tolist()
+    # trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy').tolist()
     
     allx =trainGroup.toarray().astype('float32')
     #deal with the features:
@@ -97,10 +101,10 @@ if args.traindata_name is not None:
 
     testNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.testdata_name)))
     testGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.testdata_name)))
-    # testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
-    # testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
-    testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy').tolist()
-    testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy').tolist()
+    testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
+    testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    # testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy').tolist()
+    # testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy').tolist()
     
     allxt =testGroup.toarray().astype('float32')
     #deal with the features:
@@ -157,8 +161,10 @@ if args.use_attribute and trainAttributes is not None:
 # train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphs(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
 
 # ratio
-train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphsRatio(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
-train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphsRatio(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
+train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphsRatio(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.nonzerolabel_ratio, args.zerolabel_ratio, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
+train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphsRatio(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.nonzerolabel_ratio, args.zerolabel_ratio, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
+# train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphsRatio(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, 1.0, 0.0, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
+# train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphsRatio(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, 0.0, 1.0, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
 
 
 # For 2 vs 1

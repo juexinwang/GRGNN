@@ -1,29 +1,35 @@
-# for k in {1..10}
+for k in {1..3}
+do
+   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute
+done
+
+for i in 1, 2, 4, 8, 16
+for k in {1..3}
+do
+   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute --use-embedding
+done
+
+# for i in 0.1 0.5 1.0
 # do
-#    python Main_inductive_ensembl.py --traindata-name dream4 --testdata-name dream3 --use-attribute
+# for j in False True
+# do
+# for k in {1..3}
+# do
+#    python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute --neighbors-ratio $i --nonezerolabel-flag $j
+# done
+# done
 # done
 
-for i in 0.1 0.5 1.0
-do
-for j in False True
-do
-for k in {1..3}
-do
-   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute --neighbors-ratio $i --nonezerolabel-flag $j
-done
-done
-done
-
-for i in 0.1 0.5 1.0
-do
-for j in False True
-do
-for k in {1..3}
-do
-   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute --neighbors-ratio $i --nonezerolabel-flag $j --use-embedding
-done
-done
-done
+# for i in 0.1 0.5 1.0
+# do
+# for j in False True
+# do
+# for k in {1..3}
+# do
+#    python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute --neighbors-ratio $i --nonezerolabel-flag $j --use-embedding
+# done
+# done
+# done
 
 
 # for i in {1}

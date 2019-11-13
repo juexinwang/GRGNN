@@ -150,9 +150,9 @@ def genenet_attribute(allx,tfNum):
     #trainAttributes = np.concatenate([trainAttributes, stdAtt, tfAttr], axis=1)
     # Describe the slope
     # Best now:
-    #trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
+    # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
 
-    trainAttributes = np.concatenate([trainAttributes, tfAttr], axis=1)
+    trainAttributes = np.concatenate([trainAttributes, quantilPerAtt, tfAttr], axis=1)
     # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, quantilValAtt, tfAttr], axis=1)
     
     #trainAttributes = np.concatenate([tfAttr], axis=1)
@@ -479,7 +479,7 @@ def extractLinks2subgraphs(Atrain, Atest, train_pos, train_neg, test_pos, test_n
     return train_graphs, test_graphs, max_n_label['value']
 
 # Extract subgraph from links 
-def extractLinks2subgraphsRatio(Atrain, Atest, train_pos, train_neg, test_pos, test_neg, ratio, labelflag, h=1, max_nodes_per_hop=None, train_node_information=None, test_node_information=None):
+def extractLinks2subgraphsRatio(Atrain, Atest, train_pos, train_neg, test_pos, test_neg, ratio, labelflag, nonzerolabel_ratio, zerolabel_ratio, h=1, max_nodes_per_hop=None, train_node_information=None, test_node_information=None):
     # automatically select h from {1, 2}
     if h == 'auto': # TODO
         # split train into val_train and val_test
@@ -503,7 +503,7 @@ def extractLinks2subgraphsRatio(Atrain, Atest, train_pos, train_neg, test_pos, t
         g_list = []
         for i, j in tqdm(zip(links[0], links[1])):
             # g, n_labels, n_features = subgraph_extraction_labeling((i, j), A, h, max_nodes_per_hop, node_information)
-            g, n_labels, n_features = subgraph_extraction_labeling_ratio((i, j), A, ratio, labelflag, h, max_nodes_per_hop, node_information)
+            g, n_labels, n_features = subgraph_extraction_labeling_ratio((i, j), A, ratio, labelflag, nonzerolabel_ratio, zerolabel_ratio, h, max_nodes_per_hop, node_information)
             max_n_label['value'] = max(max(n_labels), max_n_label['value'])
             g_list.append(GNNGraph(g, g_label, n_labels, n_features))
         return g_list
@@ -574,7 +574,7 @@ def subgraph_extraction_labeling(ind, A, h=1, max_nodes_per_hop=None, node_infor
     return g, labels.tolist(), features
 
 # extract graph and get labels
-def subgraph_extraction_labeling_ratio(ind, A, ratio, labelflag, h=1, max_nodes_per_hop=None, node_information=None):
+def subgraph_extraction_labeling_ratio(ind, A, ratio, labelflag, nonzerolabel_ratio, zerolabel_ratio, h=1, max_nodes_per_hop=None, node_information=None):
     # extract the h-hop enclosing subgraph around link 'ind'
     dist = 0
     nodes = set([ind[0], ind[1]])
@@ -601,11 +601,21 @@ def subgraph_extraction_labeling_ratio(ind, A, ratio, labelflag, h=1, max_nodes_
     labels = node_label(subgraph)
     # if noly use nonezero
     if labelflag:
-        labelindex = np.nonzero(labels)
-        labels = labels[labelindex]
         nodesO = np.array(nodes)
-        nodes = nodesO[labelindex]
+        labelnzindex = np.where(labels>1)
+        zSize = math.floor(labelnzindex[0].shape[0]*nonzerolabel_ratio) 
+        permn = np.random.permutation(labelnzindex[0])[:zSize] 
+        permn = np.concatenate(([0,1],permn))      
+        
+        #zero labels
+        labelzindex = np.where(labels==0)
+        zSize = math.floor(labelzindex[0].shape[0]*zerolabel_ratio)
+        perm = np.random.permutation(labelzindex[0])[:zSize]
+        index = np.concatenate((permn, perm))
+        nodes = nodesO[index]
+        labels = labels[index]
         subgraph = A[nodes, :][:, nodes]
+        
     # get node features
     features = None
     if node_information is not None:
