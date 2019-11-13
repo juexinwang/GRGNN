@@ -55,7 +55,7 @@ parser.add_argument('--max-nodes-per-hop', default=None,
                     help='if > 0, upper bound the # nodes per hop by subsampling')
 parser.add_argument('--use-embedding', action='store_true', default=False,
                     help='whether to use node2vec node embeddings')
-parser.add_argument('--use-attribute', action='store_true', default=True,
+parser.add_argument('--use-attribute', action='store_true', default=False,
                     help='whether to use node attributes')
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
