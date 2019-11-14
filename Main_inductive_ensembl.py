@@ -34,11 +34,11 @@ parser.add_argument('--training-ratio', type=float, default=1.0,
                     help='ratio of used training set')
 parser.add_argument('--neighbors-ratio', type=float, default=1.0,
                     help='ratio of neighbors used')
-parser.add_argument('--nonezerolabel-flag', default=False,
+parser.add_argument('--nonezerolabel-flag', default=True,
                     help='whether only use nonezerolabel flag')
 parser.add_argument('--nonzerolabel-ratio', type=float, default=1.0,
                     help='ratio for nonzero label for training')
-parser.add_argument('--zerolabel-ratio', type=float, default=1.0,
+parser.add_argument('--zerolabel-ratio', type=float, default=0.0,
                     help='ratio for zero label for training')
 # Pearson correlation
 parser.add_argument('--embedding-dim', type=int, default=1,
