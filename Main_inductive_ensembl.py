@@ -34,12 +34,15 @@ parser.add_argument('--training-ratio', type=float, default=1.0,
                     help='ratio of used training set')
 parser.add_argument('--neighbors-ratio', type=float, default=1.0,
                     help='ratio of neighbors used')
-parser.add_argument('--nonezerolabel-flag', default=True,
+parser.add_argument('--nonezerolabel-flag', default=False,
                     help='whether only use nonezerolabel flag')
 parser.add_argument('--nonzerolabel-ratio', type=float, default=1.0,
                     help='ratio for nonzero label for training')
 parser.add_argument('--zerolabel-ratio', type=float, default=0.0,
                     help='ratio for zero label for training')
+# For debug
+parser.add_argument('--feature-num', type=int, default=0,
+                    help='feature num for debug')
 # Pearson correlation
 parser.add_argument('--embedding-dim', type=int, default=1,
                     help='embedding dimmension')
@@ -97,7 +100,10 @@ if args.traindata_name is not None:
     
     allx =trainGroup.toarray().astype('float32')
     #deal with the features:
-    trainAttributes = genenet_attribute(allx,dreamTFdict[args.traindata_name])   
+    # trainAttributes = genenet_attribute(allx,dreamTFdict[args.traindata_name])
+    #debug
+    trainAttributes = genenet_attribute_feature(allx,dreamTFdict[args.traindata_name],args.feature_num)   
+   
 
     testNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.testdata_name)))
     testGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.testdata_name)))
@@ -108,7 +114,9 @@ if args.traindata_name is not None:
     
     allxt =testGroup.toarray().astype('float32')
     #deal with the features:
-    testAttributes = genenet_attribute(allxt,dreamTFdict[args.testdata_name])
+    # testAttributes = genenet_attribute(allxt,dreamTFdict[args.testdata_name])
+    #debug
+    testAttributes = genenet_attribute_feature(allxt,dreamTFdict[args.testdata_name],args.feature_num)
 
     train_pos, train_neg, _, _ = sample_neg_TF(trainNet_ori, 0.0, TF_num=dreamTFdict[args.traindata_name], max_train_num=args.max_train_num)
     use_pos_size = math.floor(len(train_pos[0])*args.training_ratio)

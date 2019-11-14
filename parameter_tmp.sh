@@ -1,6 +1,33 @@
+for i in {0..15}
+do
 for k in {1..3}
 do
-   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-attribute
+   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --feature-num $i
+done
+done
+
+for i in {0..15}
+do
+for k in {1..3}
+do
+   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --feature-num $i --nonezerolabel-flag True
+done
+done
+
+for i in {0..15}
+do
+for k in {1..3}
+do
+   python Main_inductive_ensembl.py --traindata-name dream4 --testdata-name dream3 --feature-num $i
+done
+done
+
+for i in {0..15}
+do
+for k in {1..3}
+do
+   python Main_inductive_ensembl.py --traindata-name dream4 --testdata-name dream3 --feature-num $i --nonezerolabel-flag True
+done
 done
 
 # for i in 1 2 4 8 16

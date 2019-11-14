@@ -159,6 +159,127 @@ def genenet_attribute(allx,tfNum):
     
     return trainAttributes
 
+# Search
+# Generate explicit features for inductive learning, get trends features
+def genenet_attribute_feature(allx,tfNum,searchNum):
+    #1: average to one dimension
+    allx_ = StandardScaler().fit_transform(allx)
+    trainAttributes = np.average(allx_, axis=1).reshape((len(allx),1))
+    #2: std,min,max as the attribute
+    meanAtt = np.average(allx,axis=1).reshape((len(allx_),1))
+    stdAtt = np.std(allx,axis=1).reshape((len(allx_),1))
+    minVal = np.min(allx,axis=1).reshape((len(allx_),1))
+    # expAtt = allx[:,:536]
+
+
+    # #2 folder
+    # qu1Val = np.quantile(allx,0.5, axis=1).reshape((len(allx_),1))
+    # maxVal = np.max(allx,axis=1).reshape((len(allx_),1))
+
+    # qu1Att = (qu1Val-minVal)/(maxVal-minVal)
+    # qu2Att = (maxVal-qu1Val)/(maxVal-minVal)
+
+    # quantilPerAtt =np.concatenate([qu1Att,qu2Att],axis=1)
+    # quantilValAtt =np.concatenate([minVal, qu1Val, maxVal],axis=1)
+
+    #4 folder
+    qu1Val = np.quantile(allx,0.25, axis=1).reshape((len(allx_),1))
+    qu2Val = np.quantile(allx,0.5, axis=1).reshape((len(allx_),1))
+    qu3Val = np.quantile(allx,0.75, axis=1).reshape((len(allx_),1))
+    maxVal = np.max(allx,axis=1).reshape((len(allx_),1))
+
+    qu1Att = (qu1Val-minVal)/(maxVal-minVal)
+    qu2Att = (qu2Val-qu1Val)/(maxVal-minVal)
+    qu3Att = (qu3Val-qu2Val)/(maxVal-minVal)
+    qu4Att = (maxVal-qu3Val)/(maxVal-minVal)
+
+    quantilPerAtt =np.concatenate([qu1Att,qu2Att,qu3Att,qu4Att],axis=1)
+    quantilValAtt =np.concatenate([minVal, qu1Val,qu2Val,qu3Val,maxVal],axis=1)
+
+
+    #10 folder
+    # qu1Val = np.quantile(allx,0.1, axis=1).reshape((len(allx_),1))
+    # qu2Val = np.quantile(allx,0.2, axis=1).reshape((len(allx_),1))
+    # qu3Val = np.quantile(allx,0.3, axis=1).reshape((len(allx_),1))
+    # qu4Val = np.quantile(allx,0.4, axis=1).reshape((len(allx_),1))
+    # qu5Val = np.quantile(allx,0.5, axis=1).reshape((len(allx_),1))
+    # qu6Val = np.quantile(allx,0.6, axis=1).reshape((len(allx_),1))
+    # qu7Val = np.quantile(allx,0.7, axis=1).reshape((len(allx_),1))
+    # qu8Val = np.quantile(allx,0.8, axis=1).reshape((len(allx_),1))
+    # qu9Val = np.quantile(allx,0.9, axis=1).reshape((len(allx_),1))
+    # maxVal = np.max(allx,axis=1).reshape((len(allx_),1))
+
+    # qu1Att = (qu1Val-minVal)/(maxVal-minVal)
+    # qu2Att = (qu2Val-qu1Val)/(maxVal-minVal)
+    # qu3Att = (qu3Val-qu2Val)/(maxVal-minVal)
+    # qu4Att = (qu4Val-qu3Val)/(maxVal-minVal)
+    # qu5Att = (qu5Val-qu4Val)/(maxVal-minVal)
+    # qu6Att = (qu6Val-qu5Val)/(maxVal-minVal)
+    # qu7Att = (qu7Val-qu6Val)/(maxVal-minVal)
+    # qu8Att = (qu8Val-qu7Val)/(maxVal-minVal)
+    # qu9Att = (qu9Val-qu8Val)/(maxVal-minVal)
+    # qu10Att = (maxVal-qu9Val)/(maxVal-minVal)
+
+    # quantilPerAtt =np.concatenate([qu1Att,qu2Att,qu3Att,qu4Att,qu5Att,qu6Att,qu7Att,qu8Att,qu9Att,qu10Att],axis=1)
+    # quantilValAtt =np.concatenate([minVal, qu1Val,qu2Val,qu3Val,qu4Val, qu5Val, qu6Val, qu7Val, qu8Val, qu9Val, maxVal],axis=1)
+
+    
+    #5: TF or not, vital
+    tfAttr = np.zeros((len(allx),1))
+    for i in np.arange(tfNum) :
+        tfAttr[i]=1.0
+    
+    #2. PCA to 3 dimensions
+    allx_ = StandardScaler().fit_transform(allx)
+    pca = PCA(n_components=3)
+    pcaAttr = pca.fit_transform(allx_)
+
+    # trainAttributes = np.concatenate([trainAttributes, stdAtt, minAtt, qu1Att, qu3Att, maxAtt, tfAttr], axis=1)
+    #trainAttributes = np.concatenate([trainAttributes, stdAtt, tfAttr], axis=1)
+    # Describe the slope
+    # Best now:
+    # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
+
+    if searchNum ==0:
+        trainAttributes = np.concatenate([trainAttributes, tfAttr], axis=1)
+    elif searchNum ==1:
+        trainAttributes = np.concatenate([trainAttributes, stdAtt, tfAttr], axis=1)
+    elif searchNum ==2:
+        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, tfAttr], axis=1)
+    elif searchNum ==3:
+        trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, tfAttr], axis=1)    
+    elif searchNum ==4:
+        trainAttributes = np.concatenate([trainAttributes, quantilPerAtt, tfAttr], axis=1)
+    elif searchNum ==5:
+        trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
+    elif searchNum ==6:
+        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, quantilPerAtt, tfAttr], axis=1)
+    elif searchNum ==7:
+        trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, quantilPerAtt, tfAttr], axis=1) 
+    elif searchNum ==8:
+        trainAttributes = trainAttributes
+    elif searchNum ==9:
+        trainAttributes = np.concatenate([trainAttributes, stdAtt], axis=1)
+    elif searchNum ==10:
+        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal], axis=1)
+    elif searchNum ==11:
+        trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal], axis=1)    
+    elif searchNum ==12:
+        trainAttributes = np.concatenate([trainAttributes, quantilPerAtt], axis=1)
+    elif searchNum ==13:
+        trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt], axis=1)
+    elif searchNum ==14:
+        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, quantilPerAtt], axis=1)
+    elif searchNum ==15:
+        trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, quantilPerAtt], axis=1) 
+    
+    
+    # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, quantilValAtt, tfAttr], axis=1)
+    
+    #trainAttributes = np.concatenate([tfAttr], axis=1)
+    
+    return trainAttributes
+
 # Negative sampling of the data, not restrict on TF
 def sample_neg(net, test_ratio=0.1, train_pos=None, test_pos=None, max_train_num=None):
     # get upper triangular matrix
