@@ -240,39 +240,53 @@ def genenet_attribute_feature(allx,tfNum,searchNum):
     # Best now:
     # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
 
-    if searchNum ==0:
-        trainAttributes = np.concatenate([trainAttributes, tfAttr], axis=1)
-    elif searchNum ==1:
-        trainAttributes = np.concatenate([trainAttributes, stdAtt, tfAttr], axis=1)
-    elif searchNum ==2:
-        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, tfAttr], axis=1)
-    elif searchNum ==3:
-        trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, tfAttr], axis=1)    
-    elif searchNum ==4:
-        trainAttributes = np.concatenate([trainAttributes, quantilPerAtt, tfAttr], axis=1)
-    elif searchNum ==5:
-        trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
-    elif searchNum ==6:
-        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, quantilPerAtt, tfAttr], axis=1)
-    elif searchNum ==7:
-        trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, quantilPerAtt, tfAttr], axis=1) 
-    elif searchNum ==8:
-        trainAttributes = trainAttributes
-    elif searchNum ==9:
-        trainAttributes = np.concatenate([trainAttributes, stdAtt], axis=1)
-    elif searchNum ==10:
-        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal], axis=1)
-    elif searchNum ==11:
-        trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal], axis=1)    
-    elif searchNum ==12:
-        trainAttributes = np.concatenate([trainAttributes, quantilPerAtt], axis=1)
-    elif searchNum ==13:
-        trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt], axis=1)
-    elif searchNum ==14:
-        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, quantilPerAtt], axis=1)
-    elif searchNum ==15:
-        trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, quantilPerAtt], axis=1) 
+    # Original Search
+    # if searchNum ==0:
+    #     trainAttributes = np.concatenate([trainAttributes, tfAttr], axis=1)
+    # elif searchNum ==1:
+    #     trainAttributes = np.concatenate([trainAttributes, stdAtt, tfAttr], axis=1)
+    # elif searchNum ==2:
+    #     trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, tfAttr], axis=1)
+    # elif searchNum ==3:
+    #     trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, tfAttr], axis=1)    
+    # elif searchNum ==4:
+    #     trainAttributes = np.concatenate([trainAttributes, quantilPerAtt, tfAttr], axis=1)
+    # elif searchNum ==5:
+    #     trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, tfAttr], axis=1)
+    # elif searchNum ==6:
+    #     trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, quantilPerAtt, tfAttr], axis=1)
+    # elif searchNum ==7:
+    #     trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, quantilPerAtt, tfAttr], axis=1) 
+    # elif searchNum ==8:
+    #     trainAttributes = trainAttributes
+    # elif searchNum ==9:
+    #     trainAttributes = np.concatenate([trainAttributes, stdAtt], axis=1)
+    # elif searchNum ==10:
+    #     trainAttributes = np.concatenate([trainAttributes, minVal, maxVal], axis=1)
+    # elif searchNum ==11:
+    #     trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal], axis=1)    
+    # elif searchNum ==12:
+    #     trainAttributes = np.concatenate([trainAttributes, quantilPerAtt], axis=1)
+    # elif searchNum ==13:
+    #     trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt], axis=1)
+    # elif searchNum ==14:
+    #     trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, quantilPerAtt], axis=1)
+    # elif searchNum ==15:
+    #     trainAttributes = np.concatenate([trainAttributes, stdAtt, minVal, maxVal, quantilPerAtt], axis=1) 
     
+    # New trimmed
+    if searchNum ==1:
+        trainAttributes = np.concatenate([trainAttributes, tfAttr], axis=1)    
+    elif searchNum ==2:
+        trainAttributes = np.concatenate([trainAttributes, quantilPerAtt, tfAttr], axis=1)
+    elif searchNum ==3:
+        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, quantilPerAtt, tfAttr], axis=1)
+    elif searchNum ==4:
+        trainAttributes = trainAttributes   
+    elif searchNum ==5:
+        trainAttributes = np.concatenate([trainAttributes, quantilPerAtt], axis=1)
+    elif searchNum ==6:
+        trainAttributes = np.concatenate([trainAttributes, minVal, maxVal, quantilPerAtt], axis=1)
     
     # trainAttributes = np.concatenate([trainAttributes, stdAtt, quantilPerAtt, quantilValAtt, tfAttr], axis=1)
     
