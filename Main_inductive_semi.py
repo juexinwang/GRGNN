@@ -34,9 +34,9 @@ parser.add_argument('--semi-pool-fold', type=int, default=5,
 parser.add_argument('--semi-iter', type=int, default=5,
                     help='semi iter')
 # Pearson correlation
-parser.add_argument('--embedding-dim', type=int, default=8,
+parser.add_argument('--embedding-dim', type=int, default=1,
                     help='embedding dimmension')
-parser.add_argument('--pearson_net', type=float, default=1.0, #1
+parser.add_argument('--pearson_net', type=float, default=0.8, #1
                     help='pearson correlation as the network')
 parser.add_argument('--mutual_net', type=int, default=3, #3
                     help='mutual information as the network')
