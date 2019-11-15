@@ -191,12 +191,12 @@ with open(feature_filename) as f:
     f.close()
 
 # Calculate Pearson's Correlation coeficient
-# pmatrix = pearsonMatrix(data, args.pearson_net)
-# np.save('dream'+datasetname+'_pmatrix_'+args.pearson_net+'.npy', pmatrix)
+pmatrix = pearsonMatrix(data, args.pearson_net)
+np.save('dream'+datasetname+'_pmatrix_'+args.pearson_net+'.npy', pmatrix)
 
 # Calculate Mutual Information
-# mmatrix = mutualMatrix(data, args.mutual_net)
-# np.save('dream'+datasetname+'_mmatrix_'+args.mutual_net+'.npy', mmatrix)
+mmatrix = mutualMatrix(data, args.mutual_net)
+np.save('dream'+datasetname+'_mmatrix_'+args.mutual_net+'.npy', mmatrix)
 
 # Calculate a random network based on 
 rmatrix = randomMatrix(data, args.random_net)
