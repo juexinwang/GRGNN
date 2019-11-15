@@ -1,28 +1,28 @@
-for i in 1 3 4 6
-do
-for j in 1 2 4
-do
-for k in {1..3}
-do
-   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --feature-num $i --use-embedding --embedding-dim $j
-done
-done
-done
+# for i in 1 3 4 6
+# do
+# for j in 1 2 4
+# do
+# for k in {1..3}
+# do
+#    python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --feature-num $i --use-embedding --embedding-dim $j
+# done
+# done
+# done
+
+# for i in 1 3 4 6
+# do
+# for j in 1 2 4
+# do
+# for k in {1..3}
+# do
+#    python Main_inductive_ensembl.py --traindata-name dream4 --testdata-name dream3 --feature-num $i --use-embedding --embedding-dim $j
+# done
+# done
+# done
 
 for i in 1 3 4 6
 do
-for j in 1 2 4
-do
-for k in {1..3}
-do
-   python Main_inductive_ensembl.py --traindata-name dream4 --testdata-name dream3 --feature-num $i --use-embedding --embedding-dim $j
-done
-done
-done
-
-for i in 1 3 4 6
-do
-for k in {1..3}
+for k in {1..10}
 do
    python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --feature-num $i
 done
@@ -30,7 +30,7 @@ done
 
 for i in 1 3 4 6
 do
-for k in {1..3}
+for k in {1..10}
 do
    python Main_inductive_ensembl.py --traindata-name dream4 --testdata-name dream3 --feature-num $i
 done
