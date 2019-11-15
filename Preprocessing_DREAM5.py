@@ -12,7 +12,7 @@ import pickle
 # Preprocess DREAM5 data from Official DREAM websites.
 # https://www.synapse.org/#!Synapse:syn3130840
 parser = argparse.ArgumentParser()
-parser.add_argument('--dream-num', type=str, default='4',
+parser.add_argument('--dream-num', type=str, default='1',
                     help='1 for In silico, 3 for E.coli, 4 for S. cerevisae')
 parser.add_argument('--pearson_net', type=float, default=0.8, #1
                     help='pearson correlation as the network')
