@@ -41,7 +41,7 @@ parser.add_argument('--nonzerolabel-ratio', type=float, default=1.0,
 parser.add_argument('--zerolabel-ratio', type=float, default=0.0,
                     help='ratio for zero label for training')
 # For debug
-parser.add_argument('--feature-num', type=int, default=0,
+parser.add_argument('--feature-num', type=int, default=4,
                     help='feature num for debug')
 # Pearson correlation
 parser.add_argument('--embedding-dim', type=int, default=1,

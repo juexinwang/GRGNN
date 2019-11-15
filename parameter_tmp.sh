@@ -20,19 +20,19 @@
 # done
 # done
 
-for i in 1 3 4 6
+for i in 1 2 4
 do
-for k in {1..10}
+for k in {1..5}
 do
-   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --feature-num $i
+   python Main_inductive_ensembl.py --traindata-name dream3 --testdata-name dream4 --use-embedding --embedding-dim $i
 done
 done
 
-for i in 1 3 4 6
+for i in 1 2 4
 do
-for k in {1..10}
+for k in {1..5}
 do
-   python Main_inductive_ensembl.py --traindata-name dream4 --testdata-name dream3 --feature-num $i
+   python Main_inductive_ensembl.py --traindata-name dream4 --testdata-name dream3 --use-embedding --embedding-dim $i
 done
 done
 
