@@ -3,8 +3,7 @@ import numpy as np
 import random
 from tqdm import tqdm
 import os, sys, pdb, math
-#import cPickle as cp
-import _pickle as cp  # python3 compatability
+import _pickle as cp
 import networkx as nx
 import argparse
 import scipy.io as sio
@@ -26,11 +25,11 @@ import node2vec
 def generateTFattribute(dream_name):
     tfDict={}
     number = 0
-    if dream_name == 'dream1':
+    if dream_name == 'data1':
         number = 195
-    elif dream_name == 'dream3':
+    elif dream_name == 'data3':
         number = 334
-    elif dream_name == 'dream4':
+    elif dream_name == 'data4':
         number = 333
     for i in np.arange(number):
         tfDict[i]=1

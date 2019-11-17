@@ -2,7 +2,6 @@ import torch
 import numpy as np
 import sys, copy, math, time, pdb
 import pickle as cPickle
-#import cPickle as pickle
 import scipy.io as sio
 import scipy.sparse as ssp
 import os.path
@@ -24,11 +23,15 @@ from util_functions import *
 
 
 parser = argparse.ArgumentParser(description='Link Prediction with SEAL')
+# Data from http://dreamchallenges.org/project/dream-5-network-inference-challenge/
+# data1: In silico
+# data3: E. coli
+# data4: Yeast
 # general settings
 parser.add_argument('--data-name', default='USAir', help='network name')
-parser.add_argument('--traindata-name', default='dream3', help='train network name')
+parser.add_argument('--traindata-name', default='data3', help='train network name')
 parser.add_argument('--traindata-name2', default=None, help='train network name2')
-parser.add_argument('--testdata-name', default='dream4', help='test network name')
+parser.add_argument('--testdata-name', default='data4', help='test network name')
 parser.add_argument('--train-name', default=None, help='train name')
 parser.add_argument('--test-name', default=None, help='test name')
 parser.add_argument('--max-train-num', type=int, default=100000, 
@@ -44,8 +47,6 @@ parser.add_argument('--embedding-dim', type=int, default=1,
                     help='embedding dimmension')
 parser.add_argument('--pearson_net', type=float, default=0.8,
                     help='pearson correlation as the network')
-# parser.add_argument('--pearson_net', type=int, default=3,
-#                     help='pearson correlation as the network')
 # model settings
 parser.add_argument('--hop', default=0, metavar='S', 
                     help='enclosing subgraph hop number, \
@@ -76,16 +77,16 @@ if args.max_nodes_per_hop is not None:
 args.file_dir = os.path.dirname(os.path.realpath('__file__'))
 args.res_dir = os.path.join(args.file_dir, 'results/{}'.format(args.data_name))
 
-# dream1: top 195
-# dream3: top 334
-# dream4: top 333 are TF
+# data1: top 195 are TF
+# data3: top 334 are TF
+# data4: top 333 are TF
 dreamTFdict={}
-dreamTFdict['dream1']=195
-dreamTFdict['dream3']=334
-dreamTFdict['dream4']=333
+dreamTFdict['data1']=195
+dreamTFdict['data3']=334
+dreamTFdict['data4']=333
 
 # Inductive learning
-# For 1vs 1
+# Training on 1 data, test on 1 data
 if args.traindata_name is not None:
     trainNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.traindata_name)))
     trainGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name)))
@@ -136,7 +137,7 @@ if args.use_attribute and trainAttributes is not None:
 train_graphs, test_graphs, train_labels, test_labels = extractLinks2subgraphsSVM(Atrain, Atest, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information, test_node_information)
 
 
-# For 2 vs 1
+# For training on 2 datasets, test on 1 dataset
 if args.traindata_name2 is not None:
     trainNet2_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.traindata_name2)))
     trainGroup2 = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name2)))

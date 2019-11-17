@@ -2,7 +2,6 @@ import torch
 import numpy as np
 import sys, copy, math, time, pdb
 import pickle as cPickle
-#import cPickle as pickle
 import scipy.io as sio
 import scipy.sparse as ssp
 import os.path
@@ -18,12 +17,15 @@ sys.path.append('%s/software/pytorch_DGCNN' % os.path.dirname(os.path.realpath(_
 from main import *
 from util_functions import *
 
-
 parser = argparse.ArgumentParser(description='Gene Regulatory Graph Neural Network in ensemble')
+# Data from http://dreamchallenges.org/project/dream-5-network-inference-challenge/
+# data1: In silico
+# data3: E. coli
+# data4: Yeast
 # general settings
-parser.add_argument('--traindata-name', default='dream3', help='train network name')
+parser.add_argument('--traindata-name', default='data3', help='train network name')
 parser.add_argument('--traindata-name2', default=None, help='also train another network')
-parser.add_argument('--testdata-name', default='dream4', help='test network name')
+parser.add_argument('--testdata-name', default='data4', help='test network name')
 parser.add_argument('--max-train-num', type=int, default=100000, 
                     help='set maximum number of train links (to fit into memory)')
 parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -79,43 +81,45 @@ if args.max_nodes_per_hop is not None:
 '''Prepare data'''
 args.file_dir = os.path.dirname(os.path.realpath('__file__'))
 
-# dream1: top 195
-# dream3: top 334
-# dream4: top 333 are TF
+# data1: top 195 are TF
+# data3: top 334 are TF
+# data4: top 333 are TF
 dreamTFdict={}
-dreamTFdict['dream1']=195
-dreamTFdict['dream3']=334
-dreamTFdict['dream4']=333
-
+dreamTFdict['data1']=195
+dreamTFdict['data3']=334
+dreamTFdict['data4']=333
 
 # Inductive learning
-# For 1vs 1
+# Training on 1 data, test on 1 data
 if args.traindata_name is not None:
+    # Prepare Training
     trainNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.traindata_name)))
     trainGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name)))
+    # Pearson's correlation/Mutual Information as the starting skeletons
     trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
     trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    # Random network as the starting skeletons
     # trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy').tolist()
     # trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy').tolist()
     
     allx =trainGroup.toarray().astype('float32')
-    #deal with the features:
-    # trainAttributes = genenet_attribute(allx,dreamTFdict[args.traindata_name])
-    #debug
-    trainAttributes = genenet_attribute_feature(allx,dreamTFdict[args.traindata_name],args.feature_num)   
-   
+    trainAttributes = genenet_attribute(allx,dreamTFdict[args.traindata_name])
+    # Debug: choose appropriate features in debug
+    # trainAttributes = genenet_attribute_feature(allx,dreamTFdict[args.traindata_name],args.feature_num)  
 
+    # Prepare Testing
     testNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.testdata_name)))
     testGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.testdata_name)))
+    # Pearson's correlation/Mutual Information as the starting skeletons
     testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
     testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    # Random network as the starting skeletons
     # testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy').tolist()
     # testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy').tolist()
     
     allxt =testGroup.toarray().astype('float32')
-    #deal with the features:
-    # testAttributes = genenet_attribute(allxt,dreamTFdict[args.testdata_name])
-    #debug
+    testAttributes = genenet_attribute(allxt,dreamTFdict[args.testdata_name])
+    # Debug: choose appropriate features in debug
     testAttributes = genenet_attribute_feature(allxt,dreamTFdict[args.testdata_name],args.feature_num)
 
     train_pos, train_neg, _, _ = sample_neg_TF(trainNet_ori, 0.0, TF_num=dreamTFdict[args.traindata_name], max_train_num=args.max_train_num)
@@ -166,17 +170,14 @@ if args.use_attribute and trainAttributes is not None:
 
 
 # Original
-# train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphs(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
-# train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphs(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
+train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphs(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
+train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphs(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
 
-# ratio
-train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphsRatio(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.nonzerolabel_ratio, args.zerolabel_ratio, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
-train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphsRatio(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.nonzerolabel_ratio, args.zerolabel_ratio, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
-# train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphsRatio(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, 1.0, 0.0, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
-# train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphsRatio(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, 0.0, 1.0, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
+# Neighbor Ratio
+# train_graphs_agent0, test_graphs_agent0, max_n_label_agent0 = extractLinks2subgraphsRatio(Atrain_agent0, Atest_agent0, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.nonzerolabel_ratio, args.zerolabel_ratio, args.hop, args.max_nodes_per_hop, train_node_information_agent0, test_node_information_agent0)
+# train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgraphsRatio(Atrain_agent1, Atest_agent1, train_pos, train_neg, test_pos, test_neg, args.neighbors_ratio, args.nonezerolabel_flag, args.nonzerolabel_ratio, args.zerolabel_ratio, args.hop, args.max_nodes_per_hop, train_node_information_agent1, test_node_information_agent1)
 
-
-# For 2 vs 1
+# For training on 2 datasets, test on 1 dataset
 if args.traindata_name2 is not None:
     trainNet2_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.traindata_name2)))
     trainGroup2 = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name2)))
@@ -269,8 +270,9 @@ def DGCNN_classifer(train_graphs, test_graphs, train_node_information, max_n_lab
     
     return test_loss, train_neg_idx, test_neg_idx, train_prob_results, test_prob_results
 
+# Agent 0
 _, _, test_neg_agent0,  _,test_prob_agent0 =DGCNN_classifer(train_graphs_agent0, test_graphs_agent0, train_node_information_agent0, max_n_label_agent0, set_epoch = 50, eval_flag=True)
-
+# Agent 1
 _, _, test_neg_agent1,  _,test_prob_agent1 =DGCNN_classifer(train_graphs_agent1, test_graphs_agent1, train_node_information_agent1, max_n_label_agent1, set_epoch = 50, eval_flag=True)
 
 dic_agent0={}
@@ -367,9 +369,6 @@ print(agent0_str+"\n")
 print("Agent1:Accuracy tp fn tn fp")
 print(agent1_str+"\n") 
 
+# Output results
 with open('acc_result.txt', 'a+') as f:
     f.write(allstr+"\t"+agent0_str+"\t"+agent1_str + '\n')
-
-
-
-
