@@ -34,18 +34,18 @@ Usages
     python Preprocessing_DREAM5.py 3
     python Preprocessing_DREAM5.py 4
 
-In this program, for simple, dataa3 means E.coli dataset, data4 means S. cerevisae dataset
+In this program, for simple, data3 means E.coli dataset, data4 means S. cerevisae dataset
 Train E.coli and test on S. cerevisae with default parameters, Type:
 
-    python Main_inductive_ensembl.py  --traindata-name data3 --testdata-name data4
+    python Main_inductive_ensemble.py  --traindata-name data3 --testdata-name data4
 
 Train E.coli and test on S. cerevisae with hop 1 and embedding, Type:
 
-    python Main_inductive_ensembl.py  --traindata-name data3 --testdata-name data4 --hop 1 --use-embedding
+    python Main_inductive_ensemble.py  --traindata-name data3 --testdata-name data4 --hop 1 --use-embedding
 
 Train S. cerevisae and test on E.coli with hop 1 and embedding, Type:
 
-    python Main_inductive_ensembl.py  --traindata-name data3 --testdata-name data4 --hop 1 --use-embedding
+    python Main_inductive_ensemble.py  --traindata-name data3 --testdata-name data4 --hop 1 --use-embedding
 
 
 References:
