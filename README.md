@@ -28,13 +28,18 @@ to install the required software and libraries. [Node2vec](https://github.com/ad
 
 Usages
 ------
+1. Unzip DREAM5 data
+    
+    cd data/dream
+    gunzip dreamdata.zip
+    cd ../../
 
-(Optional): Preprocessing DREAM5 data
+2. (Optional): Preprocessing DREAM5 data
 
     python Preprocessing_DREAM5.py 3
     python Preprocessing_DREAM5.py 4
 
-In this program, for simple, data3 means E.coli dataset, data4 means S. cerevisae dataset
+3. In this program, for simple, data3 means E.coli dataset, data4 means S. cerevisae dataset
 Train E.coli and test on S. cerevisae with default parameters, Type:
 
     python Main_inductive_ensemble.py  --traindata-name data3 --testdata-name data4
