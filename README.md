@@ -29,7 +29,7 @@ to install the required software and libraries. [Node2vec](https://github.com/ad
 Usages
 ------
 1. Unzip DREAM5 data
-    
+
     cd data/dream
     gunzip dreamdata.zip
     cd ../../
