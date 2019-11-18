@@ -30,14 +30,17 @@ Usages
 ------
 1. Unzip DREAM5 data
 
-    `cd data/dream`
-    `gunzip dreamdata.zip`
-    `cd ../../`
+    cd data/dream
+
+    gunzip dreamdata.zip
+
+    cd ../../
 
 2. (Optional): Preprocessing DREAM5 data
 
-    `python Preprocessing_DREAM5.py 3`
-    `python Preprocessing_DREAM5.py 4`
+    python Preprocessing_DREAM5.py 3
+    
+    python Preprocessing_DREAM5.py 4
 
 3. In this program, for simple, data3 means E.coli dataset, data4 means S. cerevisae dataset
 Train E.coli and test on S. cerevisae with default parameters, Type:
