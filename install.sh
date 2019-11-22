@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd pytorch_DGCNN
+cd software/pytorch_DGCNN
 cd lib
 make -j4
 cd "$(dirname "$0")"
