@@ -172,7 +172,7 @@ rowDict={}
 colDict={}
 rowDict['Human']=1131
 colDict['Human']=15276
-#human TF: 747
+#human TF: 745
 
 # Can be changed to dream3 and dream4
 datasetname=args.dataset
@@ -209,33 +209,33 @@ pickle.dump(graphcsc23, open( "data/ind."+datasetname+"23.csc", "wb" ) )
 pickle.dump(graphcsc13, open( "data/ind."+datasetname+"13.csc", "wb" ) )
 pickle.dump(graphcsc12, open( "data/ind."+datasetname+"12.csc", "wb" ) )
 
-# # data as the correlation
-# rownum = rowDict[datasetname]    
-# colnum = colDict[datasetname]
-# data = np.zeros((rownum,colnum))
+# data as the correlation
+rownum = rowDict[datasetname]    
+colnum = colDict[datasetname]
+data = np.zeros((rownum,colnum))
 
-# count = -1
-# with open(feature_filename) as f:
-#     lines = f.readlines()
-#     for line in lines:
-#         if count >= 0:
-#             line = line.strip()
-#             words = line.split()
-#             ncount = 0
-#             for word in words:
-#                 data[count, ncount] = word
-#                 ncount = ncount + 1
-#         count = count + 1
-#     f.close()
+count = -1
+with open(feature_filename) as f:
+    lines = f.readlines()
+    for line in lines:
+        if count >= 0:
+            line = line.strip()
+            words = line.split()
+            ncount = 0
+            for word in words:
+                data[count, ncount] = word
+                ncount = ncount + 1
+        count = count + 1
+    f.close()
 
-# # Calculate Pearson's Correlation coeficient
-# pmatrix = pearsonMatrix(data, args.pearson_net)
-# np.save('data/'+datasetname+'_pmatrix_'+str(args.pearson_net)+'.npy', pmatrix)
+# Calculate Pearson's Correlation coeficient
+pmatrix = pearsonMatrix(data, args.pearson_net)
+np.save('data/'+datasetname+'_pmatrix_'+str(args.pearson_net)+'.npy', pmatrix)
 
-# # Calculate Mutual Information
-# mmatrix = mutualMatrix(data, args.mutual_net)
-# np.save('data/'+datasetname+'_mmatrix_'+str(args.mutual_net)+'.npy', mmatrix)
+# Calculate Mutual Information
+mmatrix = mutualMatrix(data, args.mutual_net)
+np.save('data/'+datasetname+'_mmatrix_'+str(args.mutual_net)+'.npy', mmatrix)
 
-# # Calculate a random network based on 
-# rmatrix = randomMatrix(data, args.random_net)
-# np.save('data/'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)
+# Calculate a random network based on 
+rmatrix = randomMatrix(data, args.random_net)
+np.save('data/'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)

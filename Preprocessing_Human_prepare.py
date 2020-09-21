@@ -10,8 +10,8 @@ outputfileBench3='data/Human_goldstandard3.txt'
 outputfileBench23='data/Human_goldstandard23.txt'
 outputfileBench13='data/Human_goldstandard13.txt'
 outputfileBench12='data/Human_goldstandard12.txt'
-# total mapped is 747
-tfnum = 747
+# total mapped is 745
+tfnum = 745
 cvNum = 249
 
 linecount = 0
