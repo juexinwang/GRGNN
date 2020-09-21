@@ -33,7 +33,7 @@ with open(inputfileBench) as f:
             outList1.append(words[0]+'\t'+words[1]+'\t1\n')
         elif count%cvNum ==1:
             outList2.append(words[0]+'\t'+words[1]+'\t1\n')
-        elif count%cvNum ==2:
+        else:
             outList3.append(words[0]+'\t'+words[1]+'\t1\n')
         linecount += 1    
     f.close()
