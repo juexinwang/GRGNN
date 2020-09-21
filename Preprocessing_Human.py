@@ -202,12 +202,12 @@ graphcsc23 = read_edge_file_csc(edge_filename23, geneDict, sample_size=15276)
 graphcsc13 = read_edge_file_csc(edge_filename13, geneDict, sample_size=15276)
 graphcsc12 = read_edge_file_csc(edge_filename12, geneDict, sample_size=15276)
 
-pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
-pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
-pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
-pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
-pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
-pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
+pickle.dump(graphcsc1, open( "data/ind."+datasetname+"1.csc", "wb" ) )
+pickle.dump(graphcsc2, open( "data/ind."+datasetname+"2.csc", "wb" ) )
+pickle.dump(graphcsc3, open( "data/ind."+datasetname+"3.csc", "wb" ) )
+pickle.dump(graphcsc23, open( "data/ind."+datasetname+"23.csc", "wb" ) )
+pickle.dump(graphcsc13, open( "data/ind."+datasetname+"13.csc", "wb" ) )
+pickle.dump(graphcsc12, open( "data/ind."+datasetname+"12.csc", "wb" ) )
 
 # # data as the correlation
 # rownum = rowDict[datasetname]    
