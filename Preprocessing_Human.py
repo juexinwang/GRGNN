@@ -182,9 +182,31 @@ edge_filename    = "data/Human_goldstandard.txt"
 
 geneDict = generateGeneDict(feature_filename)
 graphcsc = read_edge_file_csc(edge_filename, geneDict, sample_size=15276)
+graphcsc = read_edge_file_csc(edge_filename, geneDict, sample_size=15276)
 allx = read_feature_file_sparse(feature_filename, sample_size=15276, feature_size=1131)
 
 pickle.dump(allx, open( "data/ind."+datasetname+".allx", "wb" ) )
+pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
+
+# cross validation
+edge_filename1    = "data/Human_goldstandard1.txt"
+edge_filename2    = "data/Human_goldstandard2.txt"
+edge_filename3    = "data/Human_goldstandard3.txt"
+edge_filename23   = "data/Human_goldstandard23.txt"
+edge_filename13   = "data/Human_goldstandard13.txt"
+edge_filename12   = "data/Human_goldstandard12.txt"
+graphcsc1 = read_edge_file_csc(edge_filename1, geneDict, sample_size=15276)
+graphcsc2 = read_edge_file_csc(edge_filename2, geneDict, sample_size=15276)
+graphcsc3 = read_edge_file_csc(edge_filename3, geneDict, sample_size=15276)
+graphcsc23 = read_edge_file_csc(edge_filename23, geneDict, sample_size=15276)
+graphcsc13 = read_edge_file_csc(edge_filename13, geneDict, sample_size=15276)
+graphcsc12 = read_edge_file_csc(edge_filename12, geneDict, sample_size=15276)
+
+pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
+pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
+pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
+pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
+pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
 pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
 
 # # data as the correlation
