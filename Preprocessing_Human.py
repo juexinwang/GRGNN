@@ -170,7 +170,7 @@ def randomMatrix(data, threshold=0.003):
 # Setting of Dream dataset size
 rowDict={}
 colDict={}
-rowDict['Human']=100
+rowDict['Human']=1131
 colDict['Human']=15276
 #human TF: 747
 
@@ -182,7 +182,7 @@ edge_filename    = "data/Human_goldstandard.txt"
 
 geneDict = generateGeneDict(feature_filename)
 graphcsc = read_edge_file_csc(edge_filename, geneDict, sample_size=15276)
-allx = read_feature_file_sparse(feature_filename, sample_size=15276, feature_size=100)
+allx = read_feature_file_sparse(feature_filename, sample_size=15276, feature_size=1131)
 
 pickle.dump(allx, open( "data/ind."+datasetname+".allx", "wb" ) )
 pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
