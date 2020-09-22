@@ -271,12 +271,12 @@ elif args.dream_num == '4':
     sample_size=5950
 
 graphcsc1,graphcsc2,graphcsc3,graphcsc23,graphcsc13,graphcsc12 = read_edge_file_csc_CV(edge_filename, sample_size)
-pickle.dump(graphcsc1, open( "ind.dream"+datasetname+"1.csc", "wb" ) )
-pickle.dump(graphcsc2, open( "ind.dream"+datasetname+"2.csc", "wb" ) )
-pickle.dump(graphcsc3, open( "ind.dream"+datasetname+"3.csc", "wb" ) )
-pickle.dump(graphcsc23, open( "ind.dream"+datasetname+"23.csc", "wb" ) )
-pickle.dump(graphcsc13, open( "ind.dream"+datasetname+"13.csc", "wb" ) )
-pickle.dump(graphcsc12, open( "ind.dream"+datasetname+"12.csc", "wb" ) )
+pickle.dump(graphcsc1, open( "ind.dream"+datasetname+"_1.csc", "wb" ) )
+pickle.dump(graphcsc2, open( "ind.dream"+datasetname+"_2.csc", "wb" ) )
+pickle.dump(graphcsc3, open( "ind.dream"+datasetname+"_3.csc", "wb" ) )
+pickle.dump(graphcsc23, open( "ind.dream"+datasetname+"_23.csc", "wb" ) )
+pickle.dump(graphcsc13, open( "ind.dream"+datasetname+"_13.csc", "wb" ) )
+pickle.dump(graphcsc12, open( "ind.dream"+datasetname+"_12.csc", "wb" ) )
 
 # # data as the correlation
 # rownum = rowDict[datasetname]    
