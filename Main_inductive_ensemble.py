@@ -92,43 +92,47 @@ dreamTFdict['data4']=333
 # Inductive learning
 # Training on 1 data, test on 1 data
 if args.traindata_name is not None:
+    # Select data name
+    trdata_name = args.traindata_name.split('_')[0]
+    tedata_name = args.testdata_name.split('_')[0]
+
     # Prepare Training
     trainNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.traindata_name)),allow_pickle=True)
-    trainGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name)),allow_pickle=True)
+    trainGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(trdata_name)),allow_pickle=True)
     # Pearson's correlation/Mutual Information as the starting skeletons
-    trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_pmatrix_'+str(args.pearson_net)+'.npy',allow_pickle=True).tolist()
-    trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_mmatrix_'+str(args.mutual_net)+'.npy',allow_pickle=True).tolist()
+    trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+trdata_name+'_pmatrix_'+str(args.pearson_net)+'.npy',allow_pickle=True).tolist()
+    trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+trdata_name+'_mmatrix_'+str(args.mutual_net)+'.npy',allow_pickle=True).tolist()
     # Random network as the starting skeletons
-    # trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy',allow_pickle=True).tolist()
-    # trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name+'_rmatrix_0.003.npy',allow_pickle=True).tolist()
+    # trainNet_agent0 = np.load(args.file_dir+'/data/dream/'+trdata_name+'_rmatrix_0.003.npy',allow_pickle=True).tolist()
+    # trainNet_agent1 = np.load(args.file_dir+'/data/dream/'+trdata_name+'_rmatrix_0.003.npy',allow_pickle=True).tolist()
     
     allx =trainGroup.toarray().astype('float32')
-    trainAttributes = genenet_attribute(allx,dreamTFdict[args.traindata_name])
+    trainAttributes = genenet_attribute(allx,dreamTFdict[trdata_name])
     # Debug: choose appropriate features in debug
-    # trainAttributes = genenet_attribute_feature(allx,dreamTFdict[args.traindata_name],args.feature_num)  
+    # trainAttributes = genenet_attribute_feature(allx,dreamTFdict[trdata_name],args.feature_num)  
 
     # Prepare Testing
     testNet_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.testdata_name)),allow_pickle=True)
-    testGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.testdata_name)),allow_pickle=True)
+    testGroup = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(tedata_name)),allow_pickle=True)
     # Pearson's correlation/Mutual Information as the starting skeletons
-    testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_pmatrix_'+str(args.pearson_net)+'.npy',allow_pickle=True).tolist()
-    testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_mmatrix_'+str(args.mutual_net)+'.npy',allow_pickle=True).tolist()
+    testNet_agent0 = np.load(args.file_dir+'/data/dream/'+tedata_name+'_pmatrix_'+str(args.pearson_net)+'.npy',allow_pickle=True).tolist()
+    testNet_agent1 = np.load(args.file_dir+'/data/dream/'+tedata_name+'_mmatrix_'+str(args.mutual_net)+'.npy',allow_pickle=True).tolist()
     # Random network as the starting skeletons
-    # testNet_agent0 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy',allow_pickle=True).tolist()
-    # testNet_agent1 = np.load(args.file_dir+'/data/dream/'+args.testdata_name+'_rmatrix_0.003.npy',allow_pickle=True).tolist()
+    # testNet_agent0 = np.load(args.file_dir+'/data/dream/'+tedata_name+'_rmatrix_0.003.npy',allow_pickle=True).tolist()
+    # testNet_agent1 = np.load(args.file_dir+'/data/dream/'+tedata_name+'_rmatrix_0.003.npy',allow_pickle=True).tolist()
     
     allxt =testGroup.toarray().astype('float32')
-    testAttributes = genenet_attribute(allxt,dreamTFdict[args.testdata_name])
+    testAttributes = genenet_attribute(allxt,dreamTFdict[tedata_name])
     # Debug: choose appropriate features in debug
-    testAttributes = genenet_attribute_feature(allxt,dreamTFdict[args.testdata_name],args.feature_num)
+    testAttributes = genenet_attribute_feature(allxt,dreamTFdict[tedata_name],args.feature_num)
 
-    train_pos, train_neg, _, _ = sample_neg_TF(trainNet_ori, 0.0, TF_num=dreamTFdict[args.traindata_name], max_train_num=args.max_train_num)
+    train_pos, train_neg, _, _ = sample_neg_TF(trainNet_ori, 0.0, TF_num=dreamTFdict[trdata_name], max_train_num=args.max_train_num)
     use_pos_size = math.floor(len(train_pos[0])*args.training_ratio)
     use_neg_size = math.floor(len(train_neg[0])*args.training_ratio)
     train_pos=(train_pos[0][:use_pos_size],train_pos[1][:use_pos_size])
     train_neg=(train_neg[0][:use_neg_size],train_neg[1][:use_neg_size])
-    _, _, test_pos, test_neg = sample_neg_TF(testNet_ori, 1.0, TF_num=dreamTFdict[args.testdata_name], max_train_num=args.max_train_num)
-    # test_pos, test_neg = sample_neg_all_TF(testNet_ori, TF_num=dreamTFdict[args.testdata_name])
+    _, _, test_pos, test_neg = sample_neg_TF(testNet_ori, 1.0, TF_num=dreamTFdict[tedata_name], max_train_num=args.max_train_num)
+    # test_pos, test_neg = sample_neg_all_TF(testNet_ori, TF_num=dreamTFdict[tedata_name])
 
 
 
@@ -179,15 +183,18 @@ train_graphs_agent1, test_graphs_agent1, max_n_label_agent1 = extractLinks2subgr
 
 # For training on 2 datasets, test on 1 dataset
 if args.traindata_name2 is not None:
+    # Select data name
+    trdata_name2 = args.traindata_name2.split('_')[0]
+
     trainNet2_ori = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.csc'.format(args.traindata_name2)))
-    trainGroup2 = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(args.traindata_name2)))
-    trainNet2_agent0 = np.load(args.file_dir+'/data/dream/'+args.traindata_name2+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
-    trainNet2_agent1 = np.load(args.file_dir+'/data/dream/'+args.traindata_name2+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
+    trainGroup2 = np.load(os.path.join(args.file_dir, 'data/dream/ind.{}.allx'.format(trdata_name2)))
+    trainNet2_agent0 = np.load(args.file_dir+'/data/dream/'+trdata_name2+'_pmatrix_'+str(args.pearson_net)+'.npy').tolist()
+    trainNet2_agent1 = np.load(args.file_dir+'/data/dream/'+trdata_name2+'_mmatrix_'+str(args.mutual_net)+'.npy').tolist()
     allx2 =trainGroup2.toarray().astype('float32')
 
     #deal with the features:
-    trainAttributes2 = genenet_attribute(allx2,dreamTFdict[args.traindata_name2])
-    train_pos2, train_neg2, _, _ = sample_neg_TF(trainNet2_ori, 0.0, TF_num=dreamTFdict[args.traindata_name2], max_train_num=args.max_train_num,semi_pool_fold=args.semi_pool_fold)
+    trainAttributes2 = genenet_attribute(allx2,dreamTFdict[trdata_name2])
+    train_pos2, train_neg2, _, _ = sample_neg_TF(trainNet2_ori, 0.0, TF_num=dreamTFdict[trdata_name2], max_train_num=args.max_train_num,semi_pool_fold=args.semi_pool_fold)
 
     Atrain2_agent0 = trainNet2_agent0.copy()  # the observed network
     Atrain2_agent1 = trainNet2_agent1.copy()
