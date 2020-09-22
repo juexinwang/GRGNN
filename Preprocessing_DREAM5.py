@@ -265,9 +265,9 @@ edge_filename    = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Net
 # pickle.dump(graphcsc, open( "ind.dream"+datasetname+".csc", "wb" ) )
 
 sample_size=4511
-if args.dream_num == 3:
+if args.dream_num == '3':
     sample_size=4511
-elif args.dream_num == 4:
+elif args.dream_num == '4':
     sample_size=5950
 
 graphcsc1,graphcsc2,graphcsc3,graphcsc23,graphcsc13,graphcsc12 = read_edge_file_csc_CV(edge_filename, sample_size)
