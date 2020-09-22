@@ -126,7 +126,7 @@ def read_edge_file_csc_CV(filename, sample_size):
                 row1.append(end2)
                 col1.append(end1)
                 data1.append(1.0)
-            elif int(len(tfDictTmp)/tfNum) == 0:
+            elif int(len(tfDictTmp)/tfNum) == 1:
                 row2.append(end1)
                 col2.append(end2)
                 data2.append(1.0)
