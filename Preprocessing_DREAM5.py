@@ -264,6 +264,7 @@ edge_filename    = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Net
 # pickle.dump(allx, open( "ind.dream"+datasetname+".allx", "wb" ) )
 # pickle.dump(graphcsc, open( "ind.dream"+datasetname+".csc", "wb" ) )
 
+sample_size=4511
 if args.dream_num == 3:
     sample_size=4511
 elif args.dream_num == 4:
