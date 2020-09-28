@@ -22,6 +22,8 @@ parser = argparse.ArgumentParser(description='Gene Regulatory Graph Neural Netwo
 # data1: In silico
 # data3: E. coli
 # data4: Yeast
+# Usage:
+# python Main_inductive_ensemble.py --traindata-name data3_23 --testdata-name data3_1
 # general settings
 parser.add_argument('--traindata-name', default='data3', help='train network name')
 parser.add_argument('--traindata-name2', default=None, help='also train another network')
@@ -84,10 +86,12 @@ args.file_dir = os.path.dirname(os.path.realpath('__file__'))
 # data1: top 195 are TF
 # data3: top 334 are TF
 # data4: top 333 are TF
+# Human: top 745 are TF
 dreamTFdict={}
 dreamTFdict['data1']=195
 dreamTFdict['data3']=334
 dreamTFdict['data4']=333
+dreamTFdict['Human']=745
 
 # Inductive learning
 # Training on 1 data, test on 1 data
