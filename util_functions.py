@@ -523,6 +523,29 @@ def sample_neg_semi(net, test_ratio=0.1, train_pos=None, test_pos=None, max_trai
     test_neg  = (neg[0], neg[1])
     return train_pos, train_neg, test_pos, test_neg
 
+def links2subgraphsTranSVM(Atrain, Atest, train_pos, train_neg, test_pos, test_neg, h=1, max_nodes_per_hop=None, train_node_information=None, test_node_information=None):
+
+    # extract enclosing subgraphs
+    def helper(A, links, g_label, node_information):
+        g_list = []
+        label_list = []
+        for i, j in tqdm(zip(links[0], links[1])):
+            _, _, n_features = subgraph_extraction_labeling((i, j), A, h, max_nodes_per_hop, node_information)
+            g_list.append(np.concatenate((n_features[0,:],n_features[1,:])))
+            label_list.append(g_label)
+        return g_list, label_list
+    print('Enclosing subgraph extraction begins...')
+    train_graphs, train_labels = helper(Atrain, train_pos, 1, train_node_information)
+    train_graphs1, train_labels1 = helper(Atrain, train_neg, 0, train_node_information)
+    train_graphs = train_graphs + train_graphs1
+    train_labels = train_labels + train_labels1
+    test_graphs, test_labels = helper(Atest, test_pos, 1, test_node_information)
+    test_graphs1, test_labels1 = helper(Atest, test_neg, 0, test_node_information)
+    test_graphs = test_graphs + test_graphs1
+    test_labels = test_labels + test_labels1
+    return train_graphs, test_graphs, train_labels, test_labels
+
+
 # Extract subgraph from links for network motifs 
 def extractLinks2subgraphs_motif(A, train_pos, train_neg, h=1, max_nodes_per_hop=None, node_information=None, tfNum=334):
     # automatically select h from {1, 2}
