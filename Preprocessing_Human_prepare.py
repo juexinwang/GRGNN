@@ -41,28 +41,35 @@ with open(inputfileBench) as f:
 print('Total TF number is '+str(len(tfDictName)))
 
 # generate output Benchmark
+print(len(outList))
 with open(outputfileBench,'w') as fw:
     fw.writelines(outList)
 
 # cross validation
+print(len(outList1))
 with open(outputfileBench1,'w') as fw:
     fw.writelines(outList1)
 
+print(len(outList2))
 with open(outputfileBench2,'w') as fw:
     fw.writelines(outList2)
 
+print(len(outList3))
 with open(outputfileBench3,'w') as fw:
     fw.writelines(outList3)
 
 outList23 = outList2+outList3
+print(len(outList23))
 with open(outputfileBench23,'w') as fw:
     fw.writelines(outList23)
 
 outList13 = outList1+outList3
+print(len(outList13))
 with open(outputfileBench13,'w') as fw:
     fw.writelines(outList13)
 
 outList12 = outList1+outList2
+print(len(outList12))
 with open(outputfileBench12,'w') as fw:
     fw.writelines(outList12)
 
