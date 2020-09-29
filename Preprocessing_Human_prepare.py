@@ -29,9 +29,9 @@ with open(inputfileBench) as f:
         tfDictName[words[0]]=''
         outList.append(words[0]+'\t'+words[1]+'\t1\n')
         # cross validation
-        if len(tfDictName)%cvNum == 0:
+        if (int)(len(tfDictName)/cvNum) == 0:
             outList1.append(words[0]+'\t'+words[1]+'\t1\n')
-        elif len(tfDictName)%cvNum == 1:
+        elif (int)(len(tfDictName)/cvNum) == 1:
             outList2.append(words[0]+'\t'+words[1]+'\t1\n')
         else:
             outList3.append(words[0]+'\t'+words[1]+'\t1\n')
