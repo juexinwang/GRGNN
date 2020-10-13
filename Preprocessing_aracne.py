@@ -25,5 +25,5 @@ feature_filename = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Net
 
 df = pd.read_csv(feature_filename)
 df_t = df.T
-df.to_csv('aracne.csv', index = False)
+df.to_csv('aracne'+datasetname+'.csv', index = False)
 
