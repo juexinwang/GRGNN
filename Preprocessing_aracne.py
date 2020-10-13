@@ -23,7 +23,22 @@ datasetname=args.dream_num
 feature_filename = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Network"+datasetname+"/input_data/expression_data.tsv"
 # edge_filename    = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Network"+datasetname+"/gold_standard/GoldStandard.tsv"
 
-df = pd.read_csv(feature_filename)
+df = pd.read_csv(feature_filename,sep='\t')
 df_t = df.T
-df_t.to_csv('aracne'+datasetname+'.csv', index = False)
+df_t.to_csv('aracne'+datasetname+'.csv')
+
+tfnum=334
+if datasetname==3:
+    tfnum=334
+elif datasetname==4:
+    tfnum=333
+
+tflist=[]
+for i in range(tfnum):
+    tmpstr = 'G'+str(i+1)
+    tflist.append(tmpstr)
+
+with open('aracne_tf'+datasetname+'.txt','w') as fw:
+    for item in tflist:
+        fw.write("%s\n" % item)
 
