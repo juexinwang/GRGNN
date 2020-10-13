@@ -28,9 +28,9 @@ df_t = df.T
 df_t.to_csv('aracne'+datasetname+'.csv')
 
 tfnum=334
-if datasetname==3:
+if datasetname=='3':
     tfnum=334
-elif datasetname==4:
+elif datasetname=='4':
     tfnum=333
 
 tflist=[]
