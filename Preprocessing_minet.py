@@ -46,7 +46,7 @@ with open(edge_filename) as f:
         data[end1,end2]=1
         data[end2,end1]=1
 
-np.savetxt('data/minet'+datasetname+'.csv', a, delimiter="\t")
+np.savetxt('data/minet'+datasetname+'.csv', data, delimiter="\t")
 
 
 # Running R codes
