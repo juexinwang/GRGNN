@@ -46,7 +46,15 @@ with open(edge_filename) as f:
         data[end1,end2]=1
         data[end2,end1]=1
 
-np.savetxt('data/minet'+datasetname+'.csv', data, delimiter="\t",fmt="%10.5f")
+#directly save 
+# np.savetxt('data/minet'+datasetname+'.csv', data, delimiter="\t",fmt="%10.5f")
 
+genelist=[]
+for i in range(genenum):
+    tmpstr = 'G'+str(i+1)
+    genelist.append(tmpstr)
+
+df = pd.DataFrame(data,index=genelist,columns=genelist)
+df.to_csv('data/minet'+datasetname+'.csv',sep='\t')
 
 # Running R codes
