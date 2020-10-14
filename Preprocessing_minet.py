@@ -34,7 +34,7 @@ elif datasetname=='4':
     samplenum=536
     genenum=5950
 
-data = np.zeros((samplenum,genenum))
+data = np.zeros((genenum,genenum))
 
 with open(edge_filename) as f:
     lines = f.readlines()
