@@ -10,8 +10,11 @@ import sys
 import pickle
 import pandas as pd
 
-# Preprocess data for aracne.
+# Preprocess data for minet.
 # https://www.synapse.org/#!Synapse:syn3130840
+# python Preprocessing_minet_1.py 3
+# Rscript Prepocessing_minet.r 3
+# python Preprocessing_minet_2.py 3
 parser = argparse.ArgumentParser()
 parser.add_argument('--dream-num', type=str, default='3',
                     help='1 for In silico, 3 for E.coli, 4 for S. cerevisae')
@@ -56,24 +59,7 @@ for i in range(genenum):
 
 # All
 df = pd.DataFrame(data,index=genelist,columns=genelist)
-df.to_csv('data/minet'+datasetname+'.csv',sep='\t')
+df.to_csv('data/True'+datasetname+'.csv',sep='\t')
 
 # Running R codes
-
-# save and load
-def readnpy(input):
-    tlist=[]
-    with open(input) as f:
-        lines = f.readlines()
-        for line in lines:
-            line = line.strip()
-            line = float(line)
-            tlist.append(line)
-        f.close()
-    return tlist
-
-mrlist=readnpy("data/mr3.csv")
-mr_true=readnpy("data/mr_true3.csv")
-
-np.save('data/mr3.npy',mrlist)
-np.save('data/mr_true3.npy',mr_true)
+# Rscript Preprocessing_minet.r 3

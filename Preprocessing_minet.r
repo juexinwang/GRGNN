@@ -1,8 +1,25 @@
 # https://www.bioconductor.org/packages/release/bioc/manuals/minet/man/minet.pdf
+# Use minet to infer minet,aracne,clr
+
+# Usage:
+# Rscript Preprocessing_minet.r 3
+# Rscript Preprocessing_minet.r 4
+# test if there is one argument: if not, return an error
+if (length(args)==0) {
+  stop("At least one argument must be supplied (input file).n", call.=FALSE)
+} 
+geneNum=4511
+if args[1]=='3'{
+    geneNum=4511
+}else if args[1]=='4'{
+    geneNum=5950
+}
 
 library(minet)
-m =read.csv("/home/wangjue/biodata/DREAM5_network_inference_challenge/Network3/input_data/expression_data.tsv",sep='\t')
-r =read.csv("/home/wangjue/myprojects/public/GRGNN/data/minet3.csv",sep='\t',row.names=1)
+exp_file=paste("/home/wangjue/biodata/DREAM5_network_inference_challenge/Network",args[1],"/input_data/expression_data.tsv",sep='')
+m =read.csv(exp_file,sep='\t')
+true_file=paste("/home/wangjue/myprojects/public/GRGNN/data/True",args[1],".csv",sep='')
+r =read.csv(true_file,sep='\t',row.names=1)
 r =data.matrix(r)
 
 mr <- minet( m, method="mrnet", estimator="spearman" )
@@ -19,17 +36,18 @@ clr<- minet( m, method="clr", estimator="spearman" )
 # show.pr(clr.tbl, device=dev, col="red",type="b")
 # auc.pr(clr.tbl)
 
+
 mrlist=order(mr, decreasing=TRUE)[1:1000000]
-amr=ceiling(mrlist/4511)
-bmr=mrlist%%4511
+amr=ceiling(mrlist/geneNum)
+bmr=mrlist%%geneNum
 
 arlist=order(ar, decreasing=TRUE)[1:1000000]
-aar=ceiling(arlist/4511)
-bar=arlist%%4511
+aar=ceiling(arlist/geneNum)
+bar=arlist%%geneNum
 
 clrlist=order(clr, decreasing=TRUE)[1:1000000]
-aclr=ceiling(clrlist/4511)
-bclr=clrlist%%4511
+aclr=ceiling(clrlist/geneNum)
+bclr=clrlist%%geneNum
 
 mrl<-c()
 mrl_true<-c()
@@ -48,9 +66,9 @@ while(i<=1000000) {
     i=i+1
 }
 
-write.table(mrl, file="data/mr3.csv", row.names = F, col.names = F)
-write.table(mrl_true, file="data/mr_true3.csv", row.names = F, col.names = F)
-write.table(arl, file="data/ar3.csv", row.names = F, col.names = F)
-write.table(arl_true, file="data/ar_true3.csv", row.names = F, col.names = F)
-write.table(clrl, file="data/clr3.csv", row.names = F, col.names = F)
-write.table(clrl_true, file="data/clr3_true3.csv", row.names = F, col.names = F)
+write.table(mrl, file=paste("data/mr",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(mrl_true, file=paste("data/mr_true",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(arl, file=paste("data/ar",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(arl_true, file=paste("data/ar_true",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(clrl, file=paste("data/clr",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(clrl_true, file=paste("data/clr_true",args[1],".csv",sep=''), row.names = F, col.names = F)
