@@ -59,3 +59,21 @@ df = pd.DataFrame(data,index=genelist,columns=genelist)
 df.to_csv('data/minet'+datasetname+'.csv',sep='\t')
 
 # Running R codes
+
+# save and load
+def readnpy(input):
+    tlist=[]
+    with open(input) as f:
+        lines = f.readlines()
+        for line in lines:
+            line = line.strip()
+            line = float(line)
+            tlist.append(line)
+        f.close()
+    return tlist
+
+mrlist=readnpy("data/mr3.csv")
+mr_true=readnpy("data/mr_true3.csv")
+
+np.save('data/mr3.npy',mrlist)
+np.save('data/mr_true3.npy',mr_true)
