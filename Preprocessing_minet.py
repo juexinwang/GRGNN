@@ -55,11 +55,7 @@ for i in range(genenum):
     genelist.append(tmpstr)
 
 # All
-# df = pd.DataFrame(data,index=genelist,columns=genelist)
-# df.to_csv('data/minet'+datasetname+'.csv',sep='\t')
-
-
-df = pd.DataFrame(data[:tfnum,:],index=genelist[:tfnum],columns=genelist)
+df = pd.DataFrame(data,index=genelist,columns=genelist)
 df.to_csv('data/minet'+datasetname+'.csv',sep='\t')
 
 # Running R codes
