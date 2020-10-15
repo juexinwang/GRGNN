@@ -5,6 +5,7 @@
 # Rscript Preprocessing_minet.r 3
 # Rscript Preprocessing_minet.r 4
 # test if there is one argument: if not, return an error
+args = commandArgs(trailingOnly=TRUE)
 if (length(args)==0) {
   stop("At least one argument must be supplied (input file).n", call.=FALSE)
 } 
