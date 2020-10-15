@@ -12,9 +12,9 @@ import pandas as pd
 
 # Preprocess data for minet.
 # https://www.synapse.org/#!Synapse:syn3130840
-# python Preprocessing_minet_1.py 3
+# python Preprocessing_minet_1.py --dream-num 4
 # Rscript Prepocessing_minet.r 3
-# python Preprocessing_minet_2.py 3
+# python Preprocessing_minet_2.py --dream-num 4
 parser = argparse.ArgumentParser()
 parser.add_argument('--dream-num', type=str, default='3',
                     help='1 for In silico, 3 for E.coli, 4 for S. cerevisae')

@@ -9,9 +9,9 @@ if (length(args)==0) {
   stop("At least one argument must be supplied (input file).n", call.=FALSE)
 } 
 geneNum=4511
-if args[1]=='3'{
+if(args[1]=='3'){
     geneNum=4511
-}else if args[1]=='4'{
+}else if (args[1]=='4'){
     geneNum=5950
 }
 
