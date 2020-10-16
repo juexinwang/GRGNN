@@ -11,6 +11,7 @@ import argparse
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import roc_auc_score
 import matplotlib.pyplot as plt
 from inspect import signature
 sys.path.append('%s/software/pytorch_DGCNN' % os.path.dirname(os.path.realpath(__file__)))
@@ -286,6 +287,15 @@ _, _, test_neg_agent0,  _,test_prob_agent0 =DGCNN_classifer(train_graphs_agent0,
 # Agent 1
 _, _, test_neg_agent1,  _,test_prob_agent1 =DGCNN_classifer(train_graphs_agent1, test_graphs_agent1, train_node_information_agent1, max_n_label_agent1, set_epoch = 50, eval_flag=True)
 
+# Generate 
+trueList=[]
+for i in range(len(test_pos[0])):
+    trueList.append(1)
+for i in range(len(test_neg[0])):
+    trueList.append(0)
+
+ensembleProb=[]
+
 dic_agent0={}
 for i in test_neg_agent0:
     dic_agent0[i]=0
@@ -303,6 +313,7 @@ tn0=0
 tn1=0
 tp=0
 tn=0
+eprob=0
 testpos_size = len(test_pos[0])
 for i in np.arange(len(test_prob_agent0)):
     if i<testpos_size: #positive part
@@ -310,74 +321,88 @@ for i in np.arange(len(test_prob_agent0)):
             if test_prob_agent0[i]*test_prob_agent1[i]>0:
                 # both wrong
                 bothwrong = bothwrong + 1
+                eprob = -test_prob_agent0[i]*test_prob_agent1[i]
             else:
                 if abs(test_prob_agent0[i])>abs(test_prob_agent1[i]):
                     if i in dic_agent0 and i not in dic_agent1:
                         uncorrected = uncorrected +1
                         tp1 = tp1 + 1
+                        eprob = test_prob_agent0[i]*test_prob_agent1[i]
                     else:
                         corrected = corrected +1
                         count = count +1
                         tp = tp +1
-                        tp0 = tp0 + 1 
+                        tp0 = tp0 + 1
+                        eprob = -test_prob_agent0[i]*test_prob_agent1[i] 
                 else:
                     if i in dic_agent0 and i not in dic_agent1:
                         corrected = corrected +1
                         count = count +1
                         tp = tp +1
                         tp1 = tp1 + 1
+                        eprob = -test_prob_agent0[i]*test_prob_agent1[i]
                     else:
                         uncorrected = uncorrected +1  
-                        tp0 = tp0 + 1                  
+                        tp0 = tp0 + 1
+                        eprob = test_prob_agent0[i]*test_prob_agent1[i]                  
         else:
             count = count +1
             tp = tp +1
             tp0 = tp0 + 1
             tp1 = tp1 + 1
+            eprob = test_prob_agent0[i]*test_prob_agent1[i]
     else: #negative part
         if i in dic_agent0 or i in dic_agent1:
             if test_prob_agent0[i]*test_prob_agent1[i]>0:
                 # both wrong
                 bothwrong = bothwrong + 1
+                eprob = -test_prob_agent0[i]*test_prob_agent1[i]
             else:
                 if abs(test_prob_agent0[i])>abs(test_prob_agent1[i]):
                     if i in dic_agent0 and i not in dic_agent1:
                         uncorrected = uncorrected +1
                         tn1 = tn1 + 1
+                        eprob = -test_prob_agent0[i]*test_prob_agent1[i]
                     else:
                         corrected = corrected +1
                         count = count +1 
                         tn = tn+1
                         tn0 = tn0 + 1
+                        eprob = test_prob_agent0[i]*test_prob_agent1[i]
                 else:
                     if i in dic_agent0 and i not in dic_agent1:
                         corrected = corrected +1
                         count = count +1
                         tn = tn+1
                         tn1 = tn1 + 1
+                        eprob = test_prob_agent0[i]*test_prob_agent1[i]
                     else:
                         uncorrected = uncorrected +1  
-                        tn0 = tn0 + 1                  
+                        tn0 = tn0 + 1
+                        eprob = -test_prob_agent0[i]*test_prob_agent1[i]                  
         else:
             count = count +1
             tn = tn +1 
             tn0 = tn0 + 1
             tn1 = tn1 + 1
+            eprob = -test_prob_agent0[i]*test_prob_agent1[i]
+
+    ensembleProb.append(eprob)
 
 print("Both agents right: "+str(count))
 print("Both agents wrong: "+str(bothwrong))
 print("Corrected by Ensembl: "+str(corrected))
 print("Not corrected by Ensembl: "+str(uncorrected))
 
-allstr = str(float((tp+tn)/len(test_graphs_agent0)))+"\t"+str(tp)+"\t"+str(len(test_pos[0])-tp)+"\t"+str(tn)+"\t"+str(len(test_neg[0])-tn)
-agent0_str = str(float((tp0+tn0)/len(test_graphs_agent0)))+"\t"+str(tp0)+"\t"+str(len(test_pos[0])-tp0)+"\t"+str(tn0)+"\t"+str(len(test_neg[0])-tn0)
-agent1_str = str(float((tp1+tn1)/len(test_graphs_agent0)))+"\t"+str(tp1)+"\t"+str(len(test_pos[0])-tp1)+"\t"+str(tn1)+"\t"+str(len(test_neg[0])-tn1)
-result = str(float(count/len(test_graphs_agent0)))
-print("Ensemble:Accuracy tp fn tn fp")
+allstr     = str(float((tp+tn)/len(test_graphs_agent0)))+"\t"+str(tp)+"\t"+str(len(test_pos[0])-tp)+"\t"+str(tn)+"\t"+str(len(test_neg[0])-tn)+"\t"+roc_auc_score(trueList, ensembleProb)
+agent0_str = str(float((tp0+tn0)/len(test_graphs_agent0)))+"\t"+str(tp0)+"\t"+str(len(test_pos[0])-tp0)+"\t"+str(tn0)+"\t"+str(len(test_neg[0])-tn0)+"\t"+roc_auc_score(trueList, test_prob_agent0)
+agent1_str = str(float((tp1+tn1)/len(test_graphs_agent0)))+"\t"+str(tp1)+"\t"+str(len(test_pos[0])-tp1)+"\t"+str(tn1)+"\t"+str(len(test_neg[0])-tn1)+"\t"+roc_auc_score(trueList, test_prob_agent1)
+result     = str(float(count/len(test_graphs_agent0)))
+print("Ensemble:Accuracy tp fn tn fp AUC")
 print(allstr+"\n")
-print("Agent0:Accuracy tp fn tn fp")
+print("Agent0:Accuracy tp fn tn fp AUC")
 print(agent0_str+"\n")   
-print("Agent1:Accuracy tp fn tn fp")
+print("Agent1:Accuracy tp fn tn fp AUC")
 print(agent1_str+"\n") 
 
 # Output results

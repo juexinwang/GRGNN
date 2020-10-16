@@ -10,7 +10,8 @@ import sys
 import pickle
 import pandas as pd
 
-# Preprocess data for aracne.
+# Preprocess data for minet.
+# https://www.bioconductor.org/packages/release/bioc/html/minet.html
 # https://www.synapse.org/#!Synapse:syn3130840
 parser = argparse.ArgumentParser()
 parser.add_argument('--dream-num', type=str, default='3',

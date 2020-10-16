@@ -11,6 +11,7 @@ import pickle
 import pandas as pd
 
 # Preprocess data for minet.
+# https://www.bioconductor.org/packages/release/bioc/html/minet.html
 # https://www.synapse.org/#!Synapse:syn3130840
 # python Preprocessing_minet_1.py --dream-num 4
 # Rscript Prepocessing_minet.r 3
