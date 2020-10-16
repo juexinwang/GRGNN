@@ -184,8 +184,8 @@ print(classification_report(true_y, pred))
 tn, fp, fn, tp = confusion_matrix(true_y,pred).ravel()
 print(str(tp)+"\t"+str(fp)+"\t"+str(tn)+"\t"+str(fn))
 
-np.save('svm_true_y_34_all.npy',true_y)
-np.save('svm_y_score_34_all.npy',y_score)
+np.save('svm_true_y_'+args.testdata_name+'_all.npy',true_y)
+np.save('svm_y_score_'+args.testdata_name+'_all.npy',y_score)
 
 # precision, recall, _ = precision_recall_curve(true_y, y_score)
 # # plot no skill
@@ -205,6 +205,6 @@ y_score=rf.predict_proba(testx)
 print(classification_report(true_y, pred))
 tn, fp, fn, tp = confusion_matrix(true_y,pred).ravel()
 print(str(tp)+"\t"+str(fp)+"\t"+str(tn)+"\t"+str(fn))
-np.save('rf_true_y_34_all.npy',true_y)
-np.save('rf_y_score_34_all.npy',y_score)
+np.save('rf_true_y_'+args.testdata_name+'_all.npy',true_y)
+np.save('rf_y_score_'+args.testdata_name+'_all.npy',y_score)
 
