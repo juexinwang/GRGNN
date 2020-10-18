@@ -10,7 +10,7 @@ import sys
 import pickle
 import pandas as pd
 
-# Preprocess data for aracne.
+# Preprocess data for aracne-AP.
 # https://www.synapse.org/#!Synapse:syn3130840
 parser = argparse.ArgumentParser()
 parser.add_argument('--dream-num', type=str, default='3',
