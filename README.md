@@ -38,6 +38,8 @@ Usages
 
 2. (Optional): Preprocessing DREAM5 data
 
+    cd preprocessing
+
     python Preprocessing_DREAM5.py 3
 
     python Preprocessing_DREAM5.py 4

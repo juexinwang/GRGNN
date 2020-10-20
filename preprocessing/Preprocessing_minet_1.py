@@ -60,7 +60,7 @@ for i in range(genenum):
 
 # All
 df = pd.DataFrame(data,index=genelist,columns=genelist)
-df.to_csv('data/True'+datasetname+'.csv',sep='\t')
+df.to_csv('../data/True'+datasetname+'.csv',sep='\t')
 
 # Running R codes
 # Rscript Preprocessing_minet.r 3

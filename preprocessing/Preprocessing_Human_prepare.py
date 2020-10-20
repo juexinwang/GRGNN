@@ -1,15 +1,15 @@
 #Generate goldstandard files and expression
-# inputfile='data/Human_B3expression_100.txt'
-inputfile='data/expression_trans_all_use.txt'
-inputfileBench='data/trrust_rawdata.human.tsv'
-outputfile='data/Human_expression.txt'
-outputfileBench='data/Human_goldstandard.txt'
-outputfileBench1='data/Human_goldstandard1.txt'
-outputfileBench2='data/Human_goldstandard2.txt'
-outputfileBench3='data/Human_goldstandard3.txt'
-outputfileBench23='data/Human_goldstandard23.txt'
-outputfileBench13='data/Human_goldstandard13.txt'
-outputfileBench12='data/Human_goldstandard12.txt'
+# inputfile='../data/Human_B3expression_100.txt'
+inputfile='../data/expression_trans_all_use.txt'
+inputfileBench='../data/trrust_rawdata.human.tsv'
+outputfile='../data/Human_expression.txt'
+outputfileBench='../data/Human_goldstandard.txt'
+outputfileBench1='../data/Human_goldstandard1.txt'
+outputfileBench2='../data/Human_goldstandard2.txt'
+outputfileBench3='../data/Human_goldstandard3.txt'
+outputfileBench23='../data/Human_goldstandard23.txt'
+outputfileBench13='../data/Human_goldstandard13.txt'
+outputfileBench12='../data/Human_goldstandard12.txt'
 # total mapped is 745
 tfnum = 745
 cvNum = 249

@@ -177,8 +177,8 @@ colDict['Human']=15276
 # Can be changed to dream3 and dream4
 datasetname=args.dataset
 
-feature_filename = "data/Human_expression.txt"
-edge_filename    = "data/Human_goldstandard.txt"
+feature_filename = "../data/Human_expression.txt"
+edge_filename    = "../data/Human_goldstandard.txt"
 
 geneDict = generateGeneDict(feature_filename)
 graphcsc = read_edge_file_csc(edge_filename, geneDict, sample_size=15276)
@@ -189,12 +189,12 @@ pickle.dump(allx, open( "data/ind."+datasetname+".allx", "wb" ) )
 pickle.dump(graphcsc, open( "data/ind."+datasetname+".csc", "wb" ) )
 
 # cross validation
-edge_filename1    = "data/Human_goldstandard1.txt"
-edge_filename2    = "data/Human_goldstandard2.txt"
-edge_filename3    = "data/Human_goldstandard3.txt"
-edge_filename23   = "data/Human_goldstandard23.txt"
-edge_filename13   = "data/Human_goldstandard13.txt"
-edge_filename12   = "data/Human_goldstandard12.txt"
+edge_filename1    = "../data/Human_goldstandard1.txt"
+edge_filename2    = "../data/Human_goldstandard2.txt"
+edge_filename3    = "../data/Human_goldstandard3.txt"
+edge_filename23   = "../data/Human_goldstandard23.txt"
+edge_filename13   = "../data/Human_goldstandard13.txt"
+edge_filename12   = "../data/Human_goldstandard12.txt"
 graphcsc1 = read_edge_file_csc(edge_filename1, geneDict, sample_size=15276)
 graphcsc2 = read_edge_file_csc(edge_filename2, geneDict, sample_size=15276)
 graphcsc3 = read_edge_file_csc(edge_filename3, geneDict, sample_size=15276)
@@ -202,12 +202,12 @@ graphcsc23 = read_edge_file_csc(edge_filename23, geneDict, sample_size=15276)
 graphcsc13 = read_edge_file_csc(edge_filename13, geneDict, sample_size=15276)
 graphcsc12 = read_edge_file_csc(edge_filename12, geneDict, sample_size=15276)
 
-pickle.dump(graphcsc1, open( "data/ind."+datasetname+"_1.csc", "wb" ) )
-pickle.dump(graphcsc2, open( "data/ind."+datasetname+"_2.csc", "wb" ) )
-pickle.dump(graphcsc3, open( "data/ind."+datasetname+"_3.csc", "wb" ) )
-pickle.dump(graphcsc23, open( "data/ind."+datasetname+"_23.csc", "wb" ) )
-pickle.dump(graphcsc13, open( "data/ind."+datasetname+"_13.csc", "wb" ) )
-pickle.dump(graphcsc12, open( "data/ind."+datasetname+"_12.csc", "wb" ) )
+pickle.dump(graphcsc1, open( "../data/ind."+datasetname+"_1.csc", "wb" ) )
+pickle.dump(graphcsc2, open( "../data/ind."+datasetname+"_2.csc", "wb" ) )
+pickle.dump(graphcsc3, open( "../data/ind."+datasetname+"_3.csc", "wb" ) )
+pickle.dump(graphcsc23, open( "../data/ind."+datasetname+"_23.csc", "wb" ) )
+pickle.dump(graphcsc13, open( "../data/ind."+datasetname+"_13.csc", "wb" ) )
+pickle.dump(graphcsc12, open( "../data/ind."+datasetname+"_12.csc", "wb" ) )
 
 # data as the correlation
 rownum = rowDict[datasetname]    
@@ -230,12 +230,12 @@ with open(feature_filename) as f:
 
 # Calculate Pearson's Correlation coeficient
 pmatrix = pearsonMatrix(data, args.pearson_net)
-np.save('data/'+datasetname+'_pmatrix_'+str(args.pearson_net)+'.npy', pmatrix)
+np.save('../data/dream/data'+datasetname+'_pmatrix_'+str(args.pearson_net)+'.npy', pmatrix)
 
 # Calculate Mutual Information
 mmatrix = mutualMatrix(data, args.mutual_net)
-np.save('data/'+datasetname+'_mmatrix_'+str(args.mutual_net)+'.npy', mmatrix)
+np.save('../data/dream/data'+datasetname+'_mmatrix_'+str(args.mutual_net)+'.npy', mmatrix)
 
 # Calculate a random network based on 
 rmatrix = randomMatrix(data, args.random_net)
-np.save('data/'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)
+np.save('../data/dream/data'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)

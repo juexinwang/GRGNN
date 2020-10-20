@@ -67,9 +67,9 @@ while(i<=1000000) {
     i=i+1
 }
 
-write.table(mrl, file=paste("data/mr",args[1],".csv",sep=''), row.names = F, col.names = F)
-write.table(mrl_true, file=paste("data/mr_true",args[1],".csv",sep=''), row.names = F, col.names = F)
-write.table(arl, file=paste("data/ar",args[1],".csv",sep=''), row.names = F, col.names = F)
-write.table(arl_true, file=paste("data/ar_true",args[1],".csv",sep=''), row.names = F, col.names = F)
-write.table(clrl, file=paste("data/clr",args[1],".csv",sep=''), row.names = F, col.names = F)
-write.table(clrl_true, file=paste("data/clr_true",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(mrl, file=paste("../data/mr",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(mrl_true, file=paste("../data/mr_true",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(arl, file=paste("../data/ar",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(arl_true, file=paste("../data/ar_true",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(clrl, file=paste("../data/clr",args[1],".csv",sep=''), row.names = F, col.names = F)
+write.table(clrl_true, file=paste("../data/clr_true",args[1],".csv",sep=''), row.names = F, col.names = F)

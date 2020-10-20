@@ -271,12 +271,12 @@ elif args.dream_num == '4':
     sample_size=5950
 
 graphcsc1,graphcsc2,graphcsc3,graphcsc23,graphcsc13,graphcsc12 = read_edge_file_csc_CV(edge_filename, sample_size)
-pickle.dump(graphcsc1, open( "data/dream/ind.data"+datasetname+"_1.csc", "wb" ) )
-pickle.dump(graphcsc2, open( "data/dream/ind.data"+datasetname+"_2.csc", "wb" ) )
-pickle.dump(graphcsc3, open( "data/dream/ind.data"+datasetname+"_3.csc", "wb" ) )
-pickle.dump(graphcsc23, open( "data/dream/ind.data"+datasetname+"_23.csc", "wb" ) )
-pickle.dump(graphcsc13, open( "data/dream/ind.data"+datasetname+"_13.csc", "wb" ) )
-pickle.dump(graphcsc12, open( "data/dream/ind.data"+datasetname+"_12.csc", "wb" ) )
+pickle.dump(graphcsc1, open( "../data/dream/ind.data"+datasetname+"_1.csc", "wb" ) )
+pickle.dump(graphcsc2, open( "../data/dream/ind.data"+datasetname+"_2.csc", "wb" ) )
+pickle.dump(graphcsc3, open( "../data/dream/ind.data"+datasetname+"_3.csc", "wb" ) )
+pickle.dump(graphcsc23, open( "../data/dream/ind.data"+datasetname+"_23.csc", "wb" ) )
+pickle.dump(graphcsc13, open( "../data/dream/ind.data"+datasetname+"_13.csc", "wb" ) )
+pickle.dump(graphcsc12, open( "../data/dream/ind.data"+datasetname+"_12.csc", "wb" ) )
 
 # # data as the correlation
 # rownum = rowDict[datasetname]    
@@ -299,12 +299,12 @@ pickle.dump(graphcsc12, open( "data/dream/ind.data"+datasetname+"_12.csc", "wb" 
 
 # # Calculate Pearson's Correlation coeficient
 # pmatrix = pearsonMatrix(data, args.pearson_net)
-# np.save('data'+datasetname+'_pmatrix_'+str(args.pearson_net)+'.npy', pmatrix)
+# np.save('../data/dream/data'+datasetname+'_pmatrix_'+str(args.pearson_net)+'.npy', pmatrix)
 
 # # Calculate Mutual Information
 # mmatrix = mutualMatrix(data, args.mutual_net)
-# np.save('data'+datasetname+'_mmatrix_'+str(args.mutual_net)+'.npy', mmatrix)
+# np.save('../data/dream/data'+datasetname+'_mmatrix_'+str(args.mutual_net)+'.npy', mmatrix)
 
 # # Calculate a random network based on 
 # rmatrix = randomMatrix(data, args.random_net)
-# np.save('data'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)
+# np.save('../data/dream/data'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)

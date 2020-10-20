@@ -25,7 +25,7 @@ feature_filename = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Net
 
 df = pd.read_csv(feature_filename,sep='\t')
 df_t = df.T
-df_t.to_csv('data/aracne'+datasetname+'.csv',sep='\t')
+df_t.to_csv('../data/aracne'+datasetname+'.csv',sep='\t')
 
 tfnum=334
 if datasetname=='3':
@@ -38,7 +38,7 @@ for i in range(tfnum):
     tmpstr = 'G'+str(i+1)
     tflist.append(tmpstr)
 
-with open('data/aracne_tf'+datasetname+'.txt','w') as fw:
+with open('../data/aracne_tf'+datasetname+'.txt','w') as fw:
     for item in tflist:
         fw.write("%s\n" % item)
 

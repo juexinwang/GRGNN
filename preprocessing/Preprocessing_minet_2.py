@@ -34,22 +34,22 @@ def readnpy(input):
     return tlist
 
 # mrnet
-mrlist=readnpy("data/mr"+datasetname+".csv")
-mr_true=readnpy("data/mr_true"+datasetname+".csv")
+mrlist=readnpy("../data/mr"+datasetname+".csv")
+mr_true=readnpy("../data/mr_true"+datasetname+".csv")
 
-np.save("data/mr"+datasetname+".npy",mrlist)
-np.save("data/mr_true"+datasetname+".npy",mr_true)
+np.save("../data/mr"+datasetname+".npy",mrlist)
+np.save("../data/mr_true"+datasetname+".npy",mr_true)
 
 # aracne
-mrlist=readnpy("data/ar"+datasetname+".csv")
-mr_true=readnpy("data/ar_true"+datasetname+".csv")
+mrlist=readnpy("../data/ar"+datasetname+".csv")
+mr_true=readnpy("../data/ar_true"+datasetname+".csv")
 
-np.save("data/ar"+datasetname+".npy",mrlist)
-np.save("data/ar_true"+datasetname+".npy",mr_true)
+np.save("../data/ar"+datasetname+".npy",mrlist)
+np.save("../data/ar_true"+datasetname+".npy",mr_true)
 
 # clr
-mrlist=readnpy("data/clr"+datasetname+".csv")
-mr_true=readnpy("data/clr_true"+datasetname+".csv")
+mrlist=readnpy("../data/clr"+datasetname+".csv")
+mr_true=readnpy("../data/clr_true"+datasetname+".csv")
 
-np.save("data/clr"+datasetname+".npy",mrlist)
-np.save("data/clr_true"+datasetname+".npy",mr_true)
+np.save("../data/clr"+datasetname+".npy",mrlist)
+np.save("../data/clr_true"+datasetname+".npy",mr_true)
