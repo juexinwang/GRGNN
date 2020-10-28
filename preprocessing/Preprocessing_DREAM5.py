@@ -20,6 +20,16 @@ parser.add_argument('--mutual_net', type=int, default=3, #3
                     help='mutual information as the network')
 parser.add_argument('--random_net', type=float, default=0.003, #3
                     help='random as the network')
+parser.add_argument('--outnetworkTag', action='store_true', default=False,
+                    help='whether output networks and edges in csc format')
+parser.add_argument('--outnetworkSplitTag', action='store_true', default=False,
+                    help='whether output splitted networks and edges in csc format')
+parser.add_argument('--outPCTag', action='store_true', default=False,
+                    help='whether output Pearson Correlation network')
+parser.add_argument('--outMITag', action='store_true', default=False,
+                    help='whether output Mutual Information network')
+parser.add_argument('--outRMTag', action='store_true', default=False,
+                    help='whether output Random network')
 
 args = parser.parse_args()
 
@@ -258,11 +268,13 @@ datasetname=args.dream_num
 feature_filename = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Network"+datasetname+"/input_data/expression_data.tsv"
 edge_filename    = "/home/wangjue/biodata/DREAM5_network_inference_challenge/Network"+datasetname+"/gold_standard/GoldStandard.tsv"
 
-# graphcsc = read_edge_file_csc(edge_filename, sample_size=args.sample_size)
-# allx = read_feature_file_sparse(feature_filename, sample_size=args.sample_size, feature_size=args.feature_size)
+# output
+if args.outnetworkTag:
+    graphcsc = read_edge_file_csc(edge_filename, sample_size=args.sample_size)
+    allx = read_feature_file_sparse(feature_filename, sample_size=args.sample_size, feature_size=args.feature_size)
 
-# pickle.dump(allx, open( "ind.dream"+datasetname+".allx", "wb" ) )
-# pickle.dump(graphcsc, open( "ind.dream"+datasetname+".csc", "wb" ) )
+    pickle.dump(allx, open( "ind.dream"+datasetname+".allx", "wb" ) )
+    pickle.dump(graphcsc, open( "ind.dream"+datasetname+".csc", "wb" ) )
 
 sample_size=4511
 if args.dream_num == '3':
@@ -270,41 +282,47 @@ if args.dream_num == '3':
 elif args.dream_num == '4':
     sample_size=5950
 
-graphcsc1,graphcsc2,graphcsc3,graphcsc23,graphcsc13,graphcsc12 = read_edge_file_csc_CV(edge_filename, sample_size)
-pickle.dump(graphcsc1, open( "../data/dream/ind.data"+datasetname+"_1.csc", "wb" ) )
-pickle.dump(graphcsc2, open( "../data/dream/ind.data"+datasetname+"_2.csc", "wb" ) )
-pickle.dump(graphcsc3, open( "../data/dream/ind.data"+datasetname+"_3.csc", "wb" ) )
-pickle.dump(graphcsc23, open( "../data/dream/ind.data"+datasetname+"_23.csc", "wb" ) )
-pickle.dump(graphcsc13, open( "../data/dream/ind.data"+datasetname+"_13.csc", "wb" ) )
-pickle.dump(graphcsc12, open( "../data/dream/ind.data"+datasetname+"_12.csc", "wb" ) )
+# output split
+if args.outnetworkSplitTag:
+    graphcsc1,graphcsc2,graphcsc3,graphcsc23,graphcsc13,graphcsc12 = read_edge_file_csc_CV(edge_filename, sample_size)
+    pickle.dump(graphcsc1, open( "../data/dream/ind.data"+datasetname+"_1.csc", "wb" ) )
+    pickle.dump(graphcsc2, open( "../data/dream/ind.data"+datasetname+"_2.csc", "wb" ) )
+    pickle.dump(graphcsc3, open( "../data/dream/ind.data"+datasetname+"_3.csc", "wb" ) )
+    pickle.dump(graphcsc23, open( "../data/dream/ind.data"+datasetname+"_23.csc", "wb" ) )
+    pickle.dump(graphcsc13, open( "../data/dream/ind.data"+datasetname+"_13.csc", "wb" ) )
+    pickle.dump(graphcsc12, open( "../data/dream/ind.data"+datasetname+"_12.csc", "wb" ) )
 
-# # data as the correlation
-# rownum = rowDict[datasetname]    
-# colnum = colDict[datasetname]
-# data = np.zeros((rownum,colnum))
+# data as the correlation
+if args.outPCTag or args.outMITag or args.outRMTag:
+    rownum = rowDict[datasetname]    
+    colnum = colDict[datasetname]
+    data = np.zeros((rownum,colnum))
 
-# count = -1
-# with open(feature_filename) as f:
-#     lines = f.readlines()
-#     for line in lines:
-#         if count >= 0:
-#             line = line.strip()
-#             words = line.split()
-#             ncount = 0
-#             for word in words:
-#                 data[count, ncount] = word
-#                 ncount = ncount + 1
-#         count = count + 1
-#     f.close()
+    count = -1
+    with open(feature_filename) as f:
+        lines = f.readlines()
+        for line in lines:
+            if count >= 0:
+                line = line.strip()
+                words = line.split()
+                ncount = 0
+                for word in words:
+                    data[count, ncount] = word
+                    ncount = ncount + 1
+            count = count + 1
+        f.close()
 
-# # Calculate Pearson's Correlation coeficient
-# pmatrix = pearsonMatrix(data, args.pearson_net)
-# np.save('../data/dream/data'+datasetname+'_pmatrix_'+str(args.pearson_net)+'.npy', pmatrix)
+# Calculate Pearson's Correlation coeficient
+if args.outPCTag:
+    pmatrix = pearsonMatrix(data, args.pearson_net)
+    np.save('../data/dream/data'+datasetname+'_pmatrix_'+str(args.pearson_net)+'.npy', pmatrix)
 
-# # Calculate Mutual Information
-# mmatrix = mutualMatrix(data, args.mutual_net)
-# np.save('../data/dream/data'+datasetname+'_mmatrix_'+str(args.mutual_net)+'.npy', mmatrix)
+# Calculate Mutual Information
+if args.outMITag:
+    mmatrix = mutualMatrix(data, args.mutual_net)
+    np.save('../data/dream/data'+datasetname+'_mmatrix_'+str(args.mutual_net)+'.npy', mmatrix)
 
-# # Calculate a random network based on 
-# rmatrix = randomMatrix(data, args.random_net)
-# np.save('../data/dream/data'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)
+# Calculate a random network based on
+if args.outRMTag: 
+    rmatrix = randomMatrix(data, args.random_net)
+    np.save('../data/dream/data'+datasetname+'_rmatrix_'+str(args.random_net)+'.npy', rmatrix)
